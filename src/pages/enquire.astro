@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import site from '../data/site.json';
+import { SITE_URL } from '../lib/constants';
 import { FORM_FIELDS } from '../lib/constants';
 
 // Read preselection from query params
@@ -32,13 +33,15 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
         id="enquiry-form"
         name="enquiry"
         method="POST"
-        data-netlify="true"
-        netlify-honeypot="website"
+        {...(site.formEndpoint ? {} : { 'data-netlify': 'true', 'netlify-honeypot': 'website' })}
         enctype="multipart/form-data"
         novalidate
         class="space-y-8"
-        action="/enquire/success"
+        action={site.formEndpoint || '/enquire/success'}
       >
+        {site.formEndpoint && (
+          <input type="hidden" name="_next" value={`${SITE_URL}/enquire/success`} />
+        )}
         <!-- Honeypot -->
         <div class="hidden" aria-hidden="true">
           <label>
@@ -188,20 +191,6 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
           <span id="err-design-tier" class="text-sm text-madder hidden mt-1 block" data-error="design-tier">Please select a design tier.</span>
         </div>
 
-        <!-- Budget -->
-        <div>
-          <label for="budget" class="eyebrow text-graphite block mb-2">Budget <span class="text-graphite font-normal normal-case tracking-normal">(optional)</span></label>
-          <select
-            id="budget"
-            name="budget"
-                        class="field-select w-full px-4 py-3.5 text-base text-ink bg-paper border rule focus:border-ink transition-colors duration-150"
-          >
-            {FORM_FIELDS.budget.map((opt) => (
-              <option value={opt.value}>{opt.label}</option>
-            ))}
-          </select>
-          <span id="err-budget" class="text-sm text-madder hidden mt-1 block" data-error="budget">Please select a budget range.</span>
-        </div>
 
         <!-- Timeline -->
         <div>
@@ -235,8 +224,8 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
 
         <!-- Reference images -->
         <div>
-          <label for="reference-images" class="eyebrow text-graphite block mb-2">Reference images</label>
-          <p class="text-sm text-graphite mb-2">Up to 3 images, 10MB each. Accepted formats: JPG, PNG, WebP.</p>
+          <label for="reference-images" class="eyebrow text-graphite block mb-2">Photographs of the room, or a design reference</label>
+          <p class="text-sm text-graphite mb-2">Send photographs of the room and we will design to it &mdash; the proportions, the architecture, where the light falls. A sketch or a reference image is just as welcome. Up to 3 images, 10MB each. JPG, PNG or WebP.</p>
           <input
             type="file"
             id="reference-images"

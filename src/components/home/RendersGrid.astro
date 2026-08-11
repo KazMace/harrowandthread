@@ -5,6 +5,10 @@ import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
 // measure, shown whole at its natural aspect ratio with a specification
 // caption beneath — the way a serious object is photographed for a catalogue.
 //
+// Sizes are read off the imagery itself — measured against the furniture — so a
+// caption never claims a piece is smaller than the picture shows. Client audit,
+// 2026-08-11: the library plate said 4 x 3m for what is plainly about 8 x 6m.
+//
 // Two rules meet here. No rug may ever be cropped, so width/height MUST match
 // the file on disk (ImagePlaceholder sets aspect-ratio from them) and nothing
 // uses object-cover. And a rug only reads as its real size when the room does
@@ -24,25 +28,25 @@ const plates = [
   },
   {
     id: 'render-rug-02', width: 1600, height: 1199, no: 'III',
-    title: 'Library, 4 × 3m',
+    title: 'Library, 8 × 6m',
     spec: 'Geometric · wool · 6mm pile · charcoal, saffron, cream',
     alt: 'A hand-tufted rug with a bold geometric design in charcoal and saffron, shown whole on the floor of a panelled private library',
   },
   {
     id: 'render-rug-03', width: 1600, height: 1199, no: 'IV',
-    title: 'Principal bedroom, 5 × 4m',
+    title: 'Principal bedroom, 6 × 4m',
     spec: 'Plain · wool · 20mm pile · deep teal, matched to a single reference',
     alt: 'A plain deep teal hand-tufted rug with a deep pile, shown whole beneath a four-poster bed in a grand bedroom',
   },
   {
     id: 'render-wall-hanging-01', width: 1600, height: 1199, no: 'V',
-    title: 'Wall hanging, 3 × 2m',
+    title: 'Wall hanging, 4 × 3m',
     spec: 'Pictorial · wool · 20mm pile · rust, plum, sage, ivory',
     alt: 'A hand-tufted wool wall hanging with a painterly abstract design, hung from wide loops threaded onto a turned wooden pole on the panelled wall of a grand saloon',
   },
   {
     id: 'render-wall-hanging-02', width: 1600, height: 1199, no: 'VI',
-    title: 'Wall hanging, 2.5 × 1.8m',
+    title: 'Wall hanging, 3.5 × 2.5m',
     spec: 'Geometric · wool · 12mm pile · indigo, saffron, ivory',
     alt: 'A hand-tufted wool wall hanging with a bold geometric design in indigo and saffron, hung from wide loops threaded onto a turned wooden pole in a double-height drawing room',
   },

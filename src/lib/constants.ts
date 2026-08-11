@@ -54,15 +54,6 @@ export const FORM_FIELDS = {
     { value: 'pictorial', label: 'Pictorial' },
     { value: 'not-sure', label: 'Not sure' },
   ],
-  budget: [
-    { value: '', label: 'Select...' },
-    { value: 'under-5k', label: 'Under £5k' },
-    { value: '5k-10k', label: '£5k–10k' },
-    { value: '10k-25k', label: '£10k–25k' },
-    { value: '25k-50k', label: '£25k–50k' },
-    { value: '50k-plus', label: '£50k+' },
-    { value: 'not-sure', label: 'Not sure' },
-  ],
   timeline: [
     { value: '', label: 'Select...' },
     { value: 'within-3-months', label: 'Within 3 months' },
