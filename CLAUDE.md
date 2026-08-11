@@ -88,23 +88,42 @@ Read only. An earlier session broke it and the client repaired it by hand.
   the prompts: no full-bleed rug photography, no `object-cover` on a rug image, no tight
   aspect-ratio container that clips one. Rugs sit as complete plates on a ground.
 
-## Where work stopped (2026-08-11, end of day)
+## Where work stopped (2026-08-11, evening — READ THIS FIRST AFTER RESTART)
 
-Direction A ("Plate") is chosen and rolled across all 12 pages. All seven tasks
-from the day's list are done: images filled, homepage rebuilt to A, accordions
-built, copy rewritten around the room thesis, old hero retired, /lab deleted,
-full sweep clean.
+Direction A is rolled out across all 12 pages and Lighthouse is 100/100/100/100 on
+performance, accessibility, best practices and SEO (real artifacts, mobile, simulated
+throttling — not estimates).
 
-Verified: 12 pages x 11 widths zero overflow; one h1 per page, no heading skips;
-fonts resolve to Schibsted Grotesk Variable in-browser; zero broken images; zero
-images with object-cover (the no-crop rule holds structurally now); zero console
-errors; form verified both paths (empty -> 4 errors + aria-invalid, stays put;
-valid -> POST -> /enquire/success); 4.3 KB JS; compliance greps all zero.
+**The enquiry pipeline is half live.** The email leg is PROVEN with a real submission:
+Web3Forms delivered every field correctly, including both warning lines. The database leg
+is not, because the schema has never been applied.
 
-**Blocking launch, all needing the client:** trading address, legal "Last
-updated" dates, phone number, a real form endpoint plus a test submission (this
-failure mode is invisible from the front end), solicitor review, fire-rating
-certification. See COMPLIANCE.md.
+**Immediate next steps, in order:**
+
+1. **Approve the `supabase` MCP server.** `claude mcp list` shows it as
+   *"⏸ Pending approval"* — a project-scoped server needs the user to approve it, which is
+   why the tools are not reachable. The user is restarting to do this, then running `/mcp`
+   for OAuth.
+2. **Apply `supabase/schema.sql`.** 81 lines, idempotent. Creates the `enquiries` table,
+   the `enquiry-uploads` storage bucket, and three insert-only RLS policies. Already
+   validated against a real submission: every field the form sends has a column, and there
+   is deliberately **no SELECT policy** on the table.
+3. **Verify the security, do not assume it.** With the publishable key from `.env`:
+   `curl "$PUBLIC_SUPABASE_URL/rest/v1/enquiries?select=*" -H "apikey: $PUBLIC_SUPABASE_ANON_KEY"`
+   must return 401/403 or empty — never rows. That key ships in the page source.
+4. **Re-test the form in a real browser.** Both warning lines should disappear, a row
+   should land in `enquiries`, and an attached image in `enquiry-uploads`.
+
+**Do not "modernise" the Web3Forms call into a fetch.** It is a native hidden-form POST on
+purpose. fetch with JSON fails the CORS preflight on their free tier; fetch with FormData
+gets no Access-Control-Allow-Origin. A native form POST is not subject to CORS at all,
+which is why their own documented example is a plain `<form>`. Both fetch versions fail
+silently from the visitor's point of view. There is a comment saying so in `enquire.astro`.
+
+**Testing notes.** Cloudflare 403s headless Chromium on Web3Forms; it passes with a
+realistic user agent plus `--disable-blink-features=AutomationControlled` (see
+`scratchpad/w3f.mjs` pattern). Supabase free projects auto-pause after ~a week idle and a
+paused project returns no DNS at all — that cost half an hour to diagnose once already.
 
 ## Open — do not implement unilaterally
 
