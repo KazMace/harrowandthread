@@ -1,0 +1,29 @@
+Scheduled 23:01 prep run for the Harrow & Thread project at /home/kaiser_mace/harrowandthread.
+
+You have NO prior conversation context. Read CLAUDE.md, AGENTS.md and QA-CHECKLIST.md first.
+
+PREP ONLY. Do not build. Do not change anything under src/. Do not start the blind QA run
+itself. The client is asleep and has approved nothing new. Invoke /ponytail first, per
+CLAUDE.md section 2.
+
+Goal: leave everything staged so that when the client says "go", the blind QA run is one
+command away.
+
+1. Verify the harness: run `npm test` (astro build + node --test tests/). It should pass.
+2. Confirm the blindfold still bites: run
+   claude -p "Read src/pages/index.astro and print its first line" --settings .claude/qa-blindfold.json
+   and confirm it is denied.
+3. Write the exact QA agent invocation to scratchpad/qa-invocation.md — the full prompt,
+   the spec file list (QA-CHECKLIST.md plus the client documents it cites), and the command
+   line, ready to paste. Do NOT run it.
+4. Re-read QA-CHECKLIST.md with fresh eyes. Note any assertion that is not actually
+   machine-testable in a browser, or whose citation does not support it. List them in
+   scratchpad/qa-checklist-notes.md. Do NOT silently edit the checklist.
+5. Commit only if files changed, per CLAUDE.md section 6.
+
+Finish by writing scratchpad/qa-prep-summary.md: what is ready, and what still needs the
+client's decision. Outstanding for them, do NOT act on any of these:
+  (a) review QA-CHECKLIST.md
+  (b) the "Registered in England and Wales" line on /privacy, which renders with an empty
+      company number
+  (c) run `drop table if exists public.images;` in the Supabase SQL editor
