@@ -6,29 +6,35 @@ Everything left that needs you rather than code. Ordered by what blocks launch.
 
 ## 1 · Blocks launch — legally or functionally
 
-**Set up the enquiry pipeline.** Decided: Web3Forms **free** tier sends you the notification email, and everything — including the uploaded room photographs — goes to Supabase. Web3Forms never handles the files, so you do **not** need their $12/month Pro plan.
+~~**Set up the enquiry pipeline.**~~ **DONE — 2026-08-11. Both legs live and proven end to end.**
 
-**Status: half done.** Supabase URL and key are in `.env`. Still needed, in this order — each one blocks the next:
+Web3Forms free tier sends you the notification email; everything, including the uploaded room photographs, goes to Supabase. Web3Forms never handles the files, so you do **not** need their $12/month Pro plan.
 
-1. ~~**Set up the Harrow & Thread email.**~~ **Done** — `meadow.mace@harrowandthread.com`. The site's public contact address has been switched to it across all 12 pages, `/enquire`, `/cookies` and the `Organization` structured data, so every address shown on the site now actually receives mail.
+All four steps are finished: the mailbox, the Web3Forms key, the Supabase keys, and the MCP authentication. The schema is applied — `enquiries` table, `enquiry-uploads` storage bucket, insert-only security policies.
 
-   **Optional improvement when you have a spare minute:** create `enquiries@harrowandthread.com` as an *alias* forwarding to `meadow.mace@`, then tell me and I'll switch the public address back. An alias is a forwarding rule, not a mailbox — look for "Aliases" or "Forwarders" in your email provider; most give unlimited free. Reasons it's worth doing: `enquiries@` reads as a business rather than one person, it survives you hiring someone or handing the inbox over, and it keeps your own name out of a permanently-crawled public record. Not urgent — what's live now works.
-2. **A Web3Forms access key** — free account at web3forms.com, registered against the mailbox from step 1. 250 submissions a month, no card needed. They email you a UUID.
-3. ~~**Supabase project URL and anon key**~~ — **done**, both in `.env` (new-format `sb_publishable_` key, which is fine).
+**It was tested for real, in a browser, not just read over.** A full submission with an attached image: photo uploaded to storage, row written to the database, notification email sent, visitor landed on the "Received" page. Every field arrived in the right place.
 
-   **Cause of the earlier failure found: the project was suspended.** Free-tier Supabase projects pause after about a week idle, and a paused project's subdomain stops answering DNS entirely — which is exactly what we saw. Nothing was wrong with the keys or the ref.
+**The security was proved, not assumed.** The anon key is public by design — it ships in your page source — so the table has to be insert-only or anyone viewing the page could read every enquiry you have ever received. Tested by writing a row and then trying to read it back as a stranger: the write succeeded, the read failed, and a delete attempt left the row untouched. Same for the uploads — a stranger can send a file but cannot read one back, list the bucket, or reach it by URL.
 
-   **Resumed, and coming back up.** DNS now resolves. The API is not serving yet — the REST root returns 401 and a table query returns a Cloudflare holding page instead of JSON, which means the project is still provisioning behind the edge. Supabase say minutes to hours. No action needed; it will start answering on its own.
+**Still worth knowing:** free-tier Supabase pauses after about a week idle, and a paused project stops answering DNS entirely. If that happens mid-enquiry you still get the email, and it arrives stamped *"WARNING: this enquiry could NOT be saved to the database. This email is the only record of it."* So a lead is never lost silently — but treat the email as your real record and the database as the convenience. Once the site is taking real enquiries it stays warm on its own.
 
-   **Worth knowing for later:** this will happen again if the project sits idle for a week. Once the site is live and taking real enquiries it stays warm on its own, but during a quiet build period expect it. If it becomes a nuisance, a paid tier removes the auto-pause.
+**Why this sat at the top for so long:** the failure is invisible from the front end. The page says "Received" whether or not anything was sent, and it did exactly that — silently discarding every enquiry — for weeks before it was caught. That is now closed.
 
-4. **Run `/mcp` in the terminal** to authenticate Supabase over OAuth. This is also the fastest way to settle the DNS problem above — once authenticated I can read your real project ref straight from the account instead of us guessing at a twenty-letter string. I've added the server to `.mcp.json` using the OAuth transport rather than the access-token version, because the token variant would write a secret into a committed file. Once you've authenticated I can create the table, the storage bucket and the security policies myself.
+---
 
-Per Supabase's own warning, point the MCP at a development project, not live production data.
+**→ Confirm which contact address is actually live.** The site shows `enquiries@harrowandthread.com` on all 12 pages, in `/cookies`, on `/enquire`, and in the structured data search engines read. An earlier session switched everything to `meadow.mace@harrowandthread.com` on the grounds that it was "the mailbox that exists", and then the next session switched it straight back — so I can't tell from the code which of those is true, and I'm not going to guess.
 
-**One thing I must not skip, and neither should you:** the Supabase anon key is public by design, so the `enquiries` table needs Row Level Security with an **insert-only** policy. Without it, anyone who views the page source can read every enquiry you have ever received. I'll set that up, but if you ever wire Supabase in yourself, that's the step that matters.
+If `enquiries@` is a real mailbox or an alias forwarding to you, nothing needs doing. If it isn't, **every contact address on the site is dead**, including the one `/enquire` tells people to use when the form fails. Send me a test email to it and tell me whether it arrives.
 
-**Why this sits at the top:** the failure is invisible from the front end. The page says "Received" whether or not anything was sent, and it did exactly that — silently discarding every enquiry — for weeks before it was caught. Until the mailbox and the Web3Forms key exist, the form still behaves as it does today: it validates properly and goes nowhere.
+**→ Two minutes of tidying in the Supabase dashboard.** My test data is still there. Storage → `enquiry-uploads` holds three files (two test uploads and an 8-byte `probe.png`); select and delete them. The database rows are already cleared. Storage files can only be removed through the dashboard, not with SQL — Supabase blocks that deliberately so files can't be orphaned.
+
+**→ Drop a leftover table.** `public.images` is left over from the Knightfall Rugs build on this same Supabase project. It has security switched off, so anyone with your public key can read *and write* it. Nothing on this site uses it. You approved removing it but my tooling refuses to run destructive commands, so paste this into the Supabase SQL editor:
+
+```sql
+drop table if exists public.images;
+```
+
+**→ Check your Web3Forms submission limit.** The free tier caps monthly submissions. That cap is now the single point of failure in the pipeline — hitting it costs you a commission enquiry, not pennies. Worth knowing the number and whether they warn you as you approach it.
 
 ---
 
@@ -104,6 +110,8 @@ One genuine texture shot does more for trust than four more AI room scenes. And 
 
 Direction A rolled across all 12 pages. Every image slot filled. Accordions built. All rugs shown whole, never cropped — verified structurally, no `object-cover` anywhere. Zero horizontal overflow across 12 pages × 11 widths. One `h1` per page, no heading skips. Fonts confirmed rendering. Form validated both paths. 4.3 KB of JavaScript. Compliance greps clean.
 
-**Done since this list was written:** design rights assigned to the client with IPO registration offered and the fee included; lead times qualified by scale and complexity; budget selector removed; room photographs invited on the enquiry upload; plate sizes corrected after your audit; `formEndpoint` wired so the form is one pasted URL from working; wall hangings redone with loops and a threaded pole.
+**Done since this list was written:** design rights assigned to the client with IPO registration offered and the fee included; lead times qualified by scale and complexity; budget selector removed; room photographs invited on the enquiry upload; plate sizes corrected after your audit; wall hangings redone with loops and a threaded pole.
 
-**The code side is done.** What's left is the list above.
+**Done 2026-08-11:** the enquiry pipeline finished and proven end to end — database schema applied, insert-only security verified by attack rather than assumption, and a real submission with an attached photograph tested in a browser through to the "Received" page.
+
+**The code side is done.** What's left is the list above — and apart from the three short dashboard jobs in section 1, none of it is code.
