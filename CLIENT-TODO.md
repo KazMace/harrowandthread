@@ -63,13 +63,21 @@ One genuine texture shot does more for trust than four more AI room scenes. And 
 
 **The "Assurances" section** on the homepage — "What you're covered for", four guarantees. An earlier session added it without asking. Keep or cut?
 
-**Enquiry form fields.** Four are required now: name, email, what they're commissioning, and who they are. My proposal was to also require size and design tier, and to cut budget, timeline and design starting point. Your call.
+**Enquiry form fields.** Budget is now removed as you asked. Four remain required: name, email, what they're commissioning, and who they are. Still open: should size and design tier also be required, and should timeline and design starting point be cut too?
 
 **Privacy and Terms in the homepage accordions.** Your brief listed them. I linked to the pages instead, because two copies of legal text drift apart and it matters which one was live. Say the word if you want them inline.
 
 ---
 
-## 5 · Nice to have
+## 5 · Confirm when you have a moment
+
+**Plate sizes.** I recaptioned four plates after your scale audit, reading each size off the picture by measuring against the furniture: library 4×3m → **8×6m**, bedroom 5×4 → **6×4m**, wall hangings 3×2 → **4×3m** and 2.5×1.8 → **3.5×2.5m**. Those are my estimates from the imagery — worth your eye before launch.
+
+**Registered office address.** Once you have the virtual address, it drops straight into the footer. Note that since ECCTA 2023 the registered office must be an "appropriate address" able to receive and acknowledge post — PO boxes don't qualify, virtual office providers do.
+
+---
+
+## 6 · Nice to have
 
 - **Analytics** — Plausible or Fathom, currently commented out in `BaseLayout.astro`.
 - **Delete the two old reference links** from `harrowandthread_core_Design.md` if they're still bothering you.
@@ -80,5 +88,7 @@ One genuine texture shot does more for trust than four more AI room scenes. And 
 ## Where the build stands
 
 Direction A rolled across all 12 pages. Every image slot filled. Accordions built. All rugs shown whole, never cropped — verified structurally, no `object-cover` anywhere. Zero horizontal overflow across 12 pages × 11 widths. One `h1` per page, no heading skips. Fonts confirmed rendering. Form validated both paths. 4.3 KB of JavaScript. Compliance greps clean.
+
+**Done since this list was written:** design rights assigned to the client with IPO registration offered and the fee included; lead times qualified by scale and complexity; budget selector removed; room photographs invited on the enquiry upload; plate sizes corrected after your audit; `formEndpoint` wired so the form is one pasted URL from working; wall hangings redone with loops and a threaded pole.
 
 **The code side is done.** What's left is the list above.
