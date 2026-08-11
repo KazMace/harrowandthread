@@ -107,11 +107,24 @@ Read only. A previous session broke it and the client had to repair it by hand.
   are always rolled around a core, at every size.
 - **The construction term is "hand-tufted".** Never "handwoven" or "woven".
 
-## Open decisions the client has not yet answered
+## Client decisions — settled 2026-08-11
 
-Do not implement these unilaterally:
+- **Geometric all-over rate:** invented £1,250/m² removed. The client is supplying the
+  real figure. Until it arrives the tier renders `[rate to confirm]` and is withheld from
+  JSON-LD. **Do not fill this in with a guess** — set `rate` in `pricing.json` only from
+  a number the client gave you.
+- **Price position on `/`:** stays as the lower "Rates" section. Settled. Do not move it
+  back up, and note this means the old spec's "price above the fold" acceptance line no
+  longer applies.
+- **Trade:** the client sells to end customers. Trade lives in the footer only — not in
+  the main nav, not on the homepage. `/trade` stays live and indexed. Do not re-promote it.
+  Avoid "trade specialist" phrasing anywhere; the client dislikes it.
 
-1. Keep or delete the invented £1,250/m² "Geometric all-over" tier
-2. Price back above the fold on `/`, or leave it as the lower "Rates" section
-3. Keep or cut the unrequested homepage "Assurances" section
-4. Enquiry form: 4 required fields (current) or the 10 originally specified
+## Still open — do not implement unilaterally
+
+1. **Homepage "Assurances" section** — unrequested, added by an earlier session. The
+   client is deciding whether to keep it. Leave it in place until they say.
+2. **Enquiry form fields** — the client's instruction was "keep as many as we need,
+   nothing extra". The proposed required set is name, email, what they're commissioning,
+   size (or "not sure"), design tier (or "not sure"); everything else optional or cut.
+   Awaiting confirmation of the exact list.
