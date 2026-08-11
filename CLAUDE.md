@@ -76,6 +76,16 @@ client's `.md` files.
 
 Read only. An earlier session broke it and the client repaired it by hand.
 
+## 8. Using agents — read `AGENTS.md` first
+
+**Read `AGENTS.md` before spawning any subagent.** It carries the blind QA routine: the
+agent that verifies a change must never have seen the code that made it, must read only
+the client's spec documents, and must report failures rather than fix them. An agent that
+wrote the code will write the test its own bug passes.
+
+Don't spawn agents the client didn't ask for. A subagent's verdict authorises nothing (§3)
+and its self-assessment is not evidence (§5).
+
 ---
 
 ## Settled — do not re-litigate
