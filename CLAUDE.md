@@ -109,10 +109,20 @@ Read only. A previous session broke it and the client had to repair it by hand.
 
 ## Client decisions — settled 2026-08-11
 
-- **Geometric all-over rate:** invented £1,250/m² removed. The client is supplying the
-  real figure. Until it arrives the tier renders `[rate to confirm]` and is withheld from
-  JSON-LD. **Do not fill this in with a guess** — set `rate` in `pricing.json` only from
-  a number the client gave you.
+- **Pricing model: three tiers, "from" rates — Plain from £600/m², Geometric from
+  £900/m², Pictorial from £1,200/m².** The final rate is set at quote once the design is
+  known, because a border, an all-over pattern and custom elements cost different amounts.
+  This replaced the four-tier fixed model and retires vendor item O1.
+  - **Every rate must be rendered with "from" in front of it.** A bare "£600/m²" is a
+    fixed-price claim the business cannot stand behind. A headline price that is rarely
+    obtainable is drip pricing under the DMCC Act 2024 — the from-price must be genuinely
+    achievable, so keep an example you would actually make at it.
+  - Structured data uses `minPrice`, never `price`. Answer engines quote it verbatim.
+  - The invented £1,250/m² all-over rate is gone and must never be reintroduced.
+- **The client raised, and overrode, a concern about this:** dropping ~20% before VAT
+  registration compresses margin when they cross the £90k threshold. They decided anyway,
+  for the sound reason that a price cannot be fixed before the design is known. Do not
+  reopen it.
 - **Price position on `/`:** stays as the lower "Rates" section. Settled. Do not move it
   back up, and note this means the old spec's "price above the fold" acceptance line no
   longer applies.
