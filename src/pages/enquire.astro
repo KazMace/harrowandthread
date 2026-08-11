@@ -305,7 +305,7 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
             </p>
             <p class="text-sm text-graphite m-0">
               Prefer to write directly?
-              <a href="mailto:meadow.mace@harrowandthread.com" class="link-underline text-ink">meadow.mace@harrowandthread.com</a>
+              <a href="mailto:enquiries@harrowandthread.com" class="link-underline text-ink">enquiries@harrowandthread.com</a>
             </p>
           </div>
         </aside>
@@ -369,7 +369,7 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
   const SB_URL = import.meta.env.PUBLIC_SUPABASE_URL;
   const SB_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
   const W3F_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY;
-  const CONTACT_EMAIL = 'meadow.mace@harrowandthread.com';
+  const CONTACT_EMAIL = 'enquiries@harrowandthread.com';
 
   form?.addEventListener('submit', (e) => {
     let valid = true;
@@ -469,62 +469,92 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
 
       const sbHeaders = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` };
 
-      try {
-        // 1 · Room photographs and design references -> Supabase Storage
-        const picker = document.getElementById('reference-images') as HTMLInputElement | null;
-        const chosen = Array.from(picker?.files ?? []).slice(0, 3);
-        const folder = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-        const uploaded: string[] = [];
+      const picker = document.getElementById('reference-images') as HTMLInputElement | null;
+      const chosen = Array.from(picker?.files ?? []).slice(0, 3);
+      const folder = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      const uploaded: string[] = [];
+      let storageFailed = false;
+      let dbSaved = false;
+      let mailSent = false;
 
-        for (const file of chosen) {
-          if (file.size > 10 * 1024 * 1024) throw new Error(`${file.name} is over 10MB.`);
+      // 1 · Room photographs and references -> Supabase Storage
+      for (const file of chosen) {
+        try {
+          if (file.size > 10 * 1024 * 1024) throw new Error('too large');
           const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
           const res = await fetch(
             `${SB_URL}/storage/v1/object/enquiry-uploads/${folder}/${safe}`,
             { method: 'POST', headers: sbHeaders, body: file }
           );
-          if (!res.ok) throw new Error('We could not upload your images.');
+          if (!res.ok) throw new Error('upload failed');
           uploaded.push(`${folder}/${safe}`);
-        }
+        } catch { storageFailed = true; }
+      }
 
-        // 2 · The record -> Supabase. Hyphenated field names become columns.
-        const row: Record<string, unknown> = { upload_paths: uploaded };
-        for (const [k, v] of fd.entries()) {
-          if (k === 'website' || k === 'reference-images') continue;
-          row[k.replace(/-/g, '_')] = typeof v === 'string' ? v : null;
-        }
+      // 2 · The record -> Supabase. Hyphenated field names become columns.
+      const row: Record<string, unknown> = { upload_paths: uploaded };
+      for (const [k, v] of fd.entries()) {
+        if (k === 'website' || k === 'reference-images') continue;
+        row[k.replace(/-/g, '_')] = typeof v === 'string' ? v : null;
+      }
+      try {
         const ins = await fetch(`${SB_URL}/rest/v1/enquiries`, {
           method: 'POST',
           headers: { ...sbHeaders, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
           body: JSON.stringify(row),
         });
-        if (!ins.ok) throw new Error('We could not record your enquiry.');
+        dbSaved = ins.ok;
+      } catch { dbSaved = false; }
 
-        // 3 · Notification email. Non-fatal: the enquiry is already safe.
-        if (W3F_KEY) {
-          try {
-            await fetch('https://api.web3forms.com/submit', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-              body: JSON.stringify({
-                access_key: W3F_KEY,
-                subject: `New commission enquiry — ${row.name ?? 'unnamed'}`,
-                from_name: 'Harrow & Thread website',
-                ...row,
-                images: uploaded.length
-                  ? uploaded.map((p) => `${SB_URL}/storage/v1/object/enquiry-uploads/${p}`).join('\n')
-                  : 'none attached',
-              }),
-            });
-          } catch { /* email is a convenience, not the record */ }
+      // 3 · Notification email. Sent even when Supabase failed, and told so, so
+      // a lead is never lost while the database is unreachable. Web3Forms' free
+      // tier only accepts browser-side calls — which this is.
+      // 3 · Notification email, sent as a NATIVE form POST rather than fetch.
+      //
+      // fetch() to Web3Forms is blocked by CORS: with a JSON content-type the
+      // preflight is rejected, and even as FormData the response carries no
+      // Access-Control-Allow-Origin for our origin. A native form submission is
+      // not subject to CORS at all, which is exactly why Web3Forms' own example
+      // is a plain <form>. Their `redirect` field brings the visitor back to our
+      // success page afterwards. Do not "modernise" this into a fetch.
+      if (W3F_KEY) {
+        const alerts: string[] = [];
+        if (!dbSaved) alerts.push('WARNING: this enquiry could NOT be saved to the database. This email is the only record of it.');
+        if (storageFailed) alerts.push('WARNING: one or more images the sender attached failed to upload.');
+
+        const post = document.createElement('form');
+        post.method = 'POST';
+        post.action = 'https://api.web3forms.com/submit';
+        post.style.display = 'none';
+
+        const add = (k: string, v: string) => {
+          const i = document.createElement('input');
+          i.type = 'hidden'; i.name = k; i.value = v;
+          post.appendChild(i);
+        };
+        add('access_key', W3F_KEY);
+        add('subject', `New commission enquiry — ${row.name ?? 'unnamed'}`);
+        add('from_name', 'Harrow & Thread website');
+        add('redirect', `${window.location.origin}/enquire/success`);
+        for (const [k, v] of Object.entries(row)) {
+          if (k === 'upload_paths') continue;
+          if (v != null && v !== '') add(k, String(v));
         }
+        add('images', uploaded.length
+          ? uploaded.map((pth) => `${SB_URL}/storage/v1/object/enquiry-uploads/${pth}`).join(' | ')
+          : 'none attached');
+        if (alerts.length) add('alerts', alerts.join(' '));
 
-        window.location.assign('/enquire/success');
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : 'Something went wrong.';
-        say(`${msg} Please try again, or email us directly at ${CONTACT_EMAIL}.`, true);
-        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send enquiry'; }
+        document.body.appendChild(post);
+        post.submit();   // navigates; Web3Forms redirects to /enquire/success
+        return;
       }
+
+      // Only a total failure is worth stopping the visitor for.
+      if (dbSaved || mailSent) { window.location.assign('/enquire/success'); return; }
+
+      say(`We could not send your enquiry. Please try again, or email us directly at ${CONTACT_EMAIL}.`, true);
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send enquiry'; }
     })();
   });
 </script>
