@@ -57,6 +57,10 @@ Read only. An earlier session broke it and the client repaired it by hand.
   Avoid "trade specialist" phrasing.
 - **Images:** generated via OpenRouter (`POST /api/v1/images`, key in `.env`). Do not reduce
   the image count to dodge the empty-slot problem — fill the slots.
+- **NO RUG MAY BE CROPPED. Ever.** Client rule, 2026-08-11. Every rug image must show the
+  whole piece, all four corners inside the frame. This constrains the *design* as much as
+  the prompts: no full-bleed rug photography, no `object-cover` on a rug image, no tight
+  aspect-ratio container that clips one. Rugs sit as complete plates on a ground.
 
 ## Open — do not implement unilaterally
 

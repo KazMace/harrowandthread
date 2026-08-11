@@ -1,0 +1,311 @@
+---
+// DIRECTION A — "Plate"
+// Throwaway design exploration. Delete src/pages/lab/ before rollout.
+//
+// Logic: the auction catalogue / gallery plate. Every rug is presented whole,
+// centred, with air around it and a specification caption beneath — the way a
+// serious object is photographed for a catalogue raisonné. Nothing bleeds, so
+// the "never crop a rug" rule is structural rather than a constraint fought
+// against. Works even if the photography stays ordinary, because the composure
+// comes from the margins and the type, not from the image.
+import '@fontsource-variable/fraunces';
+import '@fontsource-variable/schibsted-grotesk';
+
+const plates = [
+  { img: 'whole-hero', no: 'I', title: 'Quatrefoil', spec: 'Geometric · 3.5 × 2.6m · wool · 12mm pile · indigo, madder, ochre, bone' },
+  { img: 'whole-geo', no: 'II', title: 'Lattice', spec: 'Geometric · 4 × 3m · wool · 6mm pile · charcoal, saffron, cream' },
+  { img: 'whole-pictorial', no: 'III', title: 'Escarpment', spec: 'Pictorial · 3 × 2m · silk blend · 12mm pile · rust, sage, plum' },
+];
+---
+
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Direction A — Plate — Harrow &amp; Thread</title>
+  </head>
+  <body>
+    <header class="masthead">
+      <a class="wordmark" href="/lab/direction-a">Harrow &amp; Thread</a>
+      <nav>
+        <a href="#work">Work</a>
+        <a href="#colour">Colour</a>
+        <a href="#rates">Rates</a>
+        <a class="quiet-cta" href="/enquire">Commission</a>
+      </nav>
+    </header>
+
+    <!-- Opening: type only. No photograph asked to do work it cannot do. -->
+    <section class="opening">
+      <p class="folio">Est. Harrow &amp; Thread · Bespoke hand-tufted</p>
+      <h1>
+        One rug.<br />
+        <em>Yours.</em><br />
+        Never made twice.
+      </h1>
+      <div class="opening-foot">
+        <p class="lede">
+          A commission is drawn to your design, dyed to your colour, tufted to your
+          dimensions, and then never repeated for anyone else.
+        </p>
+        <a class="rule-link" href="/enquire">Begin a commission</a>
+      </div>
+    </section>
+
+    <!-- Plates. Whole rug, centred, air around it, catalogue caption beneath. -->
+    <section id="work" class="plates">
+      {plates.map((p) => (
+        <figure class="plate">
+          <div class="plate-frame">
+            <img
+              src={`/images/lab/${p.img}-1600w.webp`}
+              srcset={`/images/lab/${p.img}-800w.webp 800w, /images/lab/${p.img}-1600w.webp 1600w`}
+              sizes="(min-width: 1100px) 66rem, 92vw"
+              alt={`${p.title} — a hand-tufted rug shown in full`}
+              width="1600" height="900" loading="lazy" decoding="async"
+            />
+          </div>
+          <figcaption>
+            <span class="plate-no">Plate {p.no}</span>
+            <h2>{p.title}</h2>
+            <p>{p.spec}</p>
+            <p class="viz">Design visualisation</p>
+          </figcaption>
+        </figure>
+      ))}
+    </section>
+
+    <!-- Colour: a statement, not a swatch chart. Three dyes, enormous. -->
+    <section id="colour" class="colour">
+      <div class="colour-words">
+        <p class="folio">Colour</p>
+        <h2>One thousand four hundred dyes.<br />Yours is one of them.</h2>
+        <p class="lede">
+          We match to a single reference in the ARS system — the standard the mills
+          work to. Not a swatch posted to you that has aged in transit. A number,
+          matched exactly.
+        </p>
+        <a class="rule-link" href="https://arscolors.com" rel="noopener">Browse the system</a>
+      </div>
+      <div class="colour-fields" aria-hidden="true">
+        <span style="background:#1B2A4A"></span>
+        <span style="background:#9C3324"></span>
+        <span style="background:#C8892B"></span>
+        <span style="background:#E8E1D2"></span>
+      </div>
+    </section>
+
+    <!-- Process: a single narrow measure, numbers set as folios in the margin. -->
+    <section class="process">
+      <p class="folio">Process</p>
+      <ol>
+        <li>
+          <div>
+            <h3>Design</h3>
+            <p>Bring a sketch, a photograph, or an idea. We map it to your exact dimensions. If you would rather we drew it, a designer works alongside you for £200, credited against the commission.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Sign-off</h3>
+            <p>You approve the design and the dye references in writing. Nothing is made until you do. Production begins on a 50% deposit.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Made</h3>
+            <p>Hand-tufted, inspected, rolled around a core and delivered fully insured. About four weeks from sign-off.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Rates: a specification list, quiet, complete. -->
+    <section id="rates" class="rates">
+      <p class="folio">Rates</p>
+      <dl>
+        <div><dt>Plain</dt><dd>from £600<span>/m²</span></dd><dd class="what">A single colour across the whole piece</dd></div>
+        <div><dt>Geometric</dt><dd>from £900<span>/m²</span></dd><dd class="what">A pattern, as a border or across the whole piece</dd></div>
+        <div><dt>Pictorial</dt><dd>from £1,200<span>/m²</span></dd><dd class="what">A scene, painterly or photographic</dd></div>
+      </dl>
+      <p class="rates-note">
+        Your rate is confirmed at quote, once we know the design. Shipping included
+        and insured to the UK, Europe and the United States; import duties and
+        destination VAT are payable by the recipient.
+      </p>
+    </section>
+
+    <section class="closing">
+      <h2>Tell us what you want made.</h2>
+      <a class="rule-link big" href="/enquire">Begin a commission</a>
+      <p class="folio">We reply within one working day.</p>
+    </section>
+
+    <style is:global>
+      :root {
+        --paper: #F7F4EE;
+        --ink: #17150F;
+        --muted: #6A6459;
+        --line: #DCD5C7;
+        --measure: 34rem;
+      }
+      * { box-sizing: border-box; }
+      html { overflow-x: clip; }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif;
+        font-size: 17px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+      img { max-width: 100%; height: auto; display: block; }
+
+      h1, h2, h3 {
+        font-family: 'Fraunces Variable', Georgia, serif;
+        font-weight: 400;
+        font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 144;
+        letter-spacing: -0.02em;
+        margin: 0;
+        text-wrap: balance;
+      }
+      em { font-style: italic; font-variation-settings: 'SOFT' 8, 'WONK' 1, 'opsz' 144; }
+
+      .folio {
+        font-size: 0.6875rem; letter-spacing: 0.18em; text-transform: uppercase;
+        color: var(--muted); margin: 0;
+      }
+      .lede { max-width: var(--measure); color: var(--muted); font-size: 1.0625rem; }
+
+      .rule-link {
+        display: inline-block; text-decoration: none; color: var(--ink);
+        border-bottom: 1px solid var(--ink); padding-bottom: 0.2rem;
+        font-size: 0.9375rem; letter-spacing: 0.01em;
+        transition: opacity 200ms ease;
+      }
+      .rule-link:hover { opacity: 0.55; }
+      .rule-link.big { font-family: 'Fraunces Variable', serif; font-size: 1.5rem; }
+
+      /* Masthead — a rule, a wordmark, nothing else. */
+      .masthead {
+        display: flex; align-items: baseline; justify-content: space-between;
+        flex-wrap: wrap; gap: 1rem 2rem;
+        padding: 1.75rem clamp(1.25rem, 5vw, 4.5rem);
+        border-bottom: 1px solid var(--line);
+      }
+      .masthead nav { flex-wrap: wrap; }
+      .wordmark {
+        font-family: 'Fraunces Variable', serif; font-size: 1.25rem;
+        letter-spacing: -0.01em; text-decoration: none; color: var(--ink);
+      }
+      .masthead nav { display: flex; gap: clamp(1rem, 3vw, 2.5rem); align-items: baseline; }
+      .masthead nav a {
+        font-size: 0.8125rem; letter-spacing: 0.08em; text-transform: uppercase;
+        color: var(--muted); text-decoration: none;
+      }
+      .masthead nav a:hover { color: var(--ink); }
+      .masthead nav a.quiet-cta { color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+
+      /* Opening — type carries it. Deliberately no image. */
+      .opening { padding: clamp(5rem, 14vh, 11rem) clamp(1.25rem, 5vw, 4.5rem) clamp(4rem, 9vh, 7rem); }
+      .opening h1 {
+        font-size: clamp(3rem, 11vw, 9.5rem); line-height: 0.94;
+        margin: 2.5rem 0 0; max-width: 14ch;
+      }
+      .opening-foot {
+        display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between;
+        gap: 2.5rem; margin-top: clamp(3rem, 7vh, 5.5rem);
+        padding-top: 2rem; border-top: 1px solid var(--line);
+      }
+
+      /* Plates — the whole rug, always. Air is the luxury. */
+      .plates { padding: 0 clamp(1.25rem, 5vw, 4.5rem); }
+      .plate { margin: 0 0 clamp(5rem, 13vh, 10rem); }
+      .plate-frame {
+        max-width: 66rem; margin: 0 auto;
+        background: #fff; padding: clamp(0.75rem, 2vw, 1.75rem);
+        box-shadow: 0 1px 0 var(--line);
+      }
+      .plate figcaption {
+        max-width: 66rem; margin: 1.5rem auto 0;
+        display: grid; gap: 0.35rem;
+      }
+      .plate-no {
+        font-size: 0.6875rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
+      }
+      .plate figcaption h2 { font-size: clamp(1.75rem, 3.5vw, 2.75rem); }
+      .plate figcaption p { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+      .plate .viz {
+        font-size: 0.6875rem; letter-spacing: 0.18em; text-transform: uppercase;
+        color: var(--muted); margin-top: 0.5rem;
+      }
+
+      /* Colour — four enormous dye fields, not a chart of chips. */
+      .colour {
+        border-top: 1px solid var(--line);
+        padding: clamp(4rem, 10vh, 8rem) clamp(1.25rem, 5vw, 4.5rem) 0;
+      }
+      .colour-words { max-width: 46rem; }
+      .colour-words h2 { font-size: clamp(2rem, 5.5vw, 4rem); line-height: 1.05; margin: 1.5rem 0 1.75rem; }
+      .colour-words .rule-link { margin-top: 1.5rem; }
+      .colour-fields {
+        display: grid; grid-template-columns: repeat(4, 1fr);
+        margin-top: clamp(3rem, 8vh, 6rem);
+        margin-left: calc(clamp(1.25rem, 5vw, 4.5rem) * -1);
+        margin-right: calc(clamp(1.25rem, 5vw, 4.5rem) * -1);
+      }
+      .colour-fields span { display: block; height: clamp(9rem, 26vh, 20rem); }
+
+      /* Process — one narrow measure, generous leading between steps. */
+      .process { padding: clamp(5rem, 12vh, 9rem) clamp(1.25rem, 5vw, 4.5rem); }
+      .process ol { list-style: none; margin: 2.5rem 0 0; padding: 0; counter-reset: step; max-width: 44rem; }
+      .process li {
+        counter-increment: step; padding: 2.25rem 0; border-top: 1px solid var(--line);
+        display: grid; grid-template-columns: 4rem 1fr; gap: 1.5rem; align-items: start;
+      }
+      .process li::before {
+        content: counter(step, decimal-leading-zero);
+        font-family: 'Fraunces Variable', serif; font-size: 1.5rem; color: var(--muted);
+      }
+      .process h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+      .process p { margin: 0; color: var(--muted); }
+
+      /* Rates — a specification list. Quiet, complete, no banner. */
+      .rates {
+        background: var(--ink); color: var(--paper);
+        padding: clamp(4rem, 10vh, 8rem) clamp(1.25rem, 5vw, 4.5rem);
+      }
+      .rates .folio { color: rgba(247,244,238,0.6); }
+      .rates dl { margin: 2.5rem 0 0; max-width: 60rem; }
+      .rates dl > div {
+        display: grid; gap: 0.5rem 2.5rem;
+        grid-template-columns: minmax(0, 12rem) minmax(0, 12rem) 1fr;
+        align-items: baseline;
+        padding: 1.75rem 0; border-top: 1px solid rgba(247,244,238,0.22);
+      }
+      .rates dt { font-family: 'Fraunces Variable', serif; font-size: clamp(1.5rem, 3vw, 2.25rem); }
+      .rates dd { margin: 0; font-size: clamp(1.25rem, 2.4vw, 1.75rem); font-variant-numeric: tabular-nums; }
+      .rates dd span { font-size: 0.9375rem; color: rgba(247,244,238,0.7); }
+      .rates dd.what { font-size: 0.9375rem; color: rgba(247,244,238,0.7); }
+      .rates-note { max-width: 44rem; margin-top: 2.5rem; color: rgba(247,244,238,0.7); font-size: 0.9375rem; }
+
+      .closing {
+        padding: clamp(6rem, 16vh, 12rem) clamp(1.25rem, 5vw, 4.5rem);
+        display: grid; gap: 2rem; justify-items: start;
+      }
+      .closing h2 { font-size: clamp(2.25rem, 7vw, 5rem); line-height: 1.02; max-width: 16ch; }
+
+      @media (max-width: 767px) {
+        .rates dl > div { grid-template-columns: 1fr; gap: 0.35rem; }
+        .colour-fields { grid-template-columns: repeat(2, 1fr); }
+        .process li { grid-template-columns: 2.5rem 1fr; gap: 1rem; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * { transition: none !important; animation: none !important; }
+      }
+    </style>
+  </body>
+</html>

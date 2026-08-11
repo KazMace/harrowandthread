@@ -1,0 +1,225 @@
+---
+// DIRECTION B — "Dye"
+// Throwaway design exploration. Delete src/pages/lab/ before rollout.
+//
+// Logic: colour is the product, so colour is the page. A near-black ground with
+// enormous single-dye fields carrying the scroll. The 1,400 colours idea is not
+// a chart of 79 chips — it is four planes the size of the screen, each named.
+// Rugs appear as complete plates floating on the dark, never bleeding, so the
+// "never crop a rug" rule holds by construction.
+// This is the direction that still works if the photography never improves,
+// because the colour fields do the heavy lifting, not the pictures.
+import '@fontsource/syne';
+import '@fontsource-variable/schibsted-grotesk';
+
+const dyes = [
+  { name: 'Indigo',  code: 'ARS 4412', hex: '#1B2A4A', on: '#F2EFE9' },
+  { name: 'Madder',  code: 'ARS 1180', hex: '#9C3324', on: '#F2EFE9' },
+  { name: 'Saffron', code: 'ARS 0733', hex: '#C8892B', on: '#141210' },
+  { name: 'Bone',    code: 'ARS 0104', hex: '#E8E1D2', on: '#141210' },
+];
+---
+
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Direction B — Dye — Harrow &amp; Thread</title>
+  </head>
+  <body>
+    <header class="bar">
+      <a class="wordmark" href="/lab/direction-b">Harrow &amp; Thread</a>
+      <a class="cta" href="/enquire">Commission <span aria-hidden="true">→</span></a>
+    </header>
+
+    <section class="stage">
+      <h1>Fourteen hundred<br />colours. <span>One</span><br />is yours.</h1>
+      <p class="stage-note">
+        Bespoke hand-tufted rugs, wall hangings and carpets. Any design, any
+        dimension to fifteen metres by ten. Dyed to a single reference and never
+        made again.
+      </p>
+    </section>
+
+    <!-- The signature: four dye planes, screen-scale. Not a swatch chart. -->
+    <section class="dyes">
+      {dyes.map((d) => (
+        <article class="dye" style={`background:${d.hex}; color:${d.on}`}>
+          <div class="dye-inner">
+            <h2>{d.name}</h2>
+            <p class="code">{d.code}</p>
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <section class="claim">
+      <p class="eyebrow">Matched, not approximated</p>
+      <p class="big">
+        We dye to a reference in the ARS system — the standard the mills work to.
+        Not a swatch posted out that has aged in transit. A number, matched exactly,
+        confirmed with you in writing before anything is made.
+      </p>
+      <a class="link" href="https://arscolors.com" rel="noopener">Browse the system</a>
+    </section>
+
+    <!-- Plates float on the dark. Complete rugs, wide margins, never bleeding. -->
+    <section class="gallery">
+      <figure>
+        <img src="/images/lab/whole-hero-1600w.webp"
+             srcset="/images/lab/whole-hero-800w.webp 800w, /images/lab/whole-hero-1600w.webp 1600w"
+             sizes="(min-width: 900px) 54rem, 90vw"
+             alt="A hand-tufted rug with a bold abstract design, shown in full"
+             width="1600" height="900" loading="lazy" decoding="async" />
+        <figcaption><strong>Pictorial</strong> · 3 × 2m · wool · 12mm · indigo, madder, ochre <span>Design visualisation</span></figcaption>
+      </figure>
+      <figure>
+        <img src="/images/lab/whole-geo-1600w.webp"
+             srcset="/images/lab/whole-geo-800w.webp 800w, /images/lab/whole-geo-1600w.webp 1600w"
+             sizes="(min-width: 900px) 54rem, 90vw"
+             alt="A hand-tufted rug with a bold geometric pattern, shown in full"
+             width="1600" height="900" loading="lazy" decoding="async" />
+        <figcaption><strong>Geometric</strong> · 4 × 3m · wool · 6mm · charcoal, saffron <span>Design visualisation</span></figcaption>
+      </figure>
+    </section>
+
+    <section class="rates">
+      <p class="eyebrow">Rates</p>
+      <div class="rate-rows">
+        <div><span class="tier">Plain</span><span class="price">from £600<i>/m²</i></span><span class="what">A single colour across the whole piece</span></div>
+        <div><span class="tier">Geometric</span><span class="price">from £900<i>/m²</i></span><span class="what">A pattern, as a border or all over</span></div>
+        <div><span class="tier">Pictorial</span><span class="price">from £1,200<i>/m²</i></span><span class="what">A scene, painterly or photographic</span></div>
+      </div>
+      <p class="fine">
+        Your rate is confirmed at quote, once we know the design. Shipping included
+        and insured to the UK, Europe and the United States. Import duties and
+        destination VAT are payable by the recipient. Four weeks from sign-off.
+      </p>
+    </section>
+
+    <section class="end">
+      <h2>Tell us what you want made.</h2>
+      <a class="cta big" href="/enquire">Commission <span aria-hidden="true">→</span></a>
+      <p class="eyebrow">We reply within one working day.</p>
+    </section>
+
+    <style is:global>
+      :root {
+        --black: #141210;
+        --off: #F2EFE9;
+        --dim: rgba(242,239,233,0.62);
+        --hair: rgba(242,239,233,0.18);
+      }
+      * { box-sizing: border-box; }
+      html { overflow-x: clip; }
+      body {
+        margin: 0; background: var(--black); color: var(--off);
+        font-family: 'Schibsted Grotesk Variable', system-ui, sans-serif;
+        font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+      }
+      :focus-visible { outline: 2px solid #C8892B; outline-offset: 4px; }
+      img { display: block; max-width: 100%; height: auto; }
+
+      h1, h2 {
+        font-family: Syne, system-ui, sans-serif; font-weight: 700;
+        letter-spacing: -0.03em; margin: 0; text-wrap: balance;
+      }
+      .eyebrow {
+        font-size: 0.6875rem; letter-spacing: 0.2em; text-transform: uppercase;
+        color: var(--dim); margin: 0;
+      }
+
+      .bar {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 1.5rem clamp(1.25rem, 5vw, 4rem);
+        position: sticky; top: 0; z-index: 20;
+        background: rgba(20,18,16,0.92); backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--hair);
+      }
+      .wordmark {
+        font-family: Syne, sans-serif; font-weight: 700; font-size: 1.0625rem;
+        letter-spacing: -0.01em; color: var(--off); text-decoration: none;
+      }
+      .cta {
+        color: var(--off); text-decoration: none; font-size: 0.875rem;
+        letter-spacing: 0.06em; text-transform: uppercase;
+        border-bottom: 1px solid var(--off); padding-bottom: 0.25rem;
+        transition: color 200ms ease, border-color 200ms ease;
+      }
+      .cta:hover { color: #C8892B; border-color: #C8892B; }
+      .cta.big { font-size: 1.125rem; }
+
+      .stage { padding: clamp(5rem, 18vh, 12rem) clamp(1.25rem, 5vw, 4rem) clamp(4rem, 10vh, 8rem); }
+      .stage h1 { font-size: clamp(2.75rem, 10vw, 9rem); line-height: 0.92; max-width: 13ch; }
+      .stage h1 span { color: #C8892B; }
+      .stage-note { max-width: 38rem; color: var(--dim); margin: 2.5rem 0 0; font-size: 1.0625rem; }
+
+      /* Four dye planes. This is the page's signature. */
+      .dyes { display: grid; grid-template-columns: repeat(4, 1fr); }
+      .dye { min-height: clamp(16rem, 46vh, 30rem); display: flex; align-items: flex-end; }
+      .dye-inner { padding: clamp(1rem, 2vw, 2rem); }
+      .dye h2 { font-size: clamp(1.25rem, 2.6vw, 2.25rem); line-height: 1; }
+      .dye .code {
+        margin: 0.5rem 0 0; font-size: 0.6875rem; letter-spacing: 0.18em;
+        text-transform: uppercase; opacity: 0.75;
+      }
+
+      .claim { padding: clamp(4rem, 12vh, 9rem) clamp(1.25rem, 5vw, 4rem); max-width: 58rem; }
+      .claim .big {
+        font-size: clamp(1.375rem, 3.2vw, 2.25rem); line-height: 1.32;
+        margin: 1.75rem 0 2rem; letter-spacing: -0.015em;
+      }
+      .link {
+        color: #C8892B; text-decoration: none; border-bottom: 1px solid currentColor;
+        padding-bottom: 0.2rem; font-size: 0.9375rem;
+      }
+
+      .gallery {
+        display: grid; gap: clamp(3rem, 8vh, 6rem);
+        padding: 0 clamp(1.25rem, 5vw, 4rem) clamp(4rem, 12vh, 9rem);
+      }
+      .gallery figure { margin: 0; max-width: 54rem; }
+      .gallery figure:nth-child(even) { margin-left: auto; }
+      .gallery figcaption {
+        display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; justify-content: space-between;
+        margin-top: 1rem; font-size: 0.875rem; color: var(--dim);
+      }
+      .gallery figcaption strong { color: var(--off); font-weight: 500; }
+      .gallery figcaption span {
+        font-size: 0.6875rem; letter-spacing: 0.18em; text-transform: uppercase;
+      }
+
+      .rates {
+        border-top: 1px solid var(--hair);
+        padding: clamp(4rem, 10vh, 8rem) clamp(1.25rem, 5vw, 4rem);
+      }
+      .rate-rows { margin-top: 2.5rem; }
+      .rate-rows > div {
+        display: grid; grid-template-columns: minmax(0,12rem) minmax(0,12rem) 1fr;
+        gap: 0.5rem 2.5rem; align-items: baseline;
+        padding: 1.75rem 0; border-top: 1px solid var(--hair);
+      }
+      .tier { font-family: Syne, sans-serif; font-weight: 700; font-size: clamp(1.375rem, 2.8vw, 2rem); }
+      .price { font-size: clamp(1.125rem, 2.2vw, 1.625rem); font-variant-numeric: tabular-nums; white-space: nowrap; }
+      .price i { font-style: normal; font-size: 0.875rem; color: var(--dim); }
+      .what { color: var(--dim); font-size: 0.9375rem; }
+      .fine { max-width: 44rem; margin-top: 2.5rem; color: var(--dim); font-size: 0.875rem; }
+
+      .end {
+        padding: clamp(6rem, 18vh, 13rem) clamp(1.25rem, 5vw, 4rem);
+        display: grid; gap: 2rem; justify-items: start;
+        border-top: 1px solid var(--hair);
+      }
+      .end h2 { font-size: clamp(2rem, 7vw, 5rem); line-height: 1; max-width: 14ch; }
+
+      @media (max-width: 767px) {
+        .dyes { grid-template-columns: repeat(2, 1fr); }
+        .rate-rows > div { grid-template-columns: 1fr; gap: 0.35rem; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * { transition: none !important; animation: none !important; }
+      }
+    </style>
+  </body>
+</html>
