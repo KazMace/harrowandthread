@@ -88,23 +88,23 @@ Read only. An earlier session broke it and the client repaired it by hand.
   the prompts: no full-bleed rug photography, no `object-cover` on a rug image, no tight
   aspect-ratio container that clips one. Rugs sit as complete plates on a ground.
 
-## Where work stopped (2026-08-11)
+## Where work stopped (2026-08-11, end of day)
 
-Three throwaway homepage directions are built at `src/pages/lab/direction-{a,b,c}.astro`
-and the client is choosing between them. Comparison page (update this URL, don't make a
-new one): `https://claude.ai/code/artifact/97523aaa-ae34-4940-959e-cb9be921f6f4`
+Direction A ("Plate") is chosen and rolled across all 12 pages. All seven tasks
+from the day's list are done: images filled, homepage rebuilt to A, accordions
+built, copy rewritten around the room thesis, old hero retired, /lab deleted,
+full sweep clean.
 
-Done since: research (Robert Adam designed carpets to echo the ceiling above them —
-bespoke-to-the-room is the authentic English tradition, not a modern departure), and a
-full top-tier image set in `public/images/grand/` — hero, library, bedroom, wall hanging,
-fitted carpet, macro pile. All rooms **populated, never empty**; all rugs uncropped.
+Verified: 12 pages x 11 widths zero overflow; one h1 per page, no heading skips;
+fonts resolve to Schibsted Grotesk Variable in-browser; zero broken images; zero
+images with object-cover (the no-crop rule holds structurally now); zero console
+errors; form verified both paths (empty -> 4 errors + aria-invalid, stays put;
+valid -> POST -> /enquire/success); 4.3 KB JS; compliance greps all zero.
 
-Next: (1) re-screenshot the three lab directions using the grand imagery; (2) client picks
-a direction; (3) rewrite site copy around the "designed for your room" thesis; (4) roll
-across all 12 pages and delete `src/pages/lab/` and `public/images/lab/`.
-
-**Scale is the commercial point:** 15×10m at these rates is £90k–£180k. Imagery must
-fish for that buyer, not for a 3×2m rug in a suburban lounge.
+**Blocking launch, all needing the client:** trading address, legal "Last
+updated" dates, phone number, a real form endpoint plus a test submission (this
+failure mode is invisible from the front end), solicitor review, fire-rating
+certification. See COMPLIANCE.md.
 
 ## Open — do not implement unilaterally
 
