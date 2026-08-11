@@ -19,7 +19,17 @@ command away.
 4. Re-read QA-CHECKLIST.md with fresh eyes. Note any assertion that is not actually
    machine-testable in a browser, or whose citation does not support it. List them in
    scratchpad/qa-checklist-notes.md. Do NOT silently edit the checklist.
-5. Commit only if files changed, per CLAUDE.md section 6.
+5. Verify website.md against the codebase. It is a rulebook of lessons from this build;
+   every claim in it should still be true. Check the falsifiable ones specifically:
+   - `grep -rno '="[^"]*{[a-zA-Z_$][^"]*"' dist/ --include='*.html'` returns 0 hits
+   - the Tailwind spacing scale in tailwind.config.mjs is still contiguous (no missing step)
+   - `focus:outline-none` appears nowhere in src/
+   - @astrojs/sitemap is still pinned to 3.2.1 in package.json
+   - the shipped JS in dist/_astro/*.js is still roughly 4.3KB total
+   Correct any claim that has gone stale. Do NOT add new rules that are not grounded in
+   something that actually happened on this build — no generic filler.
+
+6. Commit only if files changed, per CLAUDE.md section 6.
 
 Finish by writing scratchpad/qa-prep-summary.md: what is ready, and what still needs the
 client's decision. Outstanding for them, do NOT act on any of these:

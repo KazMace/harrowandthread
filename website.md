@@ -236,8 +236,16 @@ Found in production on `/privacy`, on the GDPR-required deletion route:
 <a href={`mailto:${site.company.email}`}>{site.company.email}</a>
 ```
 
-The link *text* renders correctly, so it looks right in a screenshot. **Grep the built
-output for `="[^"]*{` after any build** — no error is raised.
+The link *text* renders correctly, so it looks right in a screenshot. No error is raised.
+Grep the **built** output after any build — a `{` inside an attribute value in `dist/`
+means it never interpolated:
+
+```bash
+grep -rno '="[^"]*{[a-zA-Z_$][^"]*"' dist/ --include='*.html'   # expect 0 hits
+```
+
+Run it against `dist/`, not `src/` — in source, JS template literals inside `<script>`
+blocks are legitimate matches and drown the signal.
 
 ### Build and dependency traps
 
