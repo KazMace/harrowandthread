@@ -115,7 +115,10 @@ spacing: { 0:'0', 0.5:'0.125rem', 1:'0.25rem', 1.5:'0.375rem', /* … no gaps �
 ```
 
 - **Never leave a sparse scale.** A missing `9` is a bug that renders as "slightly wrong
-  spacing" and reads as a design choice.
+  spacing" and reads as a design choice. (This repo's scale runs unbroken from `0` to `48`,
+  then `56 · 64 · 72 · 80 · 96`. Tailwind's `52` and `60` are absent — nothing uses them
+  today, so it is a latent trap rather than a live bug, but `p-52` would silently do
+  nothing.)
 - **Add semantic spacing tokens** alongside the numeric scale: `gutter`, `gutter-mobile`,
   `section`, `section-mobile`. Section rhythm then changes in one place.
 
@@ -356,9 +359,12 @@ Two structural habits follow:
 - **Headline prices must be genuinely achievable.** A "from" price nobody can obtain is
   drip pricing. Keep a real example you'd actually sell at the headline rate. Use
   `minPrice` in JSON-LD, never `price`.
-- **Material information may not be collapsed.** Anything that materially affects the
-  purchase decision must sit outside any accordion or FAQ. Assert it:
-  `element.closest('details') === null`.
+- **Material information may not be buried.** Anything that materially affects the purchase
+  decision must appear in the open **on the page that sells the thing it concerns** —
+  `element.closest('details') === null` *there*. Repeating it inside a homepage FAQ
+  accordion is not burying. An earlier version of this rule asserted absence from `<details>`
+  globally and would have failed a correct homepage; corrected 2026-08-11 after checking the
+  rendered pages. Scope the assertion to the selling page, not the whole site.
 
 ### Git
 
