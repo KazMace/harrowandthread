@@ -10,7 +10,9 @@ Everything left that needs you rather than code. Ordered by what blocks launch.
 
 **Status: half done.** Supabase URL and key are in `.env`. Still needed, in this order — each one blocks the next:
 
-1. **Set up the Harrow & Thread email.** This comes first because Web3Forms registers against a real mailbox. `enquiries@harrowandthread.com` is already written into the site as your contact address, so that is the one to create. Options: your domain registrar usually bundles mailboxes, or Google Workspace / Fastmail / Zoho if you want it properly.
+1. ~~**Set up the Harrow & Thread email.**~~ **Done** — `meadow.mace@harrowandthread.com`. The site's public contact address has been switched to it across all 12 pages, `/enquire`, `/cookies` and the `Organization` structured data, so every address shown on the site now actually receives mail.
+
+   **Optional improvement when you have a spare minute:** create `enquiries@harrowandthread.com` as an *alias* forwarding to `meadow.mace@`, then tell me and I'll switch the public address back. An alias is a forwarding rule, not a mailbox — look for "Aliases" or "Forwarders" in your email provider; most give unlimited free. Reasons it's worth doing: `enquiries@` reads as a business rather than one person, it survives you hiring someone or handing the inbox over, and it keeps your own name out of a permanently-crawled public record. Not urgent — what's live now works.
 2. **A Web3Forms access key** — free account at web3forms.com, registered against the mailbox from step 1. 250 submissions a month, no card needed. They email you a UUID.
 3. ~~**Supabase project URL and anon key**~~ — **done**, both in `.env` (new-format `sb_publishable_` key, which is fine).
 
