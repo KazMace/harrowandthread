@@ -176,7 +176,10 @@ than resolved, because resolving them is the client's call.
    requires four specific disclosures to sit outside any accordion (C:40–50). Both can hold
    — accordions for FAQ, those four in the open — but a test must enforce the split.
 4. **"We start at around £6k for a basic design"** (D:12) versus Plain from £600/m² (S).
-   Consistent only at ~10m². The from-price must be genuinely achievable or it is drip
-   pricing (C:36–38), so keep a real example you would actually make at £600/m².
+   **Resolved in the build's favour, verified 2026-08-11:** `/` and `/commissions` both carry
+   *"A 3 × 2m rug in a single colour starts at £3,600"* (6 m² × £600 ✓, and the pictorial
+   figure of £7,200 checks out at 6 m² × £1,200 ✓). So the real entry point is £3,600, not
+   £6k, and that worked example is exactly the genuinely-achievable evidence `C:36–38`
+   requires against a drip-pricing finding. **Do not reintroduce the £6k figure.**
 5. **The brief's 48-hour damage and defect windows** (D:87, D:94) are removed by
    `COMPLIANCE.md` (C:54–57).
