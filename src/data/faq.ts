@@ -68,8 +68,8 @@ export const faq = [
   {
     category: "Wall hangings",
     items: [
-      { q: "Is hanging hardware included?",
-        a: ["No pole, rail, fixings or hardware are supplied. You choose your own mounting to suit the piece and the wall. A large hand-tufted piece is heavy &mdash; confirm your wall and fixings are suitable."] },
+      { q: "How does a wall hanging actually hang?",
+        a: ["Wide loops are sewn along the top edge of the piece. A pole threads through the loops and rests on two brackets fixed to the wall, so the piece hangs flat with its fringe at the bottom.", "The loops are part of the piece. The pole, the brackets and the wall fixings are not supplied &mdash; you choose those to suit the piece and the wall. A large hand-tufted piece is heavy, so confirm your wall and fixings will carry it."] },
     ],
   },
 ];
