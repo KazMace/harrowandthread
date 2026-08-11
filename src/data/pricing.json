@@ -1,35 +1,30 @@
 {
+  "_note": "FROM-pricing model, set by the client 2026-08-11. Rates are starting rates: the final figure is set at quote once the design is specified, because a geometric border, a full all-over geometric and a design with custom elements genuinely cost different amounts to make. Every rate MUST be presented with 'from' in front of it — a bare '£600/m²' is a price claim the business cannot stand behind, and under the DMCC Act 2024 a headline price that is rarely obtainable is drip pricing. The from-price must be genuinely achievable.",
+  "fromPricing": true,
   "tiers": [
     {
       "id": "plain",
       "name": "Plain",
-      "rate": 750,
+      "rate": 600,
       "description": "A single colour across the whole piece",
       "chooseIf": "A single colour across the whole piece"
     },
     {
-      "id": "geometric-border",
-      "name": "Geometric border",
-      "rate": 1000,
-      "description": "A geometric pattern as a border, with a plain field",
-      "chooseIf": "A geometric border framing a plain centre"
-    },
-    {
-      "id": "geometric-allover",
-      "name": "Geometric all-over",
-      "rate": null,
-      "rateNote": "AWAITING CLIENT FIGURE. A previous session invented a rate here to space the ladder evenly and shipped it live. Removed 2026-08-11 on the client's instruction. Set `rate` to the real number and it fills in everywhere — rate card, worked examples and JSON-LD. Until then it renders as [rate to confirm] and is withheld from structured data. DO NOT GUESS IT AGAIN.",
-      "description": "A geometric pattern repeating across the whole piece",
-      "chooseIf": "A geometric pattern across the entire piece"
+      "id": "geometric",
+      "name": "Geometric",
+      "rate": 900,
+      "description": "A geometric pattern, as a border or across the whole piece",
+      "chooseIf": "A geometric pattern, either as a border or all over"
     },
     {
       "id": "pictorial",
       "name": "Pictorial",
-      "rate": 1500,
+      "rate": 1200,
       "description": "A scene, painterly or photographic design",
       "chooseIf": "A scene, painterly or photographic design"
     }
   ],
+  "rateNote": "The starting rate for the tier. Your final rate is confirmed at quote, once we know the design — a border, an all-over pattern and a design with custom elements take different amounts of work.",
   "designFee": 200,
   "designFeeNote": "Applies only if you ask us to assign a designer. Credited in full against your commission. If you take the design and do not proceed, the £200 is all you pay.",
   "shippingIncluded": [
@@ -43,42 +38,30 @@
     {
       "label": "1.5 × 1m (hanging)",
       "area": 1.5,
-      "plain": 1125,
-      "pictorial": 2250,
-      "geometric-border": 1500,
-      "geometric-allover": null
+      "plain": 900,
+      "geometric": 1350,
+      "pictorial": 1800
     },
     {
       "label": "3 × 2m",
       "area": 6,
-      "plain": 4500,
-      "pictorial": 9000,
-      "geometric-border": 6000,
-      "geometric-allover": null
+      "plain": 3600,
+      "geometric": 5400,
+      "pictorial": 7200
     },
     {
       "label": "4 × 3m",
       "area": 12,
-      "plain": 9000,
-      "pictorial": 18000,
-      "geometric-border": 12000,
-      "geometric-allover": null
-    },
-    {
-      "label": "6 × 4m",
-      "area": 24,
-      "plain": 18000,
-      "pictorial": 36000,
-      "geometric-border": 24000,
-      "geometric-allover": null
+      "plain": 7200,
+      "geometric": 10800,
+      "pictorial": 14400
     },
     {
       "label": "15 × 10m",
       "area": 150,
-      "plain": 112500,
-      "pictorial": 225000,
-      "geometric-border": 150000,
-      "geometric-allover": null
+      "plain": 90000,
+      "geometric": 135000,
+      "pictorial": 180000
     }
   ]
 }

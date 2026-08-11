@@ -2,14 +2,13 @@ export const SITE_NAME = 'Harrow & Thread';
 export const SITE_URL = 'https://harrowandthread.com';
 export const RESPONSE_PROMISE = 'We respond within one working day.';
 
-// `null` = not confirmed by the client. Never substitute a plausible-looking
-// number here; a previous session invented 1250 for geometric-allover and it
-// reached the live rate card and the structured data. See src/data/pricing.json.
+// STARTING rates, not fixed prices. Always rendered with "from" in front —
+// the final rate is set at quote once the design is known. Never present these
+// as the price. See the _note in src/data/pricing.json.
 export const RATES = {
-  plain: 750,
-  'geometric-border': 1000,
-  'geometric-allover': null,
-  pictorial: 1500,
+  plain: 600,
+  geometric: 900,
+  pictorial: 1200,
 } as const;
 
 export const DESIGN_FEE = 200;
@@ -51,8 +50,7 @@ export const FORM_FIELDS = {
   designTier: [
     { value: '', label: 'Select...' },
     { value: 'plain', label: 'Plain' },
-    { value: 'geometric-border', label: 'Geometric border' },
-    { value: 'geometric-allover', label: 'Geometric all-over' },
+    { value: 'geometric', label: 'Geometric' },
     { value: 'pictorial', label: 'Pictorial' },
     { value: 'not-sure', label: 'Not sure' },
   ],

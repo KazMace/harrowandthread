@@ -50,7 +50,7 @@ const extras = [
 
 <BaseLayout
   title="Bespoke Wall-to-Wall Carpets, Made to Your Room — Harrow &amp; Thread"
-  description="Hand-tufted wall-to-wall carpets made to your room and your design, from 1,400 dye colours. £750–£1,500 per square metre. Supply only, with full measurement guidance and charged-area pricing explained upfront."
+  description="Hand-tufted wall-to-wall carpets made to your room and your design, from 1,400 dye colours. From £600 per square metre. Supply only, with full measurement guidance and charged-area pricing explained upfront."
 >
   <!-- Archetype: page header. -->
   <section class="section-pad">
@@ -118,9 +118,7 @@ const extras = [
               <tr class={i < pricing.tiers.length - 1 ? 'border-b border-paper/20' : ''}>
                 <th scope="row" class="display text-xl sm:text-2xl font-medium text-left py-6 pr-6 align-top">{tier.name}</th>
                 <td class="text-lg py-6 pr-6 align-top whitespace-nowrap">
-                  {tier.rate === null
-                    ? <span class="text-sm">[rate to confirm]</span>
-                    : <Fragment>&pound;{tier.rate.toLocaleString()}<span class="text-sm text-paper/90">/m&sup2;</span></Fragment>}
+                  <span class="text-sm text-paper/90">from </span>&pound;{tier.rate.toLocaleString()}<span class="text-sm text-paper/90">/m&sup2;</span>
                 </td>
                 <td class="text-base text-paper/90 py-6 align-top">{tier.description}</td>
               </tr>
@@ -137,7 +135,7 @@ const extras = [
         <div class="text-base text-paper space-y-2">
           <p class="m-0">Ordered dimensions: 5.1m &times; 4.1m (10cm trimming allowance added to each side)</p>
           <p class="m-0">Charged area: 5.1 &times; 4.1 = 20.91m&sup2;</p>
-          <p class="m-0">Plain rate: 20.91 &times; &pound;750 = <strong class="font-medium text-paper">&pound;15,683</strong></p>
+          <p class="m-0">Plain, from &pound;600/m&sup2;: 20.91 &times; &pound;600 = <strong class="font-medium text-paper">from &pound;12,546</strong></p>
         </div>
       </div>
     </div>

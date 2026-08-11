@@ -32,8 +32,8 @@ const extras = [
 ---
 
 <BaseLayout
-  title="Bespoke Hand-Tufted Rugs &amp; Wall Hangings — From £750/m² — Harrow &amp; Thread"
-  description="Commission a hand-tufted rug or wall hanging in any design and any dimension up to 15m × 10m. Wool, silk blend, bamboo silk or flatweave, dyed to match from 1,400 colours. £750–£1,500 per square metre."
+  title="Bespoke Hand-Tufted Rugs &amp; Wall Hangings — From £600/m² — Harrow &amp; Thread"
+  description="Commission a hand-tufted rug or wall hanging in any design and any dimension up to 15m × 10m. Wool, silk blend, bamboo silk or flatweave, dyed to match from 1,400 colours. From £600 per square metre, confirmed at quote."
 >
   <!-- Archetype: page header. Eyebrow, one real h1, lede. -->
   <section class="section-pad">
@@ -97,9 +97,7 @@ const extras = [
           {pricing.tiers.map((tier) => (
             <div class="bg-paper p-7 sm:p-8 flex flex-col h-full">
               <h4 class="display text-2xl m-0 mb-4">
-                {tier.name} &mdash; {tier.rate === null
-                  ? <span class="text-madder">[rate to confirm]</span>
-                  : <Fragment>&pound;{tier.rate.toLocaleString()}/m&sup2;</Fragment>}
+                {tier.name} &mdash; from &pound;{tier.rate.toLocaleString()}/m&sup2;
               </h4>
               <p class="text-base text-graphite m-0">{tier.chooseIf}</p>
               {tier.caveat && (
@@ -170,9 +168,7 @@ const extras = [
               <tr class={i < pricing.tiers.length - 1 ? 'border-b border-paper/20' : ''}>
                 <th scope="row" class="display text-xl sm:text-2xl font-medium text-left py-6 pr-6 align-top">{tier.name}</th>
                 <td class="text-lg sm:text-2xl tabular-nums py-6 pr-6 align-top whitespace-nowrap">
-                  {tier.rate === null
-                    ? <span class="text-base">[rate to confirm]</span>
-                    : <Fragment>&pound;{tier.rate.toLocaleString()}<span class="text-sm text-paper/90">/m&sup2;</span></Fragment>}
+                  <span class="text-sm text-paper/90 tracking-normal">from </span>&pound;{tier.rate.toLocaleString()}<span class="text-sm text-paper/90">/m&sup2;</span>
                 </td>
                 <td class="text-sm sm:text-base text-paper/90 py-6 align-top">{tier.description}</td>
               </tr>
@@ -187,19 +183,22 @@ const extras = [
   <!-- Archetype: data table. Worked examples given the width they need. -->
   <section class="section-pad">
     <div class="shell">
-      <h3 class="display text-2xl sm:text-3xl m-0 mb-4 sm:mb-10">Worked examples</h3>
+      <h3 class="display text-2xl sm:text-3xl m-0 mb-4 sm:mb-6">Worked examples</h3>
+      <p class="prose-body text-graphite mb-8 sm:mb-10">
+        Starting figures, at the rates above. Your final price is confirmed at
+        quote once the design is specified.
+      </p>
       <p class="eyebrow text-graphite mb-4 sm:hidden">Scroll for all tiers &rarr;</p>
 
       <div class="overflow-x-auto -mx-6 px-6 sm:mx-0 sm:px-0">
-        <table class="w-full min-w-[44rem] text-left border-collapse">
+        <table class="w-full min-w-[34rem] text-left border-collapse">
           <thead>
             <tr class="border-b-2 border-ink">
               <th scope="col" class="eyebrow text-graphite py-4 pr-6">Size</th>
               <th scope="col" class="eyebrow text-graphite py-4 pr-6">Area</th>
-              <th scope="col" class="eyebrow text-graphite py-4 pr-6">Plain</th>
-              <th scope="col" class="eyebrow text-graphite py-4 pr-6">Geo. border</th>
-              <th scope="col" class="eyebrow text-graphite py-4 pr-6">Geo. all-over</th>
-              <th scope="col" class="eyebrow text-graphite py-4">Pictorial</th>
+              <th scope="col" class="eyebrow text-graphite py-4 pr-6">Plain from</th>
+              <th scope="col" class="eyebrow text-graphite py-4 pr-6">Geometric from</th>
+              <th scope="col" class="eyebrow text-graphite py-4">Pictorial from</th>
             </tr>
           </thead>
           <tbody>
@@ -208,12 +207,7 @@ const extras = [
                 <th scope="row" class="display text-lg sm:text-xl font-medium text-left py-5 pr-6 whitespace-nowrap">{ex.label}</th>
                 <td class="text-sm text-graphite tabular-nums py-5 pr-6 whitespace-nowrap">{ex.area}m&sup2;</td>
                 <td class="text-base tabular-nums py-5 pr-6 whitespace-nowrap">&pound;{ex.plain.toLocaleString()}</td>
-                <td class="text-base tabular-nums py-5 pr-6 whitespace-nowrap">&pound;{ex['geometric-border'].toLocaleString()}</td>
-                <td class="text-base tabular-nums py-5 pr-6 whitespace-nowrap">
-                  {ex['geometric-allover'] === null
-                    ? <span class="text-graphite tabular-nums">&mdash;</span>
-                    : <Fragment>&pound;{ex['geometric-allover'].toLocaleString()}</Fragment>}
-                </td>
+                <td class="text-base tabular-nums py-5 pr-6 whitespace-nowrap">&pound;{ex.geometric.toLocaleString()}</td>
                 <td class="text-base tabular-nums py-5 whitespace-nowrap">&pound;{ex.pictorial.toLocaleString()}</td>
               </tr>
             ))}
