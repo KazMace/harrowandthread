@@ -33,8 +33,11 @@ stop at the first rung that holds:
 5. Only then: the minimum viable solution.
 
 Lazy means efficient, not careless — validation, security and error handling stay intact.
-The plugin `ponytail@ponytail` is installed but not enabled; the client can enable it via
-`/plugin`. This section applies whether or not it is.
+
+Installed as user skills at `~/.claude/skills/ponytail*` — `/ponytail [lite|full|ultra]`,
+`/ponytail-review` (flags over-engineering in the current diff), `/ponytail-audit` (scans
+the repo for bloat). **Invoke `ponytail` before any coding task on this project.** The
+ladder above applies whether or not the skill is loaded.
 
 ## 3. Don't decide what's theirs to decide
 
