@@ -19,7 +19,7 @@ const { title, description, noindex = false, schema } = Astro.props;
 
 const SITE_URL = 'https://harrowandthread.com';
 const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE_URL).href;
-const ogImage = `${SITE_URL}/images/hero-banner-main-768w.jpeg`;
+const ogImage = `${SITE_URL}/images/og-hero.jpeg`;
 
 // Breadcrumbs derived from the path. Home-only pages get no trail.
 const segments = Astro.url.pathname.split('/').filter(Boolean);
