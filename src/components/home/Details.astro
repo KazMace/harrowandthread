@@ -1,0 +1,70 @@
+---
+// Requested in the client's own brief: accordion links at the bottom of the
+// homepage, plus sign to expand or collapse. Native <details>/<summary> — same
+// markup already proven on /faq, no JavaScript.
+//
+// The brief listed Privacy and Terms among these. Those stay as links rather
+// than accordions: duplicating legal text onto the homepage means two copies
+// that drift apart, and the CMA cares which version was live. The reference
+// group at the end routes to them.
+import { faq } from '../../data/faq';
+import site from '../../data/site.json';
+---
+
+<section class="section-pad border-t rule">
+  <div class="shell">
+    <div class="flex flex-wrap items-end justify-between gap-6 mb-12 sm:mb-16">
+      <h2 class="display text-3xl sm:text-4xl m-0 max-w-[16ch]">
+        Everything else, answered.
+      </h2>
+      <p class="text-sm text-graphite max-w-[38ch] m-0">
+        The questions we are asked most before a first commission. Open what
+        you need.
+      </p>
+    </div>
+
+    <div class="max-w-narrow">
+      {faq.map((group) => (
+        <details class="group border-b rule">
+          <summary class="display text-xl sm:text-2xl text-ink cursor-pointer list-none flex justify-between items-baseline gap-6 py-6">
+            <span set:html={group.category}></span>
+            <span class="text-graphite text-2xl leading-none shrink-0 group-open:hidden" aria-hidden="true">+</span>
+            <span class="text-graphite text-2xl leading-none shrink-0 hidden group-open:inline" aria-hidden="true">&minus;</span>
+          </summary>
+
+          <div class="pb-6">
+            {group.items.map((item) => (
+              <div class="border-t rule py-5">
+                <p class="text-base text-ink m-0 mb-2" set:html={item.q}></p>
+                {item.a.map((para) => (
+                  <p class="prose-body text-graphite m-0 mt-2" set:html={para}></p>
+                ))}
+              </div>
+            ))}
+          </div>
+        </details>
+      ))}
+
+      <!-- Reference pages, linked rather than duplicated. -->
+      <details class="group border-b rule">
+        <summary class="display text-xl sm:text-2xl text-ink cursor-pointer list-none flex justify-between items-baseline gap-6 py-6">
+          <span>Care, terms and policies</span>
+          <span class="text-graphite text-2xl leading-none shrink-0 group-open:hidden" aria-hidden="true">+</span>
+          <span class="text-graphite text-2xl leading-none shrink-0 hidden group-open:inline" aria-hidden="true">&minus;</span>
+        </summary>
+        <ul class="list-none p-0 m-0 pb-6">
+          {site.footerLinks.map((l) => (
+            <li class="border-t rule py-4">
+              <a href={l.href} class="link-underline text-base text-ink">{l.label}</a>
+            </li>
+          ))}
+        </ul>
+      </details>
+    </div>
+
+    <p class="text-sm text-graphite mt-10 m-0">
+      Still unanswered? <a href="/enquire" class="link-underline text-ink">Tell us what you have in mind</a> &mdash;
+      we reply within one working day.
+    </p>
+  </div>
+</section>

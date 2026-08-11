@@ -10,6 +10,7 @@ import CarpetsStrip from '../components/home/CarpetsStrip.astro';
 // TradeStrip removed from the homepage 2026-08-11: the client sells to end
 // customers. /trade still exists and is still indexed, linked from the footer.
 import Assurances from '../components/home/Assurances.astro';
+import Details from '../components/home/Details.astro';
 import EnquiryCTA from '../components/home/EnquiryCTA.astro';
 import pricing from '../data/pricing.json';
 
@@ -62,5 +63,6 @@ const serviceSchema = JSON.stringify({
   <PriceAnchor />
   <Assurances />
   <CarpetsStrip />
+  <Details />
   <EnquiryCTA />
 </BaseLayout>
