@@ -6,7 +6,22 @@ Everything left that needs you rather than code. Ordered by what blocks launch.
 
 ## 1 · Blocks launch — legally or functionally
 
-**Make the enquiry form actually able to send anything.** This is the single most important item and it needs you first — there is nothing to test yet. The form is static HTML with no backend, so something has to receive the POST and email it to you. In order:
+**Set up the enquiry pipeline.** Decided: Web3Forms **free** tier sends you the notification email, and everything — including the uploaded room photographs — goes to Supabase. Web3Forms never handles the files, so you do **not** need their $12/month Pro plan.
+
+I need four things from you:
+
+1. **An email account** to receive notifications. `enquiries@harrowandthread.com` is already written into the site, so that mailbox needs to exist.
+2. **A Web3Forms access key** — free account at web3forms.com, 250 submissions a month.
+3. **Supabase project URL and anon key.**
+4. **Run `/mcp` in the terminal** to authenticate Supabase over OAuth. I've added the server to `.mcp.json` using the OAuth transport rather than the access-token version, because the token variant would write a secret into a committed file. Once you've authenticated I can create the table, the storage bucket and the security policies myself.
+
+Per Supabase's own warning, point the MCP at a development project, not live production data.
+
+**One thing I must not skip, and neither should you:** the Supabase anon key is public by design, so the `enquiries` table needs Row Level Security with an **insert-only** policy. Without it, anyone who views the page source can read every enquiry you have ever received. I'll set that up, but if you ever wire Supabase in yourself, that's the step that matters.
+
+---
+
+**Original note on why this is top of the list:** This is the single most important item and it needs you first — there is nothing to test yet. The form is static HTML with no backend, so something has to receive the POST and email it to you. In order:
 
 1. **Create the mailbox.** `enquiries@harrowandthread.com` is already written into the site as your contact address, so that inbox has to exist.
 2. **Pick a form service and open an account.** Netlify Forms (free tier, only works if you host on Netlify, handles file uploads), Formspree, or Basin. The form currently carries `data-netlify="true"`, which does nothing anywhere except Netlify.

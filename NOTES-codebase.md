@@ -75,6 +75,40 @@ Screenshot at viewport size and scroll, **not** full-page — full-page captures
 downscaled ~4× and make real content look blank, which has caused false "it's broken"
 conclusions.
 
+## Enquiry form architecture (decided 2026-08-11)
+
+Two destinations, no server, no build step, nothing secret in the repo.
+
+```
+browser
+  ├─ 1. POST files      -> Supabase Storage bucket `enquiry-uploads`
+  ├─ 2. POST row        -> Supabase table `enquiries` (incl. storage paths)
+  └─ 3. POST text+links -> Web3Forms  -> email notification
+```
+
+**Why this split:** Web3Forms' free tier does not support file attachments (Pro is
+$12/mo yearly). Since every enquiry has to land in Supabase anyway, Storage holds the
+files and the notification email carries links to them. Free tier is then sufficient —
+Web3Forms is only ever asked to send text.
+
+**Keys.** Both keys involved are designed to be public: the Web3Forms *access key* and
+the Supabase *anon* key. That is only safe with Row Level Security on — the `enquiries`
+table needs an **insert-only** policy for the `anon` role and no select/update/delete,
+and the storage bucket needs insert-only too. Without those policies the anon key lets
+anyone read every enquiry. Do not skip this.
+
+**No SDK.** Use plain `fetch` against the Supabase REST and Storage endpoints. Pulling in
+`@supabase/supabase-js` would add ~30KB gzipped to a site that currently ships 4.3KB of
+JavaScript, to save a few lines.
+
+**Ordering.** Upload files first, then insert the row with their paths, then notify. If the
+notification fails the enquiry is still captured in Supabase — losing the email is
+recoverable, losing the enquiry is not.
+
+**MCP.** `.mcp.json` uses the HTTP + OAuth transport deliberately, so no personal access
+token is written to a committed file. Run `/mcp` to authenticate. Per Supabase's own
+warning, point it at a development project, never production data.
+
 ## Image generation
 
 ```
