@@ -43,14 +43,43 @@ anything works inside.
 - **Then chaos.** Null and undefined, wrong types (string where a number is expected),
   oversized payloads, empty arrays, missing keys, absent files, duplicate submits.
 
-### 3. The execution wall
+### 3. The execution wall — Playwright in a real browser
 
-The QA agent may write test files and run them. It may not edit anything under `src/`.
+The QA agent may write test files under `tests/` and run them. It may not edit anything
+under `src/`.
 
-There is no test runner installed and we are not adding one — use Node's built-in
-`node --test` (stdlib, rung 3), or drive a real browser with the existing Playwright
-pattern in `scratchpad/w3f.mjs`. See `CLAUDE.md` §5: verification on this project means
-rendering, not reading config.
+**This is a website, so almost every real check needs a real browser.** `CLAUDE.md` §5 is
+the reason: the whole site fell back to Arial for several sessions because people verified
+by reading config instead of rendering. A test that greps the built HTML would not have
+caught it. A test that reads `getComputedStyle` does.
+
+The harness is Node's built-in test runner driving Playwright — no framework, no config
+file:
+
+```bash
+npm run build   # tests run against dist/, so build first
+npm test        # node --test tests/
+```
+
+`tests/smoke.test.mjs` is the working template. Copy its shape: it starts `astro preview`,
+launches Chromium, and asserts against the rendered page. Two details in it are not
+optional —
+
+- **Serve the site, never `file://`.** Astro emits absolute asset paths (`/_astro/…`), so
+  under `file://` the stylesheet silently does not load and every visual assertion tests an
+  unstyled page.
+- **Use a realistic user agent plus `--disable-blink-features=AutomationControlled`.**
+  Cloudflare 403s default headless Chromium on Web3Forms. Without these the enquiry-form
+  tests fail for a reason that has nothing to do with the code.
+
+What a browser-based black-box test can actually assert here: computed styles and fonts,
+that no rug image is cropped (`object-fit`, and all four corners inside the frame — the
+hard client rule), that every "from" price renders the word *from*, that JSON-LD parses and
+uses `minPrice`, that the enquiry form's required fields reject empty and malformed input,
+that no testimonial or rating markup exists anywhere (`COMPLIANCE.md`), and that a form
+submission reaches `/enquire/success`.
+
+Screenshots count as evidence; `page.screenshot()` into the scratchpad, then look at it.
 
 ### 4. The no-fix feedback loop
 
@@ -75,7 +104,8 @@ Rule 2: Read ONLY the specification files listed below.
 Rule 3: From the specs alone, write a test suite covering the happy paths and the
         adversarial cases — nulls, wrong data types, boundary limits, oversized and
         empty inputs, missing keys.
-Rule 4: Run the tests (node --test, or a real browser).
+Rule 4: Run the tests in a real browser: `npm run build && npm test`
+        (node --test + Playwright; copy the shape of tests/smoke.test.mjs).
 Rule 5: If a test fails, DO NOT edit the source. Output a bug report: what input was
         sent, what was expected, what actually returned.
 

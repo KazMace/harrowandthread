@@ -146,8 +146,9 @@ which is why their own documented example is a plain `<form>`. Both fetch versio
 silently from the visitor's point of view. There is a comment saying so in `enquire.astro`.
 
 **Testing notes.** Cloudflare 403s headless Chromium on Web3Forms; it passes with a
-realistic user agent plus `--disable-blink-features=AutomationControlled` (see
-`scratchpad/w3f.mjs` pattern). Supabase free projects auto-pause after ~a week idle and a
+realistic user agent plus `--disable-blink-features=AutomationControlled` (that pattern now
+lives in `tests/smoke.test.mjs` — the old `scratchpad/w3f.mjs` was session-scratch and is
+gone). Supabase free projects auto-pause after ~a week idle and a
 paused project returns no DNS at all — that cost half an hour to diagnose once already.
 
 ## Open — do not implement unilaterally
