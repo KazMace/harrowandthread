@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./src/**)",
+      "Read(./astro.config.mjs)",
+      "Read(./tailwind.config.mjs)",
+      "Read(./supabase/**)",
+      "Edit(./src/**)",
+      "Edit(./astro.config.mjs)",
+      "Edit(./tailwind.config.mjs)"
+    ]
+  }
+}

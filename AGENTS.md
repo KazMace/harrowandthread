@@ -20,9 +20,24 @@ The QA agent never sees the implementation. Spawn it fresh (`subagent_type: "Exp
 `"general-purpose"` — **not** `"fork"`, a fork inherits your context and defeats the point),
 and give it only the spec.
 
-> "You are the QA agent. You are forbidden from reading the implementation files
-> (`src/**`, `astro.config.mjs`, `tailwind.config.mjs`). Read ONLY the spec files named
-> below."
+**Enforce the blindfold, don't ask for it.** A sentence in a prompt is a request; a deny
+rule is a wall. `.claude/qa-blindfold.json` denies `Read` on `src/**` and the config files,
+and `Edit` on the same — so the QA agent physically cannot read the code or fix it. Launch
+the QA session with:
+
+```bash
+claude --settings .claude/qa-blindfold.json
+```
+
+Verified working: with that file loaded, a read of `src/pages/index.astro` is refused
+before the tool runs.
+
+**Its one hole: `Bash` can still `cat` a file.** Deny rules on shell commands are trivially
+routed around (`cat`, `sed`, `grep`, `<`), so don't pretend that half is sealed. Scan the
+QA agent's transcript for shell reads of `src/` before you trust its report.
+
+Do not put these denies in `.claude/settings.local.json` — that file loads for *every*
+session, and it would blindfold the coding agent too.
 
 **The spec files on this project are the client's documents, never a Claude-authored one:**
 
@@ -57,9 +72,11 @@ The harness is Node's built-in test runner driving Playwright — no framework, 
 file:
 
 ```bash
-npm run build   # tests run against dist/, so build first
-npm test        # node --test tests/
+npm test        # astro build && node --test tests/
 ```
+
+`npm test` rebuilds first, on purpose. Tests drive the built site in `dist/`, and a stale
+build means you are testing code you already changed — which passes, and tells you nothing.
 
 `tests/smoke.test.mjs` is the working template. Copy its shape: it starts `astro preview`,
 launches Chromium, and asserts against the rendered page. Two details in it are not
@@ -104,7 +121,7 @@ Rule 2: Read ONLY the specification files listed below.
 Rule 3: From the specs alone, write a test suite covering the happy paths and the
         adversarial cases — nulls, wrong data types, boundary limits, oversized and
         empty inputs, missing keys.
-Rule 4: Run the tests in a real browser: `npm run build && npm test`
+Rule 4: Run the tests in a real browser: `npm test`
         (node --test + Playwright; copy the shape of tests/smoke.test.mjs).
 Rule 5: If a test fails, DO NOT edit the source. Output a bug report: what input was
         sent, what was expected, what actually returned.

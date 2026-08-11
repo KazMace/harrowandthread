@@ -7,7 +7,7 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "node --test tests/"
+    "test": "astro build && node --test tests/"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",
