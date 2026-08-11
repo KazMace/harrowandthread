@@ -98,6 +98,24 @@ submission reaches `/enquire/success`.
 
 Screenshots count as evidence; `page.screenshot()` into the scratchpad, then look at it.
 
+**The enquiry form is tested with the backend stubbed** (client decision, 2026-08-11).
+Intercept in the browser so nothing reaches Supabase or Web3Forms — no junk rows in
+`enquiries`, no real emails:
+
+```js
+await page.route('**/*.supabase.co/**', r => r.fulfill({ status: 201, body: '[]' }));
+await page.route('**/api.web3forms.com/**', r => r.fulfill({ status: 303, headers: { location: '/enquire/success' } }));
+```
+
+The adversarial cases are about our own validation, and a round-trip to a live database
+adds nothing to them. The real pipeline was proven end to end in a live browser on
+2026-08-11.
+
+The cost of stubbing is drift: change the schema or the form and the stub keeps passing
+against a fiction. So keep **one** live end-to-end test in the suite marked
+`{ skip: true }`, and run it deliberately after any schema or form change — not on every
+`npm test`.
+
 ### 4. The no-fix feedback loop
 
 **The QA agent does not fix anything.** On failure it reports only:
