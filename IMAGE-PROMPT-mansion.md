@@ -80,6 +80,16 @@ A bold contemporary design in the same classical room says "we will make anythin
 any scale" — which is the actual proposition, and no importer can copy it. Generate
 both, decide by eye. Client's call.
 
+## input_references — exact shape (this errors if you guess it)
+
+```json
+"input_references": [
+  { "type": "image_url", "image_url": { "url": "data:image/webp;base64,..." } }
+]
+```
+
+A bare string 400s with a Zod `expected object, received string`. HTTP(S) URLs work too.
+
 ## Settings
 
 - Model `bytedance-seed/seedream-4.5` — ~4p, 11 seconds, best of the four tested
