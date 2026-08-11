@@ -6,7 +6,14 @@ Everything left that needs you rather than code. Ordered by what blocks launch.
 
 ## 1 · Blocks launch — legally or functionally
 
-**Test the enquiry form end to end.** The single most important item. Deploy, then submit a real enquiry and confirm it arrives in your inbox with any attached images. The form currently carries `data-netlify="true"`, which only works if you host on Netlify — anywhere else and you need an endpoint (Formspree, Basin, Resend). This failure mode is invisible from the front end: the site will say "Received" while discarding everything. It did exactly that for weeks before it was caught.
+**Make the enquiry form actually able to send anything.** This is the single most important item and it needs you first — there is nothing to test yet. The form is static HTML with no backend, so something has to receive the POST and email it to you. In order:
+
+1. **Create the mailbox.** `enquiries@harrowandthread.com` is already written into the site as your contact address, so that inbox has to exist.
+2. **Pick a form service and open an account.** Netlify Forms (free tier, only works if you host on Netlify, handles file uploads), Formspree, or Basin. The form currently carries `data-netlify="true"`, which does nothing anywhere except Netlify.
+3. **Give me the endpoint or API key, and the destination email.** I wire it up.
+4. **Then** submit a real enquiry from the live site and confirm it lands with any attached images.
+
+Why this is top of the list: the failure is invisible from the front end. The page says "Received" whether or not anything was sent, and it did exactly that — silently discarding every enquiry — for weeks before it was caught.
 
 **Trading address.** Renders as `[Trading address]` in the footer of all 12 pages right now.
 
@@ -14,15 +21,22 @@ Everything left that needs you rather than code. Ordered by what blocks launch.
 
 **Phone number.** You said this was easy to sort. There isn't one anywhere on the site, and for a £90k purchase a buyer wants to speak to someone.
 
-**Solicitor review** of `/terms`, `/privacy` and `/cookies` before you go live. I've kept them compliant as far as build-level obligations go, but that isn't legal advice.
+**Solicitor review** — pay a solicitor to read `/terms`, `/privacy` and `/cookies` before launch. That's all it means. I've kept them compliant at build level, but I'm not qualified to give legal advice and you're taking £4,500+ non-refundable deposits on goods that cannot be returned. An hour of someone's time.
 
-**Decide on incorporation and VAT with an accountant.** At £600–£1,200/m² you'll cross the £90k VAT threshold on your third or fourth commission. That changes every published price, so decide before launch rather than after. Note "Ltd" cannot appear anywhere until Companies House registration actually exists — it's a criminal offence under the Companies Act 2006 s.65.
+**Decide sole trader vs limited company, and plan for VAT.** Two separate decisions, often conflated:
+
+- **VAT is not connected to company structure.** A sole trader registers for VAT at the same £90k threshold as a limited company. Going Ltd does not trigger it; staying sole trader does not avoid it.
+- **Limited company accounts are annual, not quarterly.** Companies House wants accounts and a confirmation statement once a year, corporation tax likewise. The quarterly filing is **VAT returns** — which apply to a VAT-registered sole trader too. So the admin gap between the two options is smaller than it looks.
+- At £600–£1,200/m² you will cross £90k on your third or fourth commission, and registering moves every published price by 20% or takes it out of margin. Settle it with an accountant **before** launch.
+- **"Ltd" cannot appear anywhere on the site** until Companies House registration actually exists — criminal offence under the Companies Act 2006 s.65.
 
 ---
 
 ## 2 · Blocks a real customer segment
 
-**Fire-rating certification** — BS 4790 and EN 13501. Without it, no hotel, developer or commercial project can specify your product at all. Even though the site now sells to end customers, this closes the entire contract market.
+**Fire-rating certification** — BS 4790 and EN 13501. Without it no hotel, developer or commercial project can specify your product, so this closes the whole contract market even though the site now sells to end customers.
+
+Worth knowing: **wool is one of the better natural performers here**, not a problem material. High moisture and nitrogen content and a high oxygen index mean it chars and self-extinguishes rather than melting and dripping the way polypropylene and nylon do — which is why wool gets specified for aircraft and hotel interiors. BS 4790 is a *test method*, not a standard wool fails. Certification means sending a sample to a testing lab and getting a certificate you can hand to a specifier. Likely a fee-and-paperwork exercise rather than a product problem — but get it tested, because the certificate is what developers ask for, not the chemistry.
 
 **The all-over geometric rate.** The card currently shows one Geometric rate at from £900/m². You told me a border and an all-over pattern genuinely cost different amounts. If that's still true, I need the second figure, or all-over work is being under-quoted.
 
