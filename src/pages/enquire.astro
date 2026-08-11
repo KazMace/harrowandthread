@@ -366,6 +366,11 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
   // silently discarded while the visitor was told it had been sent. On success
   // we let the native POST proceed to the configured endpoint, which redirects
   // to /enquire/success.
+  const SB_URL = import.meta.env.PUBLIC_SUPABASE_URL;
+  const SB_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+  const W3F_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY;
+  const CONTACT_EMAIL = 'enquiries@harrowandthread.com';
+
   form?.addEventListener('submit', (e) => {
     let valid = true;
     let firstInvalid: HTMLElement | null = null;
@@ -426,6 +431,100 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
       return;
     }
 
-    // Valid: do NOT preventDefault. The form posts natively.
+    // ---- Valid submission -------------------------------------------------
+    //
+    // Two destinations. Files and the full record go to Supabase; Web3Forms
+    // only sends a notification email, so its free tier (no attachments) is
+    // enough. Files upload FIRST: if the notification later fails the enquiry
+    // is still captured, and losing an email is recoverable where losing the
+    // enquiry is not.
+    //
+    // Both keys here are public by design. That is only safe because the
+    // `enquiries` table and the `enquiry-uploads` bucket are insert-only for
+    // the anon role. Without those RLS policies anyone reading this page could
+    // read every enquiry ever sent. See NOTES-codebase.md.
+    //
+    // Until the keys exist this whole block is skipped and the form posts
+    // natively exactly as before.
+    if (!SB_URL || !SB_KEY) return;
+
+    e.preventDefault();
+
+    const submitBtn = form.querySelector('button[type=submit]') as HTMLButtonElement | null;
+    const say = (msg: string, visible = false) => {
+      if (!status) return;
+      status.textContent = msg;
+      status.classList.toggle('sr-only', !visible);
+      if (visible) status.classList.add('text-sm', 'text-madder', 'mb-4', 'block');
+    };
+
+    (async () => {
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
+      say('Sending your enquiry.');
+
+      const fd = new FormData(form);
+
+      // Honeypot: behave exactly as success, store nothing.
+      if (fd.get('website')) { window.location.assign('/enquire/success'); return; }
+
+      const sbHeaders = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` };
+
+      try {
+        // 1 · Room photographs and design references -> Supabase Storage
+        const picker = document.getElementById('reference-images') as HTMLInputElement | null;
+        const chosen = Array.from(picker?.files ?? []).slice(0, 3);
+        const folder = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        const uploaded: string[] = [];
+
+        for (const file of chosen) {
+          if (file.size > 10 * 1024 * 1024) throw new Error(`${file.name} is over 10MB.`);
+          const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+          const res = await fetch(
+            `${SB_URL}/storage/v1/object/enquiry-uploads/${folder}/${safe}`,
+            { method: 'POST', headers: sbHeaders, body: file }
+          );
+          if (!res.ok) throw new Error('We could not upload your images.');
+          uploaded.push(`${folder}/${safe}`);
+        }
+
+        // 2 · The record -> Supabase. Hyphenated field names become columns.
+        const row: Record<string, unknown> = { upload_paths: uploaded };
+        for (const [k, v] of fd.entries()) {
+          if (k === 'website' || k === 'reference-images') continue;
+          row[k.replace(/-/g, '_')] = typeof v === 'string' ? v : null;
+        }
+        const ins = await fetch(`${SB_URL}/rest/v1/enquiries`, {
+          method: 'POST',
+          headers: { ...sbHeaders, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+          body: JSON.stringify(row),
+        });
+        if (!ins.ok) throw new Error('We could not record your enquiry.');
+
+        // 3 · Notification email. Non-fatal: the enquiry is already safe.
+        if (W3F_KEY) {
+          try {
+            await fetch('https://api.web3forms.com/submit', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+              body: JSON.stringify({
+                access_key: W3F_KEY,
+                subject: `New commission enquiry — ${row.name ?? 'unnamed'}`,
+                from_name: 'Harrow & Thread website',
+                ...row,
+                images: uploaded.length
+                  ? uploaded.map((p) => `${SB_URL}/storage/v1/object/enquiry-uploads/${p}`).join('\n')
+                  : 'none attached',
+              }),
+            });
+          } catch { /* email is a convenience, not the record */ }
+        }
+
+        window.location.assign('/enquire/success');
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : 'Something went wrong.';
+        say(`${msg} Please try again, or email us directly at ${CONTACT_EMAIL}.`, true);
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send enquiry'; }
+      }
+    })();
   });
 </script>

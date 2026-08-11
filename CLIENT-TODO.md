@@ -12,7 +12,15 @@ I need four things from you:
 
 1. **An email account** to receive notifications. `enquiries@harrowandthread.com` is already written into the site, so that mailbox needs to exist.
 2. **A Web3Forms access key** — free account at web3forms.com, 250 submissions a month.
-3. **Supabase project URL and anon key.**
+3. **Supabase project URL and anon key** — paste these three lines into `.env`. The `PUBLIC_` prefix is required for the browser to see them, and is a useful reminder that the anon key is not a secret:
+
+   ```
+   PUBLIC_SUPABASE_URL=https://xxxxxxxx.supabase.co
+   PUBLIC_SUPABASE_ANON_KEY=eyJ...
+   PUBLIC_WEB3FORMS_KEY=your-access-key
+   ```
+
+   The form code is already written and waiting for them. Until they exist the form behaves exactly as it does now, so nothing is broken in the meantime.
 4. **Run `/mcp` in the terminal** to authenticate Supabase over OAuth. I've added the server to `.mcp.json` using the OAuth transport rather than the access-token version, because the token variant would write a secret into a committed file. Once you've authenticated I can create the table, the storage bucket and the security policies myself.
 
 Per Supabase's own warning, point the MCP at a development project, not live production data.
