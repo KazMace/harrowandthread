@@ -12,15 +12,14 @@ Everything left that needs you rather than code. Ordered by what blocks launch.
 
 1. **Set up the Harrow & Thread email.** This comes first because Web3Forms registers against a real mailbox. `enquiries@harrowandthread.com` is already written into the site as your contact address, so that is the one to create. Options: your domain registrar usually bundles mailboxes, or Google Workspace / Fastmail / Zoho if you want it properly.
 2. **A Web3Forms access key** — free account at web3forms.com, registered against the mailbox from step 1. 250 submissions a month, no card needed. They email you a UUID.
-3. ~~**Supabase project URL and anon key**~~ — **done**, both are in `.env` (new-format `sb_publishable_` key, which is fine). **But the project host does not resolve in DNS**, so it is either paused, deleted, or one character of the 20-letter ref is wrong. Checked over 30 seconds; other hosts resolve fine, so it is not the network. Open the dashboard, check whether the project is paused and needs resuming, and copy the URL straight from Project Settings → API rather than retyping it. For reference, the three lines are: The `PUBLIC_` prefix is required for the browser to see them, and is a useful reminder that the anon key is not a secret:
+3. ~~**Supabase project URL and anon key**~~ — **done**, both in `.env` (new-format `sb_publishable_` key, which is fine).
 
-   ```
-   PUBLIC_SUPABASE_URL=https://xxxxxxxx.supabase.co
-   PUBLIC_SUPABASE_ANON_KEY=eyJ...
-   PUBLIC_WEB3FORMS_KEY=your-access-key
-   ```
+   **Cause of the earlier failure found: the project was suspended.** Free-tier Supabase projects pause after about a week idle, and a paused project's subdomain stops answering DNS entirely — which is exactly what we saw. Nothing was wrong with the keys or the ref.
 
-   The form code is already written and waiting for them. Until they exist the form behaves exactly as it does now, so nothing is broken in the meantime.
+   **Resumed, and coming back up.** DNS now resolves. The API is not serving yet — the REST root returns 401 and a table query returns a Cloudflare holding page instead of JSON, which means the project is still provisioning behind the edge. Supabase say minutes to hours. No action needed; it will start answering on its own.
+
+   **Worth knowing for later:** this will happen again if the project sits idle for a week. Once the site is live and taking real enquiries it stays warm on its own, but during a quiet build period expect it. If it becomes a nuisance, a paid tier removes the auto-pause.
+
 4. **Run `/mcp` in the terminal** to authenticate Supabase over OAuth. This is also the fastest way to settle the DNS problem above — once authenticated I can read your real project ref straight from the account instead of us guessing at a twenty-letter string. I've added the server to `.mcp.json` using the OAuth transport rather than the access-token version, because the token variant would write a secret into a committed file. Once you've authenticated I can create the table, the storage bucket and the security policies myself.
 
 Per Supabase's own warning, point the MCP at a development project, not live production data.
