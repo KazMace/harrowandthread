@@ -26,18 +26,9 @@ Per Supabase's own warning, point the MCP at a development project, not live pro
 
 **One thing I must not skip, and neither should you:** the Supabase anon key is public by design, so the `enquiries` table needs Row Level Security with an **insert-only** policy. Without it, anyone who views the page source can read every enquiry you have ever received. I'll set that up, but if you ever wire Supabase in yourself, that's the step that matters.
 
+**Why this sits at the top:** the failure is invisible from the front end. The page says "Received" whether or not anything was sent, and it did exactly that — silently discarding every enquiry — for weeks before it was caught. Until the mailbox and the Web3Forms key exist, the form still behaves as it does today: it validates properly and goes nowhere.
+
 ---
-
-**Original note on why this is top of the list:** This is the single most important item and it needs you first — there is nothing to test yet. The form is static HTML with no backend, so something has to receive the POST and email it to you. In order:
-
-1. **Create the mailbox.** `enquiries@harrowandthread.com` is already written into the site as your contact address, so that inbox has to exist.
-2. **Pick a form service and open an account.** Netlify Forms (free tier, only works if you host on Netlify, handles file uploads), Formspree, or Basin. The form currently carries `data-netlify="true"`, which does nothing anywhere except Netlify.
-3. **Paste the endpoint into `src/data/site.json`** — the field `formEndpoint` is already there and wired up. That is the entire change; nothing else needs touching. Leave it empty and it falls back to Netlify Forms, which only works on Netlify.
-4. **Then** submit a real enquiry from the live site and confirm it lands with any attached images.
-
-Note on the approach: your plan suggested an Astro API route or Resend. Both work, but both need a server adapter and an API key in the repo, which turns a static site into a hosted one. Formspree or Basin needs neither — one URL, no backend, no secret. If you'd rather do it properly with Resend later, that's a straightforward upgrade once you know where you're hosting.
-
-Why this is top of the list: the failure is invisible from the front end. The page says "Received" whether or not anything was sent, and it did exactly that — silently discarding every enquiry — for weeks before it was caught.
 
 **Trading address.** Renders as `[Trading address]` in the footer of all 12 pages right now.
 
