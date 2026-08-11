@@ -66,6 +66,14 @@ export const faq = [
     ],
   },
   {
+    category: "Owning the design",
+    items: [
+      { q: "Who owns the design?",
+        a: ["You do. On final payment we assign the copyright and design rights in your design to you, in writing. We keep no right to reuse it, license it or sell it &mdash; which is what makes the one-of-one guarantee mean something rather than being a promise you have to trust.",
+            "If you would like the design entered on the UK register of designs, we will file the application for you and the fee is included. A UK registered design lasts five years and can be renewed up to twenty-five. Copyright itself arises automatically the moment a design is created &mdash; there is no UK copyright register, so nothing needs filing for that."] },
+    ],
+  },
+  {
     category: "Wall hangings",
     items: [
       { q: "How does a wall hanging actually hang?",
