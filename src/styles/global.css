@@ -1,0 +1,364 @@
+/* Fonts — self-hosted WOFF2 via fontsource.
+   NOTE: the family names declared in tailwind.config.mjs must match the names
+   these packages register ('… Variable'), or the browser silently falls back
+   to Arial with no error. Latin subsets only. */
+@import '@fontsource-variable/bricolage-grotesque/index.css';
+@import '@fontsource-variable/inter-tight/wght.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    /* Belt and braces against sideways scroll. `clip` (not `hidden`) avoids
+       creating a scroll container, so position:sticky keeps working. */
+    overflow-x: clip;
+    font-family: theme('fontFamily.body');
+    font-size: 100%;
+    color: theme('colors.ink');
+    background-color: theme('colors.paper');
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply text-base leading-body;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: theme('fontFamily.display');
+    font-weight: 500;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme('colors.madder');
+    outline-offset: 3px;
+  }
+
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 1.5rem;
+    z-index: 1000;
+    padding: 0.625rem 1.25rem;
+    background: theme('colors.ink');
+    color: theme('colors.paper');
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .skip-link:focus {
+    top: 0.75rem;
+  }
+
+  ::selection {
+    background-color: theme('colors.saffron');
+    color: theme('colors.ink');
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* ---- Structure -------------------------------------------------------- */
+
+  /* Default gutter container. Sections that want edge-to-edge simply don't
+     use it — full-bleed is the norm in this design, not the exception. */
+  .shell {
+    width: 100%;
+    max-width: theme('maxWidth.content');
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: theme('spacing.gutter-mobile');
+    padding-right: theme('spacing.gutter-mobile');
+  }
+
+  @media (min-width: 1024px) {
+    .shell {
+      padding-left: theme('spacing.gutter');
+      padding-right: theme('spacing.gutter');
+    }
+  }
+
+  .section-pad {
+    padding-top: theme('spacing.section-mobile');
+    padding-bottom: theme('spacing.section-mobile');
+  }
+
+  @media (min-width: 768px) {
+    .section-pad {
+      padding-top: theme('spacing.section');
+      padding-bottom: theme('spacing.section');
+    }
+  }
+
+  .rule {
+    border-color: theme('colors.hairline');
+  }
+
+  /* ---- Type ------------------------------------------------------------- */
+
+  /* Display type. Upright, never italic — the previous build faked italics by
+     synthetically obliquing an upright face, which is why headings read wrong. */
+  .display {
+    font-family: theme('fontFamily.display');
+    font-weight: 500;
+    text-wrap: balance;
+    /* Never break-word here: it splits words mid-glyph ("Commissio / ns").
+       Long words are handled by sizing headings to fit at 375px; overflow-x:
+       clip on <html> is the backstop. */
+    hyphens: manual;
+    max-width: 100%;
+  }
+
+  .eyebrow {
+    font-family: theme('fontFamily.body');
+    font-size: theme('fontSize.utility[0]');
+    line-height: 1.4;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .lede {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    max-width: 34ch;
+    text-wrap: balance;
+  }
+
+  @media (min-width: 768px) {
+    .lede {
+      font-size: 1.5rem;
+    }
+  }
+
+  .prose-body {
+    font-size: theme('fontSize.base[0]');
+    line-height: 1.65;
+    max-width: theme('maxWidth.measure');
+  }
+
+  /* ---- Links & actions -------------------------------------------------- */
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
+    text-decoration: none;
+    transition: background-size 400ms theme('transitionTimingFunction.editorial');
+  }
+
+  .link-underline:hover {
+    background-size: 0% 1px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.125rem 2.5rem;
+    font-size: theme('fontSize.sm[0]');
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    border: 0;
+    cursor: pointer;
+    transition: transform 400ms theme('transitionTimingFunction.editorial'),
+                background-color 300ms ease;
+  }
+
+  .btn-primary {
+    background-color: theme('colors.madder');
+    color: theme('colors.paper');
+  }
+
+  .btn-primary:hover {
+    background-color: theme('colors.ink');
+  }
+
+  .btn-invert {
+    background-color: theme('colors.paper');
+    color: theme('colors.ink');
+  }
+
+  .btn-invert:hover {
+    background-color: theme('colors.saffron');
+  }
+
+  /* ---- Form controls ---------------------------------------------------- */
+
+  /* Native selects render as OS-default widgets, which looks cheap on the one
+     page that has to feel expensive. Strip the default appearance and draw our
+     own chevron. Keeps the native focus ring (never `outline-none`). */
+  .field-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9' fill='none'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%235F5F5C' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 3rem;
+    border-radius: 0;
+  }
+
+  /* Native file inputs render an OS button labelled "Choose Files".
+     These MUST be separate rules — grouping the -webkit- and standard
+     pseudo-elements in one selector list invalidates the whole declaration in
+     engines that don't recognise one of them, and the styling silently
+     disappears from the built CSS. */
+  .field-file::-webkit-file-upload-button {
+    appearance: none;
+    -webkit-appearance: none;
+    margin-right: 1rem;
+    padding: 0.625rem 1.25rem;
+    border: 1px solid theme('colors.ink');
+    background-color: theme('colors.paper');
+    color: theme('colors.ink');
+    font-family: theme('fontFamily.body');
+    font-size: theme('fontSize.sm[0]');
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  .field-file::file-selector-button {
+    appearance: none;
+    margin-right: 1rem;
+    padding: 0.625rem 1.25rem;
+    border: 1px solid theme('colors.ink');
+    background-color: theme('colors.paper');
+    color: theme('colors.ink');
+    font-family: theme('fontFamily.body');
+    font-size: theme('fontSize.sm[0]');
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  .field-file::-webkit-file-upload-button:hover {
+    background-color: theme('colors.ink');
+    color: theme('colors.paper');
+  }
+
+  .field-file::file-selector-button:hover {
+    background-color: theme('colors.ink');
+    color: theme('colors.paper');
+  }
+
+  /* Larger, squarer checkboxes in the brand accent. */
+  .field-check {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 1px solid theme('colors.graphite');
+    background-color: theme('colors.paper');
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background-color 150ms ease, border-color 150ms ease;
+  }
+
+  .field-check:checked {
+    background-color: theme('colors.madder');
+    border-color: theme('colors.madder');
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='10' viewBox='0 0 12 10' fill='none'%3E%3Cpath d='M1 5L4.5 8.5L11 1.5' stroke='white' stroke-width='2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  /* Invalid fields must look invalid whether or not they are focused.
+     Needs to outrank Tailwind's `focus:border-ink` utility. */
+  input[aria-invalid='true'],
+  select[aria-invalid='true'],
+  textarea[aria-invalid='true'],
+  input[aria-invalid='true']:focus,
+  select[aria-invalid='true']:focus,
+  textarea[aria-invalid='true']:focus {
+    border-color: theme('colors.madder');
+  }
+
+  /* ---- Imagery ---------------------------------------------------------- */
+
+  /* Slow zoom on hover — a craft signal. Pair with .media on the wrapper. */
+  .media {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .media img {
+    transition: transform 900ms theme('transitionTimingFunction.editorial');
+    will-change: transform;
+  }
+
+  .media:hover img {
+    transform: scale(1.04);
+  }
+
+  /* ---- Motion ----------------------------------------------------------- */
+
+  /* Motion is an ENHANCEMENT, never a precondition for seeing content.
+     The hidden state is scoped to `.js`, which is set by an inline script in
+     BaseLayout's <head>. If JS is unavailable, fails, or the observer never
+     fires, every section renders fully visible instead of blank. */
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 900ms theme('transitionTimingFunction.editorial'),
+                transform 900ms theme('transitionTimingFunction.editorial');
+  }
+
+  .js .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .js .stagger > * {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 800ms theme('transitionTimingFunction.editorial'),
+                transform 800ms theme('transitionTimingFunction.editorial');
+  }
+
+  .js .stagger.visible > *:nth-child(1) { transition-delay: 0ms; }
+  .js .stagger.visible > *:nth-child(2) { transition-delay: 90ms; }
+  .js .stagger.visible > *:nth-child(3) { transition-delay: 180ms; }
+  .js .stagger.visible > *:nth-child(4) { transition-delay: 270ms; }
+  .js .stagger.visible > *:nth-child(5) { transition-delay: 360ms; }
+  .js .stagger.visible > *:nth-child(6) { transition-delay: 450ms; }
+  .js .stagger.visible > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Reduced motion: content must be visible immediately and must never depend
+     on the IntersectionObserver having fired. */
+  @media (prefers-reduced-motion: reduce) {
+    .js .reveal,
+    .js .stagger > * {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+
+    .media img {
+      transition: none;
+    }
+
+    .media:hover img {
+      transform: none;
+    }
+  }
+}

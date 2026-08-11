@@ -1,0 +1,44 @@
+---
+import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
+---
+
+<!-- Archetype: full-bleed image, type overlaid bottom-left. -->
+<section class="relative min-h-[78vh] sm:min-h-[92vh] flex items-end overflow-hidden bg-ink">
+  <div class="absolute inset-0">
+    <ImagePlaceholder
+      id="hero-banner-main"
+      width={768}
+      height={1376}
+      alt="A hand-tufted rug with an abstract painterly design in muted red, ochre and indigo tones, in a light-filled minimalist interior"
+      class="w-full h-full [&_img]:h-full [&_img]:w-full [&_img]:object-cover"
+      sizes="100vw"
+      formats={['avif', 'webp', 'jpeg']}
+      loading="eager"
+    />
+  </div>
+
+  <div class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/25 to-ink/10"></div>
+
+  <div class="shell relative z-10 w-full pb-40 sm:pb-20">
+    <p class="eyebrow text-paper mb-5 sm:mb-7" style="text-shadow: 0 1px 12px rgba(17,17,17,0.75)">Bespoke hand-tufted rugs</p>
+
+    <h1 class="display text-paper text-4xl sm:text-6xl lg:text-7xl mb-7 sm:mb-9 max-w-[16ch]">
+      A rug that exists once.
+    </h1>
+
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-8">
+      <p class="text-paper/75 text-lg sm:text-xl max-w-[34ch] m-0">
+        Your design. Your dimensions. Your colour, matched from 1,400.
+        Made once, and never again.
+      </p>
+
+      <a href="/enquire" class="btn btn-primary self-start shrink-0">
+        Start a commission
+      </a>
+    </div>
+  </div>
+
+  <p class="eyebrow absolute bottom-4 right-5 sm:right-8 z-10 text-paper/70">
+    Design visualisation
+  </p>
+</section>

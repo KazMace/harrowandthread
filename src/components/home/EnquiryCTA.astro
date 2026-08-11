@@ -1,0 +1,23 @@
+---
+import site from '../../data/site.json';
+---
+
+<!-- Archetype: oversized closing statement, type as the whole composition. -->
+<section class="bg-ink text-paper section-pad">
+  <div class="shell">
+    <h2 class="display text-3xl sm:text-6xl lg:text-7xl m-0 mb-10 sm:mb-14 max-w-[12ch]">
+      Start a commission.
+    </h2>
+
+    <div class="flex flex-col sm:flex-row sm:items-center gap-8 sm:gap-14">
+      <a href="/enquire" class="btn btn-invert self-start">Enquire</a>
+
+      <div class="flex flex-col gap-1">
+        <p class="text-paper/80 text-lg m-0">{site.responsePromise}</p>
+        <p class="text-paper/70 text-sm m-0">
+          No obligation. Tell us the room, the size, and roughly what you have in mind.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

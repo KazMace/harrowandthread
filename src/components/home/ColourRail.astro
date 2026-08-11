@@ -1,0 +1,58 @@
+---
+import colours from '../../data/colours.json';
+import site from '../../data/site.json';
+
+// Grouped by family so the wall reads as a dye reference card rather than a
+// random stripe. Order of first appearance in the JSON defines family order.
+const families = [...new Set(colours.map((c) => c.family))];
+---
+
+<!-- Archetype: full-bleed colour statement. The signature moment — the
+     product's defining property (colour range) IS the visual system.
+     Deliberately non-interactive: no picker, no search, no swatch library. -->
+<section class="bg-ink text-paper section-pad overflow-hidden">
+  <div class="shell mb-12 sm:mb-16">
+    <div class="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
+      <div>
+        <p class="eyebrow text-paper/70 mb-6">Colour</p>
+        <h2 class="display text-4xl sm:text-5xl lg:text-6xl m-0 max-w-[18ch]">
+          1,400 dye colours. Yours is one of them.
+        </h2>
+      </div>
+      <p class="text-paper/60 text-base max-w-[34ch] m-0 md:pb-2">
+        Every piece is dyed to match a single reference. Browse the system at
+        <a href={site.externalLinks.arsColours} class="link-underline text-paper">arscolors.com</a>
+        and note the codes you want.
+      </p>
+    </div>
+  </div>
+
+  <!-- The dye card: laid on a light ground with fine gaps, so dark swatches
+       stay legible instead of dissolving into the section background. -->
+  <div class="bg-paper p-2 sm:p-3" aria-hidden="true">
+    <div class="flex flex-col gap-2 sm:gap-3">
+      {families.map((family) => {
+        const row = colours.filter((c) => c.family === family);
+        return (
+          <div class="flex gap-2 sm:gap-3 w-full h-10 sm:h-16">
+            {row.map((c) => (
+              <div
+                class="flex-1 min-w-0"
+                style={`background-color: ${c.hex}`}
+                title={`${c.name} — ${c.hex}`}
+              ></div>
+            ))}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+
+  <div class="shell mt-8 sm:mt-10">
+    <p class="text-paper/75 text-sm m-0 max-w-[62ch]">
+      A selection of the range. Dyed wool sits slightly differently to a screen
+      &mdash; we confirm the exact colour reference with you at sign-off, before
+      anything is made.
+    </p>
+  </div>
+</section>

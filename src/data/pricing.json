@@ -1,0 +1,83 @@
+{
+  "tiers": [
+    {
+      "id": "plain",
+      "name": "Plain",
+      "rate": 750,
+      "description": "A single colour across the whole piece",
+      "chooseIf": "A single colour across the whole piece"
+    },
+    {
+      "id": "geometric-border",
+      "name": "Geometric border",
+      "rate": 1000,
+      "description": "A geometric pattern as a border, with a plain field",
+      "chooseIf": "A geometric border framing a plain centre"
+    },
+    {
+      "id": "geometric-allover",
+      "name": "Geometric all-over",
+      "rate": 1250,
+      "description": "A geometric pattern repeating across the whole piece",
+      "chooseIf": "A geometric pattern across the entire piece"
+    },
+    {
+      "id": "pictorial",
+      "name": "Pictorial",
+      "rate": 1500,
+      "description": "A scene, painterly or photographic design",
+      "chooseIf": "A scene, painterly or photographic design"
+    }
+  ],
+  "designFee": 200,
+  "designFeeNote": "Applies only if you ask us to assign a designer. Credited in full against your commission. If you take the design and do not proceed, the £200 is all you pay.",
+  "shippingIncluded": [
+    "UK",
+    "Europe",
+    "United States"
+  ],
+  "shippingNote": "Shipping is included and fully insured to the UK, Europe and the United States. For delivery elsewhere, contact us to confirm delivery to your country.",
+  "customsNote": "Import duties and destination VAT are payable by the recipient on arrival.",
+  "workedExamples": [
+    {
+      "label": "1.5 × 1m (hanging)",
+      "area": 1.5,
+      "plain": 1125,
+      "pictorial": 2250,
+      "geometric-border": 1500,
+      "geometric-allover": 1875
+    },
+    {
+      "label": "3 × 2m",
+      "area": 6,
+      "plain": 4500,
+      "pictorial": 9000,
+      "geometric-border": 6000,
+      "geometric-allover": 7500
+    },
+    {
+      "label": "4 × 3m",
+      "area": 12,
+      "plain": 9000,
+      "pictorial": 18000,
+      "geometric-border": 12000,
+      "geometric-allover": 15000
+    },
+    {
+      "label": "6 × 4m",
+      "area": 24,
+      "plain": 18000,
+      "pictorial": 36000,
+      "geometric-border": 24000,
+      "geometric-allover": 30000
+    },
+    {
+      "label": "15 × 10m",
+      "area": 150,
+      "plain": 112500,
+      "pictorial": 225000,
+      "geometric-border": 150000,
+      "geometric-allover": 187500
+    }
+  ]
+}

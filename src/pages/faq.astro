@@ -1,0 +1,168 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Questions and answers live here as data, and drive BOTH the rendered
+// accordions and the FAQPage structured data below. An earlier version
+// hand-maintained the schema separately and it had drifted to covering only
+// 5 of 18 questions — the ones AI answer engines most want (measuring,
+// customs, sizes, pile vs flatweave) were missing entirely.
+const faq = [
+  {
+    category: "Design Process",
+    items: [
+      { q: "Can you work from my design idea?",
+        a: ["We can take any design idea you have, whether inspired by photographs, sketches, or a link to an image with a pattern you like. Alternatively, our team can assign a dedicated designer to work alongside you and craft a custom design for a £200 fee, credited in full against your commission."] },
+    ],
+  },
+  {
+    category: "Ordering &amp; Production",
+    items: [
+      { q: "How long does it take to produce my piece?",
+        a: ["Production typically takes 4 weeks from the date your order is confirmed. Complex designs or larger sizes will require additional time. We will provide an estimated delivery date at order confirmation."] },
+      { q: "Can I modify my order after it is placed?",
+        a: ["Change anything you like up to sign-off. After that it is fixed: once the frame is warped and the dye is mixed, the piece cannot be altered."] },
+      { q: "What is the production process?",
+        a: ["After design approval, we source your specific materials, set up your custom dyes if applicable, and begin tufting. Your piece passes through multiple quality checkpoints during production, with a final inspection before shipping.", "Once your design is selected, we map the pattern to the exact scale of your ordered dimensions. When you approve the final design and colour choices, production begins upon receipt of a 50% non-refundable deposit. The remaining 50% balance is payable once your bespoke piece is complete and ready to ship."] },
+      { q: "What are your minimum and maximum sizes?",
+        a: ["Rugs: no minimum, up to 15m &times; 10m. Wall hangings: minimum 1.5m&sup2; (shortest side at least 1m), up to approximately 18m&sup2; (6m &times; 3m). Wall-to-wall carpets: up to 15m &times; 10m."] },
+    ],
+  },
+  {
+    category: "Materials &amp; Construction",
+    items: [
+      { q: "Can I see a sample before I commit?",
+        a: ["Not a physical swatch, no. We work to the ARS 1,400 dye system: you choose a colour reference, and we match the wool to that reference exactly. It is the same standard the mills work to, and it is more precise than matching to a posted sample that has aged in transit.", "What you do get before committing: a design visualisation mapped to your exact dimensions, your chosen colour references confirmed in writing, and a sign-off stage where nothing is made until you approve it. Dyed wool sits slightly differently to a screen &mdash; we confirm that with you at sign-off."] },
+      { q: "What materials do you use?",
+        a: ["Wool for most commissions — it is hard-wearing, takes dye beautifully and resists staining without treatment. Silk blend and bamboo silk add sheen and depth at a price; flatweave is lighter, reversible and suits high traffic. Material affects texture and appearance. It does not change the m² rate — the rate is set by design tier alone."] },
+      { q: "What is the difference between pile and flatweave?",
+        a: ["Pile is tufted yarn standing upright — it has depth and it is warm underfoot. Flatweave has no pile: lighter, reversible, and better under furniture or in a busy hallway."] },
+      { q: "How do I choose the right pile height?",
+        a: ["6mm is sleek and easy to clean, best where there is traffic. 12mm balances comfort and practicality. 20mm is the softest and needs the most care. If you are unsure, take 12mm — it suits almost every room."] },
+    ],
+  },
+  {
+    category: "Shipping &amp; Delivery",
+    items: [
+      { q: "Do you ship internationally?",
+        a: ["Shipping is included and fully insured to the UK, Europe and the United States. For delivery elsewhere, contact us to confirm delivery to your country. Every shipment is fully insured and tracked."] },
+      { q: "Who pays customs and duties?",
+        a: ["Import duties, destination VAT and customs charges are payable by the recipient on arrival. This applies to deliveries to the US, EU and any other destination outside the UK."] },
+      { q: "How is my piece packaged for shipping?",
+        a: ["Always rolled around a core, wrapped in polythene and boxed. Every piece travels rolled, whatever its size — a hand-tufted pile holds a crease permanently, so we never risk one."] },
+      { q: "What if my piece arrives damaged?",
+        a: ["All shipments are fully insured. If your piece arrives damaged, please contact us immediately with photographs. We will manage the insurance claim and prioritise producing a replacement."] },
+    ],
+  },
+  {
+    category: "Returns",
+    items: [
+      { q: "What is your return policy?",
+        a: ["A commission cannot be returned, because it exists only for you. That is why nothing is made until you have approved the design, the dimensions and the dye reference in writing. If a piece arrives faulty, contact us — your statutory rights under the Consumer Rights Act 2015 are unaffected."] },
+    ],
+  },
+  {
+    category: "Wall-to-wall carpets",
+    items: [
+      { q: "How do I measure for a wall-to-wall carpet?",
+        a: ["You supply the two longest measurements of the room. This is the standard trade method and correctly accounts for bay windows, chimney breasts and alcoves. We add approximately 10cm to each dimension as a trimming allowance. A professional measure is recommended."] },
+      { q: "What is the charged area on a carpet?",
+        a: ["You are charged for the full rectangle, including the area trimmed away around a bay or chimney breast. The quote shows the charged area in m&sup2; and states that trimming waste is included in it, before the deposit."] },
+      { q: "Will the pattern be affected by trimming?",
+        a: ["The design is centred to the ordered rectangle. Trimming at a bay or chimney breast will cut into the pattern. Please consider this when choosing your design tier."] },
+    ],
+  },
+  {
+    category: "Wall hangings",
+    items: [
+      { q: "Is hanging hardware included?",
+        a: ["No pole, rail, fixings or hardware are supplied. You choose your own mounting to suit the piece and the wall. A large hand-tufted piece is heavy &mdash; confirm your wall and fixings are suitable."] },
+    ],
+  },
+];
+
+// Strip markup for the schema — JSON-LD wants plain text.
+const slug = (t) => t.replace(/&amp;/g, 'and').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase();
+
+const stripTags = (html) => html.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&mdash;/g, '—').replace(/&times;/g, '×').replace(/&sup2;/g, '²').replace(/&pound;/g, '£').replace(/&minus;/g, '−').replace(/\s+/g, ' ').trim();
+
+const faqSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.flatMap((group) =>
+    group.items.map((item) => ({
+      '@type': 'Question',
+      name: stripTags(item.q),
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.a.map(stripTags).join(' '),
+      },
+    }))
+  ),
+});
+---
+
+<BaseLayout
+  title="Bespoke Rug FAQs — Cost, Sizes, Materials and Lead Times — Harrow &amp; Thread"
+  description="How much a bespoke hand-tufted rug costs per square metre, minimum and maximum sizes, materials, pile heights, lead times, shipping, customs and returns. Answered plainly."
+  schema={faqSchema}
+>
+  <section class="section-pad">
+    <div class="shell">
+      <div class="max-w-narrow mb-14 sm:mb-20">
+        <p class="eyebrow text-graphite mb-6">Frequently asked questions</p>
+        <h1 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0 mb-6">
+          Questions, answered.
+        </h1>
+        <p class="lede text-graphite m-0">
+          Answers to the questions we get most often. If you cannot find what you are looking for, <a href="/enquire" class="link-underline">ask us</a>.
+        </p>
+      </div>
+
+      <div class="grid gap-12 md:grid-cols-[1fr_16rem] md:gap-gutter items-start">
+      <div>
+        {faq.map((group) => (
+          <div class="mb-14 sm:mb-16 last:mb-0" id={slug(group.category)}>
+            <h2 class="display text-2xl sm:text-3xl text-ink mb-6" set:html={group.category}></h2>
+            <div>
+              {group.items.map((item) => (
+                <details class="group border-b rule py-5">
+                  <summary class="text-lg text-ink font-medium cursor-pointer list-none flex justify-between items-start gap-6">
+                    <span set:html={item.q}></span>
+                    <span class="text-graphite text-xl leading-none shrink-0 group-open:hidden">+</span>
+                    <span class="text-graphite text-xl leading-none shrink-0 hidden group-open:inline">&minus;</span>
+                  </summary>
+                  {item.a.map((para, i) => (
+                    <p class={`prose-body text-graphite mb-0 ${i === 0 ? 'mt-4' : 'mt-3'}`} set:html={para}></p>
+                  ))}
+                </details>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+        <!-- Category rail + a route out for anything not covered. -->
+        <aside class="md:sticky md:top-28">
+          <nav aria-label="Question categories" class="mb-8">
+            <p class="eyebrow text-graphite mb-4">On this page</p>
+            <ul class="list-none p-0 m-0 space-y-2.5 border-t rule pt-4">
+              {faq.map((group) => (
+                <li>
+                  <a href={`#${slug(group.category)}`} class="text-sm text-graphite hover:text-ink no-underline" set:html={group.category}></a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div class="bg-chalk p-6">
+            <p class="text-base text-ink m-0 mb-2">Not covered here?</p>
+            <p class="text-sm text-graphite m-0 mb-5">
+              Tell us what you have in mind and we will answer directly, usually the same working day.
+            </p>
+            <a href="/enquire" class="btn btn-primary !py-3 !px-6 !text-sm">Ask us</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

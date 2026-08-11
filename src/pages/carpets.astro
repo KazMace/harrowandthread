@@ -1,0 +1,203 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ImagePlaceholder from '../components/ui/ImagePlaceholder.astro';
+import pricing from '../data/pricing.json';
+import site from '../data/site.json';
+
+// The four material rules plus supply-only. All legally material information:
+// they stay prominent, uncollapsed, and on this page.
+const rules = [
+  {
+    n: '01',
+    title: 'Supply only',
+    paras: [
+      'Your carpet arrives oversized by design. A fitter trims it to your room. We can arrange UK fitting on request — ask when you enquire.',
+    ],
+  },
+  {
+    n: '02',
+    title: 'Measurement',
+    paras: [
+      'You supply the <strong class="text-ink font-medium">two longest measurements</strong> of the room. This is the standard trade method and correctly accounts for bay windows, chimney breasts and alcoves.',
+      'We add approximately <strong class="text-ink font-medium">10cm to each dimension</strong> as a trimming allowance.',
+      '<strong class="text-ink font-medium">You are responsible for the accuracy of your measurements.</strong> A professional measure is recommended.',
+    ],
+  },
+  {
+    n: '03',
+    title: 'Charged area',
+    paras: [
+      'You pay for the <strong class="text-ink font-medium">full rectangle</strong>. That includes the area trimmed away around a bay or chimney breast.',
+      'The quote shows the charged area in m&sup2; and states that trimming waste is included, <strong class="text-ink font-medium">before the deposit</strong>.',
+    ],
+  },
+  {
+    n: '04',
+    title: 'Pattern trimming',
+    paras: [
+      'The design is centred to the ordered rectangle. <strong class="text-ink font-medium">Trimming at a bay or chimney breast will cut into the pattern.</strong>',
+      'On a pictorial design, plan the layout with us first. We will show you where the cuts fall before anything is made.',
+    ],
+  },
+];
+
+const extras = [
+  { title: `Design fee — £${pricing.designFee}`, body: pricing.designFeeNote },
+  { title: 'Shipping', body: pricing.shippingNote },
+  { title: 'Customs and duties', body: pricing.customsNote },
+];
+---
+
+<BaseLayout
+  title="Bespoke Wall-to-Wall Carpets, Made to Your Room — Harrow &amp; Thread"
+  description="Hand-tufted wall-to-wall carpets made to your room and your design, from 1,400 dye colours. £750–£1,500 per square metre. Supply only, with full measurement guidance and charged-area pricing explained upfront."
+>
+  <!-- Archetype: page header. -->
+  <section class="section-pad">
+    <div class="shell">
+      <p class="eyebrow text-graphite mb-6">Wall-to-wall carpets</p>
+      <h1 class="display text-4xl sm:text-5xl lg:text-6xl m-0 mb-8 max-w-[18ch]">
+        Made to your room.<br />Your design. Your colour.
+      </h1>
+      <p class="lede text-graphite m-0 max-w-[46ch]">
+        Hand-tufted wall-to-wall carpets. All three design tiers &mdash; plain, geometric and pictorial &mdash; the same 1,400 colours. Supply only, with full measurement guidance.
+      </p>
+    </div>
+  </section>
+
+  <!-- Archetype: numbered sequence on chalk. Material information, open. -->
+  <section class="section-pad bg-chalk">
+    <div class="shell">
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-12 sm:mb-16">
+        <h2 class="display text-3xl sm:text-4xl m-0">Before you order</h2>
+        <p class="text-sm text-graphite max-w-[40ch] m-0">
+          A fitted carpet is made once, to numbers you supply. Everything that affects the price or the fit is here, before you commit.
+        </p>
+      </div>
+
+      <div class="grid gap-10 sm:gap-x-8 sm:gap-y-14 sm:grid-cols-2 stagger reveal">
+        {rules.map((r) => (
+          <div class="border-t-2 border-ink pt-6">
+            <span class="eyebrow text-madder block mb-5">{r.n}</span>
+            <h3 class="display text-2xl mb-4">{r.title}</h3>
+            <div class="space-y-3">
+              {r.paras.map((para) => (
+                <p class="prose-body text-graphite m-0" set:html={para}></p>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Archetype: full-bleed colour statement. The rate card, unmissable. -->
+  <section class="bg-madder text-paper">
+    <div class="shell py-12 sm:py-20">
+      <h2 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0 mb-6">Pricing</h2>
+      <p class="text-paper text-lg m-0 max-w-[46ch]">
+        The same rates apply to wall-to-wall carpets. The worked example below includes the 10cm trimming allowance on each dimension.
+      </p>
+    </div>
+
+    <div class="border-t border-paper/20">
+      <div class="shell">
+        <p class="eyebrow text-paper/90 mb-3 sm:hidden">Scroll for full detail &rarr;</p>
+        <div class="overflow-x-auto -mx-6 px-6 sm:mx-0 sm:px-0">
+        <table class="w-full min-w-[30rem] text-left border-collapse">
+          <caption class="sr-only">Design tier rate card</caption>
+          <thead>
+            <tr class="border-b border-paper/20">
+              <th scope="col" class="eyebrow font-medium text-paper/90 py-4 pr-6">Tier</th>
+              <th scope="col" class="eyebrow font-medium text-paper/90 py-4 pr-6">Rate</th>
+              <th scope="col" class="eyebrow font-medium text-paper/90 py-4">What it is</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pricing.tiers.map((tier, i) => (
+              <tr class={i < pricing.tiers.length - 1 ? 'border-b border-paper/20' : ''}>
+                <th scope="row" class="display text-xl sm:text-2xl font-medium text-left py-6 pr-6 align-top">{tier.name}</th>
+                <td class="text-lg py-6 pr-6 align-top whitespace-nowrap">&pound;{tier.rate.toLocaleString()}<span class="text-sm text-paper/90">/m&sup2;</span></td>
+                <td class="text-base text-paper/90 py-6 align-top">{tier.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-paper/20">
+      <div class="shell py-10 sm:py-14">
+        <p class="eyebrow text-paper/90 mb-5">Worked example: 5m &times; 4m room, plain</p>
+        <div class="text-base text-paper space-y-2">
+          <p class="m-0">Ordered dimensions: 5.1m &times; 4.1m (10cm trimming allowance added to each side)</p>
+          <p class="m-0">Charged area: 5.1 &times; 4.1 = 20.91m&sup2;</p>
+          <p class="m-0">Plain rate: 20.91 &times; &pound;750 = <strong class="font-medium text-paper">&pound;15,683</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-paper/20">
+      <div class="shell py-10 sm:py-14">
+        <dl class="grid gap-8 sm:grid-cols-3 m-0">
+          {extras.map((e) => (
+            <div>
+              <dt class="display text-xl mb-2">{e.title}</dt>
+              <dd class="m-0 text-sm text-paper/90">{e.body}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- Archetype: two-column split. Material information, deliberately open. -->
+  <section class="section-pad">
+    <div class="shell">
+      <div class="grid gap-10 md:grid-cols-[0.85fr_1.15fr] md:gap-gutter">
+        <div>
+          <h2 class="display text-3xl sm:text-4xl m-0 max-w-[12ch]">How colour works</h2>
+        </div>
+        <div>
+          <div class="space-y-6">
+            <p class="text-lg sm:text-xl m-0">
+              Every piece is dyed to match a single reference from the ARS 1,400-colour system. You select a reference from <a href={site.externalLinks.arsColours} class="link-underline" rel="noopener noreferrer">arscolors.com</a> and we match it. Physical dyed wool may vary slightly from a screen render.
+            </p>
+          </div>
+          <p class="text-sm text-graphite m-0 mt-8 pt-6 border-t-2 border-ink">
+            Dyed wool sits slightly differently to a screen. We confirm the exact colour reference with you at sign-off, before anything is made.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Archetype: full-bleed image. -->
+  <section>
+    <div class="media h-[22rem] sm:h-[34rem]">
+      <ImagePlaceholder
+        id="carpet-room-context"
+        width={1600}
+        height={900}
+        alt="A hand-tufted wall-to-wall carpet in a warm neutral tone filling a room with a bay window, extending fully to the skirting boards"
+        caption="Design visualisation"
+        class="w-full h-full [&_img]:h-full [&_img]:w-full [&_img]:object-cover"
+        sizes="100vw"
+      />
+    </div>
+  </section>
+
+  <!-- Archetype: oversized closing statement. -->
+  <section class="section-pad bg-ink text-paper">
+    <div class="shell">
+      <h2 class="display text-3xl sm:text-6xl lg:text-7xl m-0 mb-10 sm:mb-14 max-w-[12ch]">
+        Start a carpet commission.
+      </h2>
+      <div class="flex flex-col sm:flex-row sm:items-center gap-8 sm:gap-14">
+        <a href="/enquire?type=carpet" class="btn btn-invert self-start">Enquire</a>
+        <p class="text-paper text-lg m-0">{site.responsePromise}</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

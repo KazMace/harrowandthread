@@ -1,0 +1,66 @@
+---
+import site from '../../data/site.json';
+---
+
+<footer class="bg-ink text-paper">
+  <div class="shell py-16 sm:py-20">
+    <div class="grid gap-12 sm:gap-10 sm:grid-cols-2 md:grid-cols-12">
+      <div class="sm:col-span-2 md:col-span-4">
+        <p class="display text-2xl sm:text-3xl m-0 mb-4 max-w-[18ch]">
+          Bespoke hand-tufted rugs, made once.
+        </p>
+        <a href="/enquire" class="link-underline text-paper text-sm font-medium">
+          Start a commission &rarr;
+        </a>
+      </div>
+
+      <div class="md:col-span-3">
+        <p class="eyebrow text-paper/65 mb-5">Pages</p>
+        <ul class="space-y-2.5 list-none p-0 m-0">
+          {site.nav.map((item) => (
+            <li>
+              <a href={item.href} class="text-sm text-paper/75 hover:text-paper no-underline">
+                {item.label}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a href="/enquire" class="text-sm text-paper/75 hover:text-paper no-underline">Enquire</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-2">
+        <p class="eyebrow text-paper/65 mb-5">Information</p>
+        <ul class="space-y-2.5 list-none p-0 m-0">
+          {site.footerLinks.map((item) => (
+            <li>
+              <a href={item.href} class="text-sm text-paper/75 hover:text-paper no-underline">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="sm:col-span-2 md:col-span-3">
+        <p class="eyebrow text-paper/65 mb-5">{site.company.name}</p>
+        <div class="text-sm text-paper/60 space-y-1.5">
+          {site.company.number && <p class="m-0">Company number: {site.company.number}</p>}
+          <p class="m-0">{site.company.address}</p>
+          <p class="m-0 pt-1">
+            <!-- No break-words: it split the address mid-domain
+                 ("harrowandthread." / "com"), which reads as broken. -->
+            <a href={`mailto:${site.company.email}`} class="text-paper/75 hover:text-paper no-underline whitespace-nowrap">
+              {site.company.email}
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-paper/15 mt-14 pt-7 text-xs text-paper/65">
+      <p class="m-0">&copy; {new Date().getFullYear()} {site.company.name}. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

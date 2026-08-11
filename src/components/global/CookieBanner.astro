@@ -1,0 +1,95 @@
+<!-- Full-width bottom bar. Withheld until the visitor scrolls (or 6s) so it
+     never covers the hero on first paint; hidden and inert near the footer and
+     while the mobile nav overlay is open, so it never sits on a CTA or on body
+     copy. Reject is as prominent as Accept (PECR/GDPR). -->
+<div
+  id="cookie-banner"
+  class="hidden fixed bottom-0 left-0 right-0 z-50 bg-ink text-paper px-5 py-4 sm:px-8 sm:py-5 shadow-lg"
+  role="dialog"
+  aria-live="polite"
+  aria-label="Cookie preferences"
+>
+  <div class="shell flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 !px-0">
+  <p class="text-xs sm:text-sm m-0 text-paper/85 max-w-[60ch]">
+    We use essential cookies to make the site work, and analytics cookies only
+    if you agree. <a href="/cookies" class="text-paper underline">Cookie policy</a>.
+  </p>
+  <div class="flex gap-3 shrink-0">
+    <button
+      id="cookie-reject"
+      class="whitespace-nowrap px-5 py-2 text-xs sm:text-sm border border-paper/60 text-paper bg-transparent cursor-pointer transition-colors duration-150 hover:bg-paper/10"
+    >
+      Reject all
+    </button>
+    <button
+      id="cookie-accept"
+      class="whitespace-nowrap px-5 py-2 text-xs sm:text-sm border border-paper text-ink bg-paper font-medium cursor-pointer transition-opacity duration-150 hover:opacity-90"
+    >
+      Accept all
+    </button>
+  </div>
+  </div>
+</div>
+
+<script>
+  const banner = document.getElementById('cookie-banner');
+  const acceptBtn = document.getElementById('cookie-accept');
+  const rejectBtn = document.getElementById('cookie-reject');
+
+  const needsConsent = !localStorage.getItem('cookie-consent');
+
+  // Hold the banner back until the visitor has engaged, so it never covers the
+  // hero on first paint. Consent is still requested before any non-essential
+  // cookie is set — nothing analytic runs until Accept is pressed.
+  if (needsConsent) {
+    const reveal = () => banner?.classList.remove('hidden');
+    if (window.scrollY > 120) {
+      reveal();
+    } else {
+      const onScroll = () => {
+        if (window.scrollY > 120) {
+          reveal();
+          window.removeEventListener('scroll', onScroll);
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      // Fallback for visitors who never scroll.
+      setTimeout(() => { reveal(); avoidFooter(); }, 6000);
+    }
+  }
+
+  function setConsent(value: string) {
+    localStorage.setItem('cookie-consent', value);
+    banner?.classList.add('hidden');
+    if (value === 'accepted') {
+      // Load analytics scripts here
+    }
+  }
+
+  acceptBtn?.addEventListener('click', () => setConsent('accepted'));
+  rejectBtn?.addEventListener('click', () => setConsent('rejected'));
+
+  // Step aside near the foot of the page so the closing CTA is never covered.
+  // The banner is not dismissed — no consent is implied — it just moves.
+  function avoidFooter() {
+    if (!banner || banner.classList.contains('hidden')) return;
+    const nearBottom =
+      window.innerHeight + window.scrollY > document.body.scrollHeight - 420;
+    // The mobile nav overlay locks body scroll; the banner must not sit on it.
+    const navOpen = document.body.style.overflow === 'hidden';
+    const hide = nearBottom || navOpen;
+    banner.style.opacity = hide ? '0' : '1';
+    banner.style.pointerEvents = hide ? 'none' : '';
+    if (hide) { banner.setAttribute('inert', ''); } else { banner.removeAttribute('inert'); }
+  }
+
+  // Re-evaluate when the nav opens or closes.
+  new MutationObserver(avoidFooter).observe(document.body, {
+    attributes: true,
+    attributeFilter: ['style'],
+  });
+
+  banner?.style.setProperty('transition', 'opacity 300ms ease');
+  window.addEventListener('scroll', avoidFooter, { passive: true });
+  avoidFooter();
+</script>

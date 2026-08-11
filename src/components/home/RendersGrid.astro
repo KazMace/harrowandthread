@@ -1,0 +1,101 @@
+---
+import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
+
+// Each tile carries real specification metadata — tier, size, material, pile.
+// Unlabelled images make a reader guess; a spec line tells them what is
+// possible and what it would cost, which is the job of this section.
+// These describe the visualisations, not delivered client work.
+const rows = [
+  {
+    height: 'md:h-[30rem]',
+    items: [
+      {
+        id: 'render-rug-01', width: 1200, height: 900, span: 'md:col-span-7',
+        title: 'Botanical, painterly',
+        spec: 'Pictorial · 3 × 2m · wool · 12mm pile',
+        alt: 'A hand-tufted rug with a botanical painterly design in sage green, dusty rose and cream, in a bright living room with oak floors',
+      },
+      {
+        id: 'render-wall-hanging-01', width: 900, height: 1200, span: 'md:col-span-5',
+        title: 'Abstract landscape',
+        spec: 'Wall hanging · 2 × 1.5m · wool · 20mm pile',
+        alt: 'A large hand-tufted textile wall hanging featuring an abstract landscape design in muted earth tones',
+      },
+    ],
+  },
+  {
+    height: 'md:h-[26rem]',
+    items: [
+      {
+        id: 'render-rug-02', width: 1200, height: 900, span: 'md:col-span-4',
+        title: 'Geometric border',
+        spec: 'Geometric · 4 × 3m · wool · 6mm pile',
+        alt: 'A hand-tufted rug with a bold geometric border pattern in charcoal and cream, under a dark wood dining table',
+      },
+      {
+        id: 'render-rug-03', width: 1200, height: 900, span: 'md:col-span-4',
+        title: 'Single colour, ochre',
+        spec: 'Plain · 2.5 × 1.8m · wool · 20mm pile',
+        alt: 'A single-colour hand-tufted rug in warm ochre, placed at the foot of a bed in a serene bedroom',
+      },
+      {
+        id: 'render-wall-hanging-02', width: 1200, height: 1200, span: 'md:col-span-4',
+        title: 'Sculptural pile detail',
+        spec: 'Wall hanging · detail · mixed pile heights',
+        alt: 'A close-up detail of a hand-tufted wall hanging showing varied pile heights creating a sculptural topographic surface',
+      },
+    ],
+  },
+  {
+    height: 'md:h-[24rem]',
+    items: [
+      {
+        id: 'render-rug-04', width: 1200, height: 900, span: 'md:col-span-12',
+        title: 'Watercolour runner',
+        spec: 'Pictorial · 6 × 1.2m · bamboo silk blend · 6mm pile',
+        alt: 'A hand-tufted runner rug with an abstract watercolour-like design in indigo, rust and cream, in a wide hallway',
+      },
+    ],
+  },
+];
+---
+
+<section class="section-pad">
+  <div class="shell">
+    <div class="flex flex-wrap items-end justify-between gap-6 mb-12 sm:mb-16">
+      <h2 class="display text-3xl sm:text-4xl lg:text-5xl m-0 max-w-[16ch]">
+        What a commission can be.
+      </h2>
+      <p class="text-graphite text-sm max-w-[38ch] m-0">
+        Design visualisations, not photographs of delivered work.
+        Portfolio in preparation.
+      </p>
+    </div>
+
+    <div class="space-y-8 sm:space-y-10">
+      {rows.map((row) => (
+        <div class={`grid gap-6 sm:gap-4 md:grid-cols-12`}>
+          {row.items.map((r) => (
+            <figure class={`m-0 ${r.span}`}>
+              <div class={`media bg-chalk h-64 ${row.height}`}>
+                <ImagePlaceholder
+                  id={r.id}
+                  width={r.width}
+                  height={r.height}
+                  alt={r.alt}
+                  caption="Design visualisation"
+                  class="w-full h-full [&_img]:h-full [&_img]:w-full [&_img]:object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+              <figcaption class="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <span class="text-base text-ink font-medium">{r.title}</span>
+                <span class="text-sm text-graphite">{r.spec}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

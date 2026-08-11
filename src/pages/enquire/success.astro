@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import site from '../../data/site.json';
+---
+
+<BaseLayout
+  title="Thank You — Harrow &amp; Thread"
+  description="Your enquiry has been received. We will respond within one working day."
+  noindex
+>
+  <section class="section-pad">
+    <div class="shell">
+      <div class="max-w-narrow">
+        <p class="eyebrow text-graphite mb-6">Thank you</p>
+        <h1 class="display text-4xl sm:text-5xl lg:text-6xl m-0 mb-8">
+          Received.
+        </h1>
+        <p class="lede text-graphite m-0 mb-4">
+          Your enquiry has been sent. {site.responsePromise}
+        </p>
+        <p class="prose-body text-graphite m-0 mb-12">
+          If you sent reference images, they arrived with it. We will come back to
+          you with next steps, an indicative price for what you have described, and
+          any questions we need answered before we can quote properly.
+        </p>
+        <a href="/" class="btn btn-primary">Return home</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

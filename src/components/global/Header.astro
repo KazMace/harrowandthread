@@ -1,0 +1,123 @@
+---
+import Logo from '../ui/Logo.astro';
+import site from '../../data/site.json';
+
+const currentPath = Astro.url?.pathname || '/';
+---
+
+<!-- Opaque, not translucent: at 90% opacity, dark sections bled through behind
+     the logotype as the page scrolled, which read as a rendering fault. -->
+<header class="sticky top-0 z-40 bg-paper border-b rule">
+  <div class="shell flex items-center justify-between h-16 sm:h-20">
+    <a href="/" class="text-ink no-underline shrink-0" aria-label="Harrow & Thread home">
+      <Logo class="text-lg sm:text-xl" />
+    </a>
+
+    <nav class="hidden sm:flex items-center gap-9" aria-label="Main navigation">
+      {site.nav.map((item) => (
+        <a
+          href={item.href}
+          class={`text-sm no-underline link-underline ${currentPath === item.href ? 'text-ink' : 'text-graphite hover:text-ink'}`}
+        >
+          {item.label}
+        </a>
+      ))}
+      <a href="/enquire" class="btn btn-primary !py-3 !px-7 !text-sm">Enquire</a>
+    </nav>
+
+    <button
+      id="mobile-menu-toggle"
+      class="sm:hidden flex items-center justify-center w-11 h-11 -mr-3 text-ink"
+      aria-label="Open menu"
+      aria-expanded="false"
+    >
+      <svg width="22" height="14" viewBox="0 0 22 14" fill="none" aria-hidden="true">
+        <rect y="0" width="22" height="1.5" fill="currentColor"/>
+        <rect y="6" width="22" height="1.5" fill="currentColor"/>
+        <rect y="12" width="22" height="1.5" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile menu -->
+<div
+  id="mobile-menu"
+  class="hidden fixed inset-0 z-50 bg-ink text-paper flex flex-col items-start justify-center gap-2 px-8"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu"
+>
+  <button
+    id="mobile-menu-close"
+    class="absolute top-5 right-6 p-2 text-paper"
+    aria-label="Close menu"
+  >
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <line x1="3" y1="3" x2="21" y2="21" stroke="currentColor" stroke-width="1.5"/>
+      <line x1="21" y1="3" x2="3" y2="21" stroke="currentColor" stroke-width="1.5"/>
+    </svg>
+  </button>
+
+  {site.nav.map((item) => (
+    <a href={item.href} class="display text-3xl no-underline text-paper py-2">
+      {item.label}
+    </a>
+  ))}
+  <a href="/enquire" class="display text-3xl no-underline text-madder py-2">Enquire</a>
+</div>
+
+<script>
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const close = document.getElementById('mobile-menu-close');
+
+  function getFocusable(): HTMLElement[] {
+    if (!menu) return [];
+    return Array.from(
+      menu.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
+    );
+  }
+
+  function openMenu() {
+    menu?.classList.remove('hidden');
+    toggle?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    getFocusable()[0]?.focus();
+  }
+
+  function closeMenu() {
+    menu?.classList.add('hidden');
+    toggle?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    toggle?.focus();
+  }
+
+  toggle?.addEventListener('click', openMenu);
+  close?.addEventListener('click', closeMenu);
+
+  menu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  menu?.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMenu();
+      return;
+    }
+    if (e.key !== 'Tab') return;
+
+    const focusable = getFocusable();
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+</script>

@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import site from '../data/site.json';
+---
+
+<BaseLayout
+  title="Page Not Found — Harrow &amp; Thread"
+  description="That page does not exist. Browse commissions, wall-to-wall carpets, or start an enquiry."
+  noindex
+>
+  <section class="section-pad">
+    <div class="shell">
+      <div class="max-w-narrow">
+        <p class="eyebrow text-graphite mb-6">404</p>
+        <h1 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0 mb-6">
+          That page doesn't exist.
+        </h1>
+        <p class="lede text-graphite m-0 mb-12">
+          It may have moved, or the link may be wrong. Here is everything else.
+        </p>
+
+        <nav aria-label="Site sections">
+          <ul class="list-none p-0 m-0 border-t-2 border-ink">
+            {site.nav.map((item) => (
+              <li class="border-b rule">
+                <a href={item.href} class="flex items-center justify-between gap-6 py-5 no-underline group">
+                  <span class="display text-2xl text-ink">{item.label}</span>
+                  <span class="text-graphite" aria-hidden="true">&rarr;</span>
+                </a>
+              </li>
+            ))}
+            <li class="border-b rule">
+              <a href="/enquire" class="flex items-center justify-between gap-6 py-5 no-underline group">
+                <span class="display text-2xl text-ink">Enquire</span>
+                <span class="text-graphite" aria-hidden="true">&rarr;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <a href="/" class="btn btn-primary mt-12">Return home</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

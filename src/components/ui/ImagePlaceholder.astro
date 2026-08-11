@@ -1,0 +1,104 @@
+---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+export interface Props {
+  id: string;
+  width: number;
+  height: number;
+  alt: string;
+  /** Persistent visible label, e.g. "Design visualisation". Rendered as an
+   *  overlay so it stays attached to the image inside fixed-height layouts. */
+  caption?: string;
+  class?: string;
+  sizes?: string;
+  formats?: string[];
+  loading?: 'lazy' | 'eager';
+}
+
+const {
+  id,
+  width,
+  height,
+  alt,
+  caption,
+  class: className = '',
+  sizes = '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw',
+  formats = ['avif', 'webp', 'jpeg'],
+  loading = 'lazy',
+} = Astro.props;
+
+const candidateWidths = [640, 1024, 1600, 2400].filter((w) => w <= width);
+const publicImagesDir = join(process.cwd(), 'public', 'images');
+
+// Only reference files that actually exist on disk. A <source> pointing at a
+// missing file locks the <picture> into a broken image with no fallback,
+// because browsers don't retry a different <source> after a failed fetch.
+function existingWidths(format: string) {
+  return candidateWidths.filter((w) => existsSync(join(publicImagesDir, `${id}-${w}w.${format}`)));
+}
+
+const avifWidths = formats.includes('avif') ? existingWidths('avif') : [];
+const webpWidths = formats.includes('webp') ? existingWidths('webp') : [];
+const jpegWidths = formats.includes('jpeg') ? existingWidths('jpeg') : [];
+const hasRealImage = avifWidths.length > 0 || webpWidths.length > 0 || jpegWidths.length > 0;
+
+const srcsetAvif = avifWidths.map((w) => `/images/${id}-${w}w.avif ${w}w`).join(', ');
+const srcsetWebp = webpWidths.map((w) => `/images/${id}-${w}w.webp ${w}w`).join(', ');
+const srcsetJpeg = jpegWidths.map((w) => `/images/${id}-${w}w.jpeg ${w}w`).join(', ');
+
+const rasterWidths = jpegWidths.length ? jpegWidths : webpWidths.length ? webpWidths : avifWidths;
+const rasterFormat = jpegWidths.length ? 'jpeg' : webpWidths.length ? 'webp' : 'avif';
+const imgSrc = hasRealImage ? `/images/${id}-${Math.max(...rasterWidths)}w.${rasterFormat}` : '';
+
+// Awaiting-photography state: a colour field from the dye range rather than an
+// empty grey box, so the page still reads as designed. Picked deterministically
+// from the id so it stays stable between builds.
+const pendingGrounds = [
+  { bg: '#2D5443', fg: '#E4EBDC' },
+  { bg: '#1E3A5F', fg: '#DDE6EC' },
+  { bg: '#A8542E', fg: '#F7E2D0' },
+  { bg: '#5E2A47', fg: '#E8DCE6' },
+  { bg: '#8A2E2A', fg: '#F6D9D3' },
+  { bg: '#1B6B6B', fg: '#E4EBDC' },
+  { bg: '#D99A2B', fg: '#3B3630' },
+  { bg: '#3E3E42', fg: '#E9E7E2' },
+];
+const hash = [...id].reduce((a, c) => a + c.charCodeAt(0), 0);
+const ground = pendingGrounds[hash % pendingGrounds.length];
+---
+
+<figure class={`relative m-0 ${className}`} {...(!hasRealImage && { role: 'img', 'aria-label': alt })}>
+  {hasRealImage ? (
+    <picture>
+      {srcsetAvif && <source srcset={srcsetAvif} sizes={sizes} type="image/avif" />}
+      {srcsetWebp && <source srcset={srcsetWebp} sizes={sizes} type="image/webp" />}
+      {srcsetJpeg && <source srcset={srcsetJpeg} sizes={sizes} type="image/jpeg" />}
+      <img
+        src={imgSrc}
+        alt={alt}
+        width={width}
+        height={height}
+        loading={loading}
+        decoding={loading === 'eager' ? 'sync' : 'async'}
+        class="w-full h-auto"
+        style={`aspect-ratio: ${width} / ${height}`}
+      />
+    </picture>
+  ) : (
+    <div class="w-full h-full" style={`background-color: ${ground.bg};`}></div>
+  )}
+
+  {caption && (
+    <figcaption
+      class="eyebrow absolute bottom-0 left-0 right-0 px-4 pb-3 pt-8 pointer-events-none"
+      style={
+        hasRealImage
+          ? 'color: #FFFFFF; background: linear-gradient(to top, rgba(17,17,17,0.55), transparent);'
+          : `color: ${ground.fg}; opacity: 0.75;`
+      }
+    >
+      {caption}
+    </figcaption>
+  )}
+</figure>

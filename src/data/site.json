@@ -1,0 +1,50 @@
+{
+  "siteName": "Harrow & Thread",
+  "tagline": "Hand-tufted rugs, wall hangings and carpets, made to order",
+  "company": {
+    "name": "Harrow & Thread",
+    "number": "",
+    "address": "[Trading address]",
+    "email": "enquiries@harrowandthread.com"
+  },
+  "nav": [
+    {
+      "label": "Commissions",
+      "href": "/commissions"
+    },
+    {
+      "label": "Carpets",
+      "href": "/carpets"
+    },
+    {
+      "label": "Trade",
+      "href": "/trade"
+    }
+  ],
+  "footerLinks": [
+    {
+      "label": "FAQ",
+      "href": "/faq"
+    },
+    {
+      "label": "Care",
+      "href": "/care"
+    },
+    {
+      "label": "Terms",
+      "href": "/terms"
+    },
+    {
+      "label": "Privacy",
+      "href": "/privacy"
+    },
+    {
+      "label": "Cookies",
+      "href": "/cookies"
+    }
+  ],
+  "responsePromise": "We respond within one working day.",
+  "externalLinks": {
+    "arsColours": "https://arscolors.com"
+  }
+}

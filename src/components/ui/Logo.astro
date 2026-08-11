@@ -1,0 +1,9 @@
+---
+const { class: className = '' } = Astro.props;
+---
+<!-- Upright wordmark. Never italic: the display face has no true italic, so
+     `font-style: italic` would be synthesised by the browser as a mechanical
+     slant — which is what made the previous build's type read as amateur. -->
+<span class={`font-display font-semibold tracking-tight whitespace-nowrap ${className}`}>
+  Harrow &amp; Thread
+</span>

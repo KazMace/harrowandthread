@@ -1,0 +1,174 @@
+---
+import Header from '../components/global/Header.astro';
+import Footer from '../components/global/Footer.astro';
+import CookieBanner from '../components/global/CookieBanner.astro';
+import SkipLink from '../components/global/SkipLink.astro';
+import '../styles/global.css';
+import site from '../data/site.json';
+
+export interface Props {
+  title: string;
+  description: string;
+  /** Set on thin or post-submission pages that shouldn't be indexed. */
+  noindex?: boolean;
+  /** Extra JSON-LD for this page, already stringified. */
+  schema?: string;
+}
+
+const { title, description, noindex = false, schema } = Astro.props;
+
+const SITE_URL = 'https://harrowandthread.com';
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE_URL).href;
+const ogImage = `${SITE_URL}/images/hero-banner-main-768w.jpeg`;
+
+// Breadcrumbs derived from the path. Home-only pages get no trail.
+const segments = Astro.url.pathname.split('/').filter(Boolean);
+const crumbs = [
+  { name: 'Home', item: `${SITE_URL}/` },
+  ...segments.map((seg, i) => ({
+    name: seg.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+    item: `${SITE_URL}/${segments.slice(0, i + 1).join('/')}`,
+  })),
+];
+
+// Entity graph. Deliberately NO aggregateRating or review — there are no
+// genuine reviews, and fabricating them is a banned practice under the UK
+// Digital Markets, Competition and Consumers Act 2024.
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': ['Organization', 'HomeAndConstructionBusiness'],
+      '@id': `${SITE_URL}/#organization`,
+      name: site.siteName,
+      url: SITE_URL,
+      logo: `${SITE_URL}/favicon.svg`,
+      image: ogImage,
+      email: site.company.email,
+      description:
+        'Bespoke hand-tufted rugs, wall hangings and wall-to-wall carpets, made to order for clients in the United Kingdom, Europe and the United States. Any design, any dimension, dyed to match from a 1,400-colour system. From £750 per square metre.',
+      slogan: 'A rug that exists once.',
+      address: { '@type': 'PostalAddress', addressCountry: 'GB' },
+      areaServed: [
+        { '@type': 'Country', name: 'United Kingdom' },
+        { '@type': 'Place', name: 'Europe' },
+        { '@type': 'Country', name: 'United States' },
+      ],
+      knowsAbout: [
+        'Hand-tufted rugs',
+        'Bespoke rugs',
+        'Wall-to-wall carpets',
+        'Textile wall hangings',
+        'Wool rugs',
+        'Interior design specification',
+      ],
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'sales',
+        email: site.company.email,
+        areaServed: ['GB', 'EU', 'US'],
+        availableLanguage: 'English',
+      },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: site.siteName,
+      publisher: { '@id': `${SITE_URL}/#organization` },
+      inLanguage: 'en-GB',
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: crumbs.map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: c.name,
+        item: c.item,
+      })),
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <!-- Set before first paint so scroll-reveal's hidden state only ever
+         applies when JS is actually running. Without this, a JS failure would
+         leave sections permanently invisible. -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.siteName} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="768" />
+    <meta property="og:image:height" content="1376" />
+    <meta property="og:locale" content="en_GB" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(graph)}></script>
+    {schema && <script type="application/ld+json" set:html={schema}></script>}
+  </head>
+  <body>
+    <SkipLink />
+    <Header />
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <CookieBanner />
+  </body>
+</html>
+
+<script>
+  const targets = document.querySelectorAll('.reveal, .stagger');
+
+  // Safety net: if IntersectionObserver is unsupported, reveal everything
+  // rather than leaving content hidden.
+  if (!('IntersectionObserver' in window)) {
+    targets.forEach((el) => el.classList.add('visible'));
+  } else {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -10% 0px' }
+    );
+
+    targets.forEach((el) => observer.observe(el));
+
+    // Anything already on screen at load reveals immediately.
+    requestAnimationFrame(() => {
+      targets.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) {
+          el.classList.add('visible');
+          observer.unobserve(el);
+        }
+      });
+    });
+  }
+</script>

@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import PriceAnchor from '../components/home/PriceAnchor.astro';
+import Proposition from '../components/home/Proposition.astro';
+import ColourRail from '../components/home/ColourRail.astro';
+import Process from '../components/home/Process.astro';
+import RendersGrid from '../components/home/RendersGrid.astro';
+import CarpetsStrip from '../components/home/CarpetsStrip.astro';
+import TradeStrip from '../components/home/TradeStrip.astro';
+import Assurances from '../components/home/Assurances.astro';
+import EnquiryCTA from '../components/home/EnquiryCTA.astro';
+import pricing from '../data/pricing.json';
+
+// Machine-readable rate card. This is what an AI answer engine quotes for
+// "how much does a bespoke rug cost per square metre". No aggregateRating or
+// review — there are no genuine reviews and inventing them is a banned
+// practice under the UK DMCC Act 2024.
+const serviceSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  '@id': 'https://harrowandthread.com/#commission-service',
+  name: 'Bespoke Hand-Tufted Rug, Wall Hanging and Carpet Commissions',
+  serviceType: 'Bespoke rug commission',
+  provider: { '@id': 'https://harrowandthread.com/#organization' },
+  areaServed: ['GB', 'EU', 'US'],
+  description:
+    'Made-to-order hand-tufted rugs, wall hangings and wall-to-wall carpets in wool, silk blend, bamboo silk or flatweave. Priced per square metre by design tier. Approximately four weeks from sign-off.',
+  offers: {
+    '@type': 'OfferCatalog',
+    name: 'Design tier rate card',
+    itemListElement: pricing.tiers.map((tier) => ({
+      '@type': 'Offer',
+      name: tier.name,
+      description: tier.description,
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: tier.rate,
+        priceCurrency: 'GBP',
+        unitCode: 'MTK',
+        unitText: 'per square metre',
+      },
+    })),
+  },
+});
+---
+
+<BaseLayout
+  title="Bespoke Hand-Tufted Rugs, Made to Order in the UK — Harrow &amp; Thread"
+  description="Bespoke hand-tufted rugs, wall hangings and wall-to-wall carpets, made to your design and dimensions from 1,400 dye colours. Priced from £750 per square metre, insured delivery to the UK, Europe and the US."
+  schema={serviceSchema}
+>
+  <Hero />
+  <Proposition />
+  <ColourRail />
+  <Process />
+  <RendersGrid />
+  <PriceAnchor />
+  <Assurances />
+  <CarpetsStrip />
+  <TradeStrip />
+  <EnquiryCTA />
+</BaseLayout>

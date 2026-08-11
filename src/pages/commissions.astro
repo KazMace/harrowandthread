@@ -1,0 +1,299 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ImagePlaceholder from '../components/ui/ImagePlaceholder.astro';
+import pricing from '../data/pricing.json';
+import site from '../data/site.json';
+import { PILE_HEIGHTS, MATERIALS } from '../lib/constants';
+
+const wallHangingRules = [
+  {
+    title: 'Minimum 1.5m&sup2;, shortest side at least 1m',
+    body: 'Frame, design mapping, dye setup and finishing cost the same regardless of size. Below 1.5m² the piece cannot be made properly at a fair price.',
+  },
+  {
+    title: 'Maximum approximately 18m&sup2; (6m &times; 3m)',
+    body: 'A weight constraint. Larger pieces become impractical to hang safely. Weight per m² at each pile height is confirmed at quote.',
+  },
+  {
+    title: 'No pole, rail, fixings or hardware supplied',
+    body: 'You choose your own mounting to suit the piece and the wall. A large hand-tufted piece is heavy — confirm your wall and fixings are suitable.',
+  },
+  {
+    title: 'You are responsible for hanging the piece',
+    body: 'And for the suitability of your fixings and wall. Tell us the wall type at enquiry and we will advise on weight.',
+  },
+];
+
+const extras = [
+  { title: `Design fee — £${pricing.designFee}`, body: pricing.designFeeNote },
+  { title: 'Shipping', body: pricing.shippingNote },
+  { title: 'Customs and duties', body: pricing.customsNote },
+];
+---
+
+<BaseLayout
+  title="Bespoke Hand-Tufted Rugs &amp; Wall Hangings — From £750/m² — Harrow &amp; Thread"
+  description="Commission a hand-tufted rug or wall hanging in any design and any dimension up to 15m × 10m. Wool, silk blend, bamboo silk or flatweave, dyed to match from 1,400 colours. £750–£1,500 per square metre."
+>
+  <!-- Archetype: page header. Eyebrow, one real h1, lede. -->
+  <section class="section-pad">
+    <div class="shell">
+      <p class="eyebrow text-graphite mb-6">Commissions</p>
+      <h1 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0 mb-8 max-w-[18ch]">
+        A single piece.<br />Made to your design.
+      </h1>
+      <p class="lede text-graphite m-0 max-w-[44ch]">
+        A commission is one piece, made to your design, your dimensions, and your colour. You choose the material, the pile, the design tier and the size. We make it, insure it, and ship it. One of one.
+      </p>
+    </div>
+  </section>
+
+  <!-- Archetype: composite specification section — cards, list rail, colour
+       band and single column, so the choices never read as one repeated block. -->
+  <section class="section-pad bg-chalk">
+    <div class="shell">
+      <h2 class="display text-3xl sm:text-4xl m-0 mb-12 sm:mb-16">What you choose</h2>
+
+      <!-- Materials — four-up cards -->
+      <div class="mb-20 sm:mb-28">
+        <h3 class="eyebrow text-graphite mb-8">Materials</h3>
+        <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-4 stagger reveal">
+          {MATERIALS.map((m) => (
+            <div class="border-t-2 border-ink pt-5">
+              <h4 class="display text-2xl m-0 mb-3">{m.label}</h4>
+              <p class="text-sm text-graphite m-0">{m.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Pile height — full-width rail of rows -->
+      <div class="mb-20 sm:mb-28">
+        <h3 class="eyebrow text-graphite mb-8">Pile height</h3>
+        <dl class="m-0 border-t rule reveal">
+          {PILE_HEIGHTS.map((p) => (
+            <div class="grid gap-2 sm:grid-cols-[1fr_1.4fr] sm:gap-12 items-baseline border-b rule py-6">
+              <dt class="display text-xl sm:text-2xl">{p.label}</dt>
+              <dd class="m-0 text-base text-graphite">{p.chooseIf}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <!-- Size — colour band -->
+      <div class="mb-20 sm:mb-28">
+        <div class="bg-ink text-paper px-6 py-12 sm:px-12 sm:py-16">
+          <h3 class="eyebrow text-paper/90 mb-6">Size</h3>
+          <p class="display text-2xl sm:text-3xl m-0 max-w-[24ch]">
+            No minimum. Maximum 15 metres by 10. Any dimension within that range.
+          </p>
+        </div>
+      </div>
+
+      <!-- Design tier — three-up cards -->
+      <div class="mb-20 sm:mb-28">
+        <h3 class="eyebrow text-graphite mb-8">Design tier</h3>
+        <div class="grid gap-8 sm:grid-cols-3 stagger reveal">
+          {pricing.tiers.map((tier) => (
+            <div class="bg-paper p-7 sm:p-8 flex flex-col h-full">
+              <h4 class="display text-2xl m-0 mb-4">
+                {tier.name} &mdash; &pound;{tier.rate.toLocaleString()}/m&sup2;
+              </h4>
+              <p class="text-base text-graphite m-0">{tier.chooseIf}</p>
+              {tier.caveat && (
+                <p class="text-sm text-graphite m-0 mt-5 pt-5 border-t rule">{tier.caveat}</p>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Colour — single column -->
+      <div>
+        <h3 class="eyebrow text-graphite mb-6">Colour</h3>
+        <p class="text-lg sm:text-xl m-0 max-w-narrow">
+          Matched to a single reference in the ARS 1,400-colour system. Browse <a href={site.externalLinks.arsColours} class="link-underline" rel="noopener noreferrer">arscolors.com</a> and note the codes you want.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Archetype: two-column split. Material information, deliberately open. -->
+  <section class="section-pad">
+    <div class="shell">
+      <div class="grid gap-10 md:grid-cols-[0.85fr_1.15fr] md:gap-gutter">
+        <div>
+          <h2 class="display text-3xl sm:text-4xl m-0 max-w-[12ch]">How colour works</h2>
+        </div>
+
+        <div>
+          <div class="space-y-6">
+            <p class="text-lg sm:text-xl m-0">
+              You pick a reference from <a href={site.externalLinks.arsColours} class="link-underline" rel="noopener noreferrer">arscolors.com</a> and we dye the wool to match it. It is the standard the mills work to, and it is exact &mdash; which is why we match to a reference rather than to a posted swatch that has aged in transit.
+            </p>
+            <p class="text-lg sm:text-xl m-0">
+              The reference is what counts, not the image on your display. Screens vary; the dye number does not.
+            </p>
+          </div>
+
+          <p class="text-sm text-graphite m-0 mt-8 pt-6 border-t-2 border-ink">
+            Dyed wool sits slightly differently to a screen. We confirm the exact colour reference with you at sign-off, before anything is made.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Archetype: full-bleed colour statement. The rate card, unmissable. -->
+  <section id="pricing" class="bg-madder text-paper scroll-mt-24">
+    <div class="shell py-12 sm:py-20">
+      <h2 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0">Pricing</h2>
+    </div>
+
+    <div class="border-t border-paper/20">
+      <div class="shell">
+        <p class="eyebrow text-paper/90 mb-3 sm:hidden">Scroll for full detail &rarr;</p>
+        <div class="overflow-x-auto -mx-6 px-6 sm:mx-0 sm:px-0">
+        <table class="w-full min-w-[30rem] text-left border-collapse">
+          <caption class="sr-only">Design tier rate card</caption>
+          <thead>
+            <tr class="border-b border-paper/20">
+              <th scope="col" class="eyebrow font-medium text-paper/90 py-4 pr-6">Tier</th>
+              <th scope="col" class="eyebrow font-medium text-paper/90 py-4 pr-6">Rate</th>
+              <th scope="col" class="eyebrow font-medium text-paper/90 py-4">What it is</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pricing.tiers.map((tier, i) => (
+              <tr class={i < pricing.tiers.length - 1 ? 'border-b border-paper/20' : ''}>
+                <th scope="row" class="display text-xl sm:text-2xl font-medium text-left py-6 pr-6 align-top">{tier.name}</th>
+                <td class="text-lg sm:text-2xl tabular-nums py-6 pr-6 align-top whitespace-nowrap">
+                  &pound;{tier.rate.toLocaleString()}<span class="text-sm text-paper/90">/m&sup2;</span>
+                </td>
+                <td class="text-sm sm:text-base text-paper/90 py-6 align-top">{tier.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Archetype: data table. Worked examples given the width they need. -->
+  <section class="section-pad">
+    <div class="shell">
+      <h3 class="display text-2xl sm:text-3xl m-0 mb-4 sm:mb-10">Worked examples</h3>
+      <p class="eyebrow text-graphite mb-4 sm:hidden">Scroll for all tiers &rarr;</p>
+
+      <div class="overflow-x-auto -mx-6 px-6 sm:mx-0 sm:px-0">
+        <table class="w-full min-w-[44rem] text-left border-collapse">
+          <thead>
+            <tr class="border-b-2 border-ink">
+              <th scope="col" class="eyebrow text-graphite py-4 pr-6">Size</th>
+              <th scope="col" class="eyebrow text-graphite py-4 pr-6">Area</th>
+              <th scope="col" class="eyebrow text-graphite py-4 pr-6">Plain</th>
+              <th scope="col" class="eyebrow text-graphite py-4 pr-6">Geo. border</th>
+              <th scope="col" class="eyebrow text-graphite py-4 pr-6">Geo. all-over</th>
+              <th scope="col" class="eyebrow text-graphite py-4">Pictorial</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pricing.workedExamples.map((ex) => (
+              <tr class="border-b rule">
+                <th scope="row" class="display text-lg sm:text-xl font-medium text-left py-5 pr-6 whitespace-nowrap">{ex.label}</th>
+                <td class="text-sm text-graphite tabular-nums py-5 pr-6 whitespace-nowrap">{ex.area}m&sup2;</td>
+                <td class="text-base tabular-nums py-5 pr-6 whitespace-nowrap">&pound;{ex.plain.toLocaleString()}</td>
+                <td class="text-base tabular-nums py-5 pr-6 whitespace-nowrap">&pound;{ex['geometric-border'].toLocaleString()}</td>
+                <td class="text-base tabular-nums py-5 pr-6 whitespace-nowrap">&pound;{ex['geometric-allover'].toLocaleString()}</td>
+                <td class="text-base tabular-nums py-5 whitespace-nowrap">&pound;{ex.pictorial.toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid gap-10 sm:grid-cols-3 sm:gap-8 mt-16 sm:mt-20 stagger reveal">
+        {extras.map((x) => (
+          <div class="border-t-2 border-ink pt-5">
+            <h3 class="display text-xl m-0 mb-3" set:html={x.title} />
+            <p class="text-sm text-graphite m-0">{x.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Archetype: 50/50 split, image flush to the page edge. -->
+  <section class="bg-chalk">
+    <div class="grid md:grid-cols-2 items-stretch">
+      <div class="order-1 flex items-center">
+        <div class="px-6 py-14 sm:px-14 sm:py-20 lg:pl-gutter lg:pr-20">
+          <h2 class="display text-3xl sm:text-4xl m-0 mb-6 max-w-[12ch]">Wall hangings</h2>
+          <p class="text-lg text-graphite m-0 max-w-[40ch]">
+            A hand-tufted textile piece for the wall. Same materials, same colour system, same three design tiers. A variant of the same commission.
+          </p>
+        </div>
+      </div>
+
+      <div class="media order-2 min-h-[22rem] md:min-h-[34rem]">
+        <ImagePlaceholder
+          id="wall-hanging-context"
+          width={900}
+          height={1200}
+          alt="A hand-tufted textile wall hanging in an abstract composition of layered earth tones and muted blues, mounted on a white wall in a modern living room"
+          caption="Design visualisation"
+          class="w-full h-full [&_img]:h-full [&_img]:w-full [&_img]:object-cover"
+          sizes="(max-width: 1024px) 100vw, 50vw"
+        />
+      </div>
+    </div>
+
+    <!-- Archetype: numbered sequence. The hanging rules, stated as a set. -->
+    <div class="shell pb-16 sm:pb-24">
+      <ol class="grid gap-10 sm:grid-cols-2 sm:gap-x-gutter list-none p-0 m-0 stagger reveal">
+        {wallHangingRules.map((rule, i) => (
+          <li class="border-t-2 border-ink pt-6">
+            <span class="eyebrow text-madder block mb-5">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="display text-xl sm:text-2xl m-0 mb-3" set:html={rule.title} />
+            <p class="prose-body text-graphite m-0">{rule.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Archetype: wide single column. Dense terms, read straight down. -->
+  <section class="section-pad">
+    <div class="shell">
+      <div class="max-w-narrow">
+        <h2 class="display text-3xl sm:text-4xl m-0 mb-6">Timeline</h2>
+        <p class="text-lg sm:text-xl m-0">
+          About 4 weeks from sign-off. Complex designs, larger sizes, or specific material requirements may extend the timeline. You will get an estimated delivery date at order confirmation.
+        </p>
+
+        <h2 class="display text-3xl sm:text-4xl m-0 mt-16 sm:mt-20 mb-8">Terms in brief</h2>
+        <div class="border-t-2 border-ink">
+          <p class="text-base m-0 py-6 border-b rule">A 50% non-refundable deposit confirms your order and begins production. The remaining 50% balance is payable before dispatch.</p>
+          <p class="text-base m-0 py-6 border-b rule">Your order is for bespoke goods made to your personal specification. Under the Consumer Contracts Regulations 2013, you do not have the right to cancel once production has commenced.</p>
+          <p class="text-base m-0 py-6 border-b rule">Every shipment is fully insured at our expense. If your piece is lost or damaged in transit, we manage the claim and prioritise a replacement.</p>
+          <p class="text-base m-0 py-6">Full terms at <a href="/terms" class="link-underline">/terms</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Archetype: oversized closing statement on ink. -->
+  <section class="section-pad bg-ink text-paper">
+    <div class="shell">
+      <h2 class="display text-3xl sm:text-5xl lg:text-6xl m-0 mb-10 sm:mb-14 max-w-[12ch]">
+        Start a commission.
+      </h2>
+
+      <div class="flex flex-col sm:flex-row sm:items-center gap-8 sm:gap-14">
+        <a href="/enquire" class="btn btn-invert self-start">Enquire</a>
+        <p class="text-paper/90 text-lg m-0">{site.responsePromise}</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

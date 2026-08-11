@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import site from '../data/site.json';
+
+const deliverables = [
+  {
+    title: 'Specification sheet',
+    body: 'Materials, pile options, size limits and the ARS colour reference, set out for your project documentation. Ask and we send it the same working day.',
+    note: null,
+  },
+  {
+    title: 'Scaled drawing support',
+    body: 'Send the drawing with your enquiry and we will confirm feasibility the same working day.',
+    note: null,
+  },
+  {
+    title: 'Material data',
+    body: 'Full specifications, pile heights and care requirements per fibre. Enough to answer a client query without coming back to us.',
+    note: null,
+  },
+];
+---
+
+<BaseLayout
+  title="Trade Rug &amp; Carpet Specification for Designers and Architects — Harrow &amp; Thread"
+  description="Trade terms, specification assistance and material data for interior designers, architects, developers and hospitality. Exclusivity guarantee, four-week lead times, one contact for your projects."
+>
+  <!-- Archetype: header + rail. Page opener, heading left, note right. -->
+  <section class="section-pad">
+    <div class="shell">
+      <p class="eyebrow text-graphite mb-6">Trade</p>
+      <div class="flex flex-wrap items-end justify-between gap-8 lg:gap-16">
+        <h1 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0">
+          For designers.<br />For architects.<br />For developers.
+        </h1>
+        <p class="text-lg text-graphite m-0 max-w-[34ch]">
+          Trade rates, full specification data, and direct answers on lead times and feasibility. For interior designers, architects, developers and hospitality.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Archetype: three-up cards on chalk. -->
+  <section class="section-pad bg-chalk">
+    <div class="shell">
+      <h2 class="display text-3xl sm:text-4xl m-0 mb-12 sm:mb-16 max-w-[16ch]">What you get</h2>
+
+      <div class="grid gap-10 sm:gap-8 sm:grid-cols-3 stagger reveal">
+        <div class="border-t-2 border-ink pt-6">
+          <h3 class="display text-2xl mb-3">Trade terms</h3>
+          <p class="prose-body text-graphite m-0">Discounted rates for registered trade accounts. Get in touch to set yours up.</p>
+        </div>
+        <div class="border-t-2 border-ink pt-6">
+          <h3 class="display text-2xl mb-3">Specification assistance</h3>
+          <p class="prose-body text-graphite m-0">Material data, pile heights, weight per m&sup2; and colour references, in the form your specification document needs.</p>
+        </div>
+        <div class="border-t-2 border-ink pt-6">
+          <h3 class="display text-2xl mb-3">Lead times</h3>
+          <p class="prose-body text-graphite m-0">Approximately 4 weeks from sign-off. Larger or more complex pieces may require additional time. We confirm at order.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Archetype: full-bleed colour statement. The two protections carry the
+       most weight on this page, so they get the loudest ground. -->
+  <section class="bg-forest text-paper section-pad">
+    <div class="shell">
+      <p class="eyebrow text-paper/70 mb-6">Protections</p>
+      <div class="grid gap-12 md:grid-cols-2 md:gap-16 reveal">
+        <div>
+          <h2 class="display text-3xl sm:text-4xl m-0 mb-5 max-w-[14ch]">Exclusivity guarantee</h2>
+          <p class="text-paper/75 text-lg m-0 max-w-[38ch]">Every custom design is exclusive to its client. We will not recreate it for anyone else, ever.</p>
+        </div>
+        <div>
+          <h2 class="display text-3xl sm:text-4xl m-0 mb-5 max-w-[14ch]">Intellectual property</h2>
+          <p class="text-paper/75 text-lg m-0 max-w-[38ch]">You keep the rights to any artwork you supply. We keep the rights to the design we draw, and we licence it to your client alone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Archetype: data table. Full-width rows, name left, detail right. -->
+  <section class="section-pad">
+    <div class="shell">
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-12 sm:mb-16">
+        <h2 class="display text-3xl sm:text-4xl m-0">Deliverables</h2>
+        <a href="/enquire?type=trade" class="link-underline text-sm font-medium shrink-0">
+          Request the specification sheet &rarr;
+        </a>
+      </div>
+
+      <dl class="m-0 border-t rule">
+        {deliverables.map((d) => (
+          <div class="grid gap-4 md:grid-cols-[1fr_2fr] md:gap-16 border-b rule py-8 sm:py-10">
+            <dt class="display text-2xl m-0">
+              <h3 class="display text-2xl m-0">{d.title}</h3>
+            </dt>
+            <dd class="m-0">
+              <p class="prose-body text-graphite m-0">{d.body}</p>
+              {d.note && (
+                <span class="inline-block mt-5 px-4 py-2 text-sm text-graphite border rule">{d.note}</span>
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- Archetype: oversized closing statement, type as the whole composition. -->
+  <section class="bg-ink text-paper section-pad">
+    <div class="shell">
+      <h2 class="display text-3xl sm:text-6xl lg:text-7xl m-0 mb-10 sm:mb-14 max-w-[12ch]">
+        Open a trade account.
+      </h2>
+
+      <div class="flex flex-col sm:flex-row sm:items-center gap-8 sm:gap-14">
+        <a href="/enquire?type=trade" class="btn btn-invert self-start">Enquire</a>
+        <p class="text-paper/80 text-lg m-0">{site.responsePromise}</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
