@@ -59,3 +59,41 @@ test('no image is cropped or distorted on any page', async () => {
 
   assert.deepEqual(failures, [], `\n  ${failures.join('\n  ')}\n`);
 });
+
+// COMPLIANCE.md: four things materially affect the purchase decision and must be
+// prominent on the page that sells them — not buried as their only appearance in
+// an accordion. Repeating them in the homepage FAQ is fine; that is not burying.
+const MATERIAL_INFO = {
+  '/carpets': {
+    customs: /import duties|customs/i,
+    chargedArea: /full rectangle/i,
+    trimming: /trimm/i,
+    colourVariance: /ARS 1,?400|dyed to match/i,
+  },
+  '/commissions': {
+    customs: /import duties|customs/i,
+    colourVariance: /screens? vary|dye number/i,
+  },
+};
+
+test('material information is open, not only inside an accordion', async () => {
+  const page = await browser.newPage({ userAgent: UA });
+  const failures = [];
+
+  for (const [path, checks] of Object.entries(MATERIAL_INFO)) {
+    await page.goto(BASE + path, { waitUntil: 'networkidle' });
+    for (const [name, re] of Object.entries(checks)) {
+      const state = await page.evaluate(src => {
+        const rx = new RegExp(src, 'i');
+        for (const el of document.querySelectorAll('p,li,dd')) {
+          const t = (el.textContent || '').trim();
+          if (t.length > 25 && rx.test(t)) return el.closest('details') ? 'buried' : 'open';
+        }
+        return 'absent';
+      }, re.source);
+      if (state !== 'open') failures.push(`${path} — ${name}: ${state}`);
+    }
+  }
+
+  assert.deepEqual(failures, [], `\n  ${failures.join('\n  ')}\n`);
+});

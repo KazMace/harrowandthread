@@ -36,18 +36,29 @@ Sources: `COMPLIANCE.md` (C), `harrowandthread_core_Design.md` (D),
 
 ## C. Material information — must be prominent, never collapsed
 
-These four must render **outside** any `<details>`, accordion or FAQ. This is the one place
-where the client's accordion request (D:36) and `COMPLIANCE.md` actively conflict — compliance
-wins, because burying them is a misleading-omission risk.
+These four must be **prominent on the page that sells the thing they concern** — not buried
+as their only appearance inside an accordion or FAQ.
 
-| # | Assertion | Source |
-|---|---|---|
-| C1 | Colour-variance position (dyed wool may differ from a screen render) is outside any `<details>`. | C:45 |
-| C2 | Customs and duties are the recipient's responsibility — outside any `<details>`. | C:46 |
-| C3 | Charged area on carpets = the full rectangle including trimmed waste — outside any `<details>`. | C:47 |
-| C4 | Pattern trimming cuts into the design at bays and chimney breasts — outside any `<details>`. | C:48 |
+⚠ **Corrected 2026-08-11 after verification.** An earlier version of this section asserted
+"outside any `<details>`" *globally*. That is wrong and would have failed the homepage for a
+non-bug: the homepage FAQ accordions legitimately **repeat** disclosures that already appear
+in the open on `/carpets`. The rule is about burying, not about repeating.
 
-**Test shape:** for each, assert the element exists AND `element.closest('details') === null`.
+Verified state (browser, `/carpets` and `/commissions`):
+
+| # | Assertion | Where it must be open | Verified |
+|---|---|---|---|
+| C1 | Colour-variance position (dyed wool differs from a screen; ARS 1400 reference governs) | `/carpets` **and** `/commissions` | ✅ open on both |
+| C2 | Customs and duties are the recipient's responsibility | `/carpets` **and** `/commissions` | ✅ open on both |
+| C3 | Charged area = the full rectangle including trimmed waste | `/carpets` (carpet-only concern) | ✅ open |
+| C4 | Pattern trimming cuts into the design at bays and chimney breasts | `/carpets` (carpet-only concern) | ✅ open |
+
+C3 and C4 are correctly **absent** from `/commissions` — rugs are not trimmed to a room, so
+stating it there would be noise, not disclosure.
+
+**Test shape:** on the page that sells it, assert the text exists AND
+`element.closest('details') === null`. Do **not** assert global absence from accordions.
+Enforced in `tests/smoke.test.mjs`.
 
 ## D. Consumer rights
 
