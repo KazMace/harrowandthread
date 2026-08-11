@@ -8,3 +8,4 @@ dist/
 .ENV
 .Env
 *.env
+design-directions.html
