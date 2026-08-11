@@ -145,7 +145,7 @@ const extras = [
   </section>
 
   <!-- Archetype: full-bleed colour statement. The rate card, unmissable. -->
-  <section id="pricing" class="bg-madder text-paper scroll-mt-24">
+  <section id="pricing" class="bg-ink text-paper scroll-mt-24">
     <div class="shell py-12 sm:py-20">
       <h2 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0">Pricing</h2>
     </div>
@@ -241,11 +241,11 @@ const extras = [
       <div class="media order-2 min-h-[22rem] md:min-h-[34rem]">
         <ImagePlaceholder
           id="wall-hanging-context"
-          width={900}
-          height={1200}
+          width={1600}
+          height={1199}
           alt="A hand-tufted textile wall hanging in an abstract composition of layered earth tones and muted blues, mounted on a white wall in a modern living room"
           caption="Design visualisation"
-          class="w-full h-full [&_img]:h-full [&_img]:w-full [&_img]:object-cover"
+          class="w-full"
           sizes="(max-width: 1024px) 100vw, 50vw"
         />
       </div>
@@ -256,7 +256,7 @@ const extras = [
       <ol class="grid gap-10 sm:grid-cols-2 sm:gap-x-gutter list-none p-0 m-0 stagger reveal">
         {wallHangingRules.map((rule, i) => (
           <li class="border-t-2 border-ink pt-6">
-            <span class="eyebrow text-madder block mb-5">{String(i + 1).padStart(2, '0')}</span>
+            <span class="eyebrow text-graphite block mb-5">{String(i + 1).padStart(2, '0')}</span>
             <h3 class="display text-xl sm:text-2xl m-0 mb-3" set:html={rule.title} />
             <p class="prose-body text-graphite m-0">{rule.body}</p>
           </li>
