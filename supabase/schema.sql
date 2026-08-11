@@ -47,6 +47,14 @@ create policy "anon can insert enquiries"
   on public.enquiries for insert to anon
   with check (true);
 
+-- Belt and braces. RLS alone already returns zero rows, but Supabase grants
+-- SELECT on new public tables to anon by default, and that grant alone is
+-- enough for the table to show up in the GraphQL schema — so a stranger could
+-- read the column names, just never the values. Revoking makes the grant agree
+-- with the policy: insert, and nothing else. After this, a read attempt fails
+-- with 401 "permission denied for table enquiries" rather than an empty array.
+revoke select, update, delete on public.enquiries from anon;
+
 -- Storage bucket for uploads. Private: no public read.
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('enquiry-uploads', 'enquiry-uploads', false, 10485760,
@@ -74,8 +82,13 @@ create policy "owner can read enquiry images"
 --   select tablename, policyname, cmd, roles
 --     from pg_policies where tablename = 'enquiries';
 --
--- And confirm anon genuinely cannot read. This must return 401/403 or an empty
--- result, never rows:
+-- And confirm anon genuinely cannot read:
 --
 --   curl "$PUBLIC_SUPABASE_URL/rest/v1/enquiries?select=*" \
 --        -H "apikey: $PUBLIC_SUPABASE_ANON_KEY"
+--
+-- Verified 2026-08-11: returns 401 {"code":"42501","message":"permission denied
+-- for table enquiries"}. Note that an empty [] is NOT proof of anything on an
+-- empty table — the real test is to insert a row first, then read as anon. Done:
+-- the row was written (201), stayed invisible to anon, and survived an anon
+-- DELETE (204 = zero rows matched, not deleted).

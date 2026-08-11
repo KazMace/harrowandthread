@@ -88,31 +88,33 @@ Read only. An earlier session broke it and the client repaired it by hand.
   the prompts: no full-bleed rug photography, no `object-cover` on a rug image, no tight
   aspect-ratio container that clips one. Rugs sit as complete plates on a ground.
 
-## Where work stopped (2026-08-11, evening — READ THIS FIRST AFTER RESTART)
+## Where work stopped (2026-08-11, evening)
 
 Direction A is rolled out across all 12 pages and Lighthouse is 100/100/100/100 on
 performance, accessibility, best practices and SEO (real artifacts, mobile, simulated
 throttling — not estimates).
 
-**The enquiry pipeline is half live.** The email leg is PROVEN with a real submission:
-Web3Forms delivered every field correctly, including both warning lines. The database leg
-is not, because the schema has never been applied.
+**The enquiry pipeline is fully live and proven end to end.** Schema applied to project
+`hvbqbtmosjbvwolyfkad`; both legs verified in a real browser (Playwright, realistic UA):
+storage upload 200, row insert 201, Web3Forms 303, visitor landed on `/enquire/success`.
+Every field arrived in the right column, `upload_paths` included. Neither warning line
+fired.
 
-**Immediate next steps, in order:**
+Security was verified empirically, not assumed. An empty `[]` from an empty table proves
+nothing, so the test was: insert a row as anon, then try to read it. The row was invisible
+to anon and survived an anon DELETE (204 there means "zero rows matched", not "deleted").
+The default anon SELECT grant was then revoked, so reads now fail 401 at the grant level
+before RLS is even consulted, and the table no longer appears in the GraphQL schema.
 
-1. **Approve the `supabase` MCP server.** `claude mcp list` shows it as
-   *"⏸ Pending approval"* — a project-scoped server needs the user to approve it, which is
-   why the tools are not reachable. The user is restarting to do this, then running `/mcp`
-   for OAuth.
-2. **Apply `supabase/schema.sql`.** 81 lines, idempotent. Creates the `enquiries` table,
-   the `enquiry-uploads` storage bucket, and three insert-only RLS policies. Already
-   validated against a real submission: every field the form sends has a column, and there
-   is deliberately **no SELECT policy** on the table.
-3. **Verify the security, do not assume it.** With the publishable key from `.env`:
-   `curl "$PUBLIC_SUPABASE_URL/rest/v1/enquiries?select=*" -H "apikey: $PUBLIC_SUPABASE_ANON_KEY"`
-   must return 401/403 or empty — never rows. That key ships in the page source.
-4. **Re-test the form in a real browser.** Both warning lines should disappear, a row
-   should land in `enquiries`, and an attached image in `enquiry-uploads`.
+**Left in the database deliberately — for the client to delete when they have looked:**
+two `PIPELINE TEST` rows in `enquiries`, their two uploads, and an 8-byte `probe.png` in
+`enquiry-uploads`. Storage objects cannot be deleted via SQL (Supabase blocks it); use the
+dashboard, Storage → `enquiry-uploads`.
+
+**Pre-existing, NOT touched, needs a decision:** `public.images` has RLS *disabled* and
+holds one test row. Anyone with the publishable key can read *and write* it. It appears
+unused by the site. Either drop it or enable RLS — but enabling RLS without policies
+blocks all access, so it is the client's call.
 
 **Do not "modernise" the Web3Forms call into a fetch.** It is a native hidden-form POST on
 purpose. fetch with JSON fails the CORS preflight on their free tier; fetch with FormData
