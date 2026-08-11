@@ -44,17 +44,15 @@ as their only appearance inside an accordion or FAQ.
 non-bug: the homepage FAQ accordions legitimately **repeat** disclosures that already appear
 in the open on `/carpets`. The rule is about burying, not about repeating.
 
-Verified state (browser, `/carpets` and `/commissions`):
-
-| # | Assertion | Where it must be open | Verified |
+| # | Assertion | Where it must be open | Source |
 |---|---|---|---|
-| C1 | Colour-variance position (dyed wool differs from a screen; ARS 1400 reference governs) | `/carpets` **and** `/commissions` | ✅ open on both |
-| C2 | Customs and duties are the recipient's responsibility | `/carpets` **and** `/commissions` | ✅ open on both |
-| C3 | Charged area = the full rectangle including trimmed waste | `/carpets` (carpet-only concern) | ✅ open |
-| C4 | Pattern trimming cuts into the design at bays and chimney breasts | `/carpets` (carpet-only concern) | ✅ open |
+| C1 | Colour-variance position (dyed wool differs from a screen; ARS 1400 reference governs) | `/carpets` **and** `/commissions` | C:45 |
+| C2 | Customs and duties are the recipient's responsibility | `/carpets` **and** `/commissions` | C:46 |
+| C3 | Charged area = the full rectangle including trimmed waste | `/carpets` (carpet-only concern) | C:47 |
+| C4 | Pattern trimming cuts into the design at bays and chimney breasts | `/carpets` (carpet-only concern) | C:48 |
 
-C3 and C4 are correctly **absent** from `/commissions` — rugs are not trimmed to a room, so
-stating it there would be noise, not disclosure.
+C3 and C4 are expected to be **absent** from `/commissions` — rugs are not trimmed to a room,
+so stating it there would be noise, not disclosure.
 
 **Test shape:** on the page that sells it, assert the text exists AND
 `element.closest('details') === null`. Do **not** assert global absence from accordions.
@@ -73,9 +71,9 @@ Enforced in `tests/smoke.test.mjs`.
 
 | # | Assertion | Source |
 |---|---|---|
-| E1 | No non-essential cookie is set before consent. Assert `document.cookie` and storage are clean on first paint. **✅ Verified 2026-08-11: zero cookies, zero localStorage, zero sessionStorage on first paint.** | C:65 |
-| E2 | Reject is as prominent as Accept — compare computed size, weight and contrast, not just presence. **✅ Verified 2026-08-11: "Reject all" and "Accept all" carry identical classes, and Reject comes first in DOM order.** | C:65 |
-| E3 | The choice persists across a reload. | C:65 |
+| E1 | No non-essential cookie is set before consent. Assert `document.cookie` and storage are clean on first paint. | C:65 |
+| E2 | Reject is as prominent as Accept — compare computed size, weight, fill and contrast, not just presence. Note the banner is withheld until `scrollY > 120` or a 6s fallback, so a test must scroll or wait before measuring. | C:65 |
+| E3 | The choice persists across a reload. | C:66 |
 | E4 | `/cookies` exists and returns 200. | C:66 |
 | E5 | Privacy policy has a data controller contact address, a retention period, and a working deletion route for enquiry uploads (assert the `mailto:` href actually resolves — it was literal template text until 2026-08-11). | C:66–67 |
 
@@ -101,7 +99,7 @@ Enforced in `tests/smoke.test.mjs`.
 
 | # | Assertion | Source |
 |---|---|---|
-| H1 | Fonts render as specified — no Arial/serif fallback. (Covered by `tests/smoke.test.mjs`.) | D:5–6, CLAUDE.md §5 |
+| H1 | The display font is neither Arial nor a bare `serif`/`sans-serif` fallback. **Not** "as specified" — no client document names a typeface, and the config that does is behind the blindfold. (Covered by `tests/smoke.test.mjs`.) | CLAUDE.md §5 |
 | H2 | Page load under 3 seconds. | D:6 |
 | H3 | Nav and footer are consistent across all 12 pages. | D:14, D:27 |
 | H4 | Trade appears in the footer only — not in the nav, not on the homepage. `/trade` is indexed. | S |
@@ -111,15 +109,56 @@ Enforced in `tests/smoke.test.mjs`.
 Backend calls are intercepted with `page.route()`; nothing reaches Supabase or Web3Forms.
 See `AGENTS.md` §3.
 
+⚠ **I1–I6 are general robustness, NOT client requirements.** They were originally cited to
+`C:79–80`, which reads *"Form endpoint configured and a real test submission sent"* — that
+supports **I7 only**. It says nothing about empty submissions, malformed emails, oversized
+uploads, type coercion, injection or double-submit. They are good tests; they are not the
+client's stated requirements, and **a failure here is a robustness bug, not a compliance
+breach.** Do not escalate one as the other.
+
 | # | Assertion | Source |
 |---|---|---|
-| I1 | Submitting empty is rejected; every required field reports its own error. | C:79–80 |
-| I2 | Malformed emails are rejected (`a@`, `@b.com`, `a b@c.com`, 400-character local part). | C:79–80 |
-| I3 | Oversized and zero-byte uploads are handled without an unhandled error. | C:79–80 |
-| I4 | Wrong types where a number is expected (size fields) are rejected, not coerced silently. | C:79–80 |
-| I5 | Script tags and SQL fragments in text fields are neither executed nor reflected unescaped. | C:79–80 |
-| I6 | Double-submit does not produce two submissions. | C:79–80 |
-| I7 | A valid submission reaches `/enquire/success`. | CLAUDE.md, verified live 2026-08-11 |
+| I1 | Submitting empty is rejected; every required field reports its own error. | `AGENTS.md` §2 (chaos cases) |
+| I2 | Malformed emails are rejected (`a@`, `@b.com`, `a b@c.com`, 400-character local part). | `AGENTS.md` §2 |
+| I3 | Oversized and zero-byte uploads are handled without an unhandled error. **Define "unhandled" before testing** — console error, unhandled rejection, crash, or silent no-op are four different assertions, and the silent no-op is the one that hurts. | `AGENTS.md` §2 |
+| I4 | Wrong types where a number is expected (size fields) are rejected, not coerced silently. **If the input is `type="number"` the browser blocks typing — force the value with `fill()`/`evaluate()` or the test is vacuous.** | `AGENTS.md` §2 |
+| I5 | Script tags and SQL fragments in text fields are neither executed nor reflected unescaped. | `AGENTS.md` §2 |
+| I6 | Double-submit does not produce two submissions. | `AGENTS.md` §2 |
+| I7 | A valid submission reaches `/enquire/success`. | C:79–80, verified live 2026-08-11 |
+
+---
+
+## Verification history — NOT part of the checklist
+
+⚠ **Do not move these back into the assertion tables.** A checklist handed to a blind
+adversarial agent must not tell it the expected answer in advance; that invites confirmation
+instead of testing. Kept here for the client's benefit only.
+
+Checked in a real browser on 2026-08-11:
+
+- **C1–C4 — pass.** `/carpets` states all four in the open; `/commissions` states C1 and C2.
+- **E1 — pass.** Zero cookies, zero `localStorage`, zero `sessionStorage` on first paint.
+  The banner is deliberately withheld until `scrollY > 120` or a 6s fallback, so it is
+  genuinely true that nothing is set before consent.
+- **G1 — pass, and now enforced** in `tests/smoke.test.mjs` across 7 pages.
+- **E2 — ⚠ OPEN QUESTION, needs the client.** An earlier note in this file claimed the two
+  buttons "carry identical classes". **That was wrong, and it was reached by reading source
+  rather than rendering — the exact failure `CLAUDE.md` §5 exists to prevent.** Measured
+  computed styles:
+
+  | | Reject all | Accept all |
+  |---|---|---|
+  | Background | `transparent` | solid `rgb(247,244,238)` |
+  | Font weight | 400 | 500 |
+  | Border | `rgba(247,244,238,0.6)` | `rgb(247,244,238)` |
+  | Size / font-size | identical | identical |
+
+  Accept is a **filled** button; Reject is a **ghost** button. Same dimensions, different
+  visual weight. `CookieBanner.astro:4` asserts in a comment that "Reject is as prominent as
+  Accept (PECR/GDPR)" — that claim is stronger than the rendered evidence supports, and the
+  filled-accept/ghost-reject pattern is the one regulators have criticised specifically.
+  **Not changed — the design system is the client's call (`CLAUDE.md` §3).** The minimal fix
+  if they want it: give Reject the same `font-medium` and a solid or equally-weighted fill.
 
 ---
 
