@@ -21,9 +21,12 @@ Four principles, in the order they saved time:
    sessions believed it — the client's requested homepage accordions never got built and
    an invented colour palette became "the design system". A document you wrote is
    evidence of what you thought, never of what was asked.
-2. **Static by default.** 12 pages ship **4.3 KB of JavaScript** total. No client
-   framework, no state library, no SDK. Every interactive element is a native platform
-   feature (`<details>`, `<form>`, `<input type="file">`) until proven insufficient.
+2. **Static by default.** 12 pages ship **6.6 KB of JavaScript raw / 3.1 KB gzipped**,
+   across two files. No client framework, no state library, no SDK. Every interactive
+   element is a native platform feature (`<details>`, `<form>`, `<input type="file">`)
+   until proven insufficient.
+   *(Measure with `wc -c dist/_astro/*.js`, not `du` — `du` rounds to 4 KB blocks and will
+   tell you 12 K. An earlier note in this repo recorded 4.3 KB; it was stale.)*
 3. **Verify by rendering.** The whole site rendered in Arial for several sessions because
    people read the Tailwind config and concluded it was fine. Config is a claim;
    `getComputedStyle` is evidence.
@@ -59,8 +62,8 @@ practices, SEO) on real mobile artifacts with simulated throttling — not estim
 - **One layout.** `BaseLayout.astro` owns `<head>`, JSON-LD, the skip link, and the inline
   `.js` class script. Per-page layouts fragment the head and the structured data drifts.
 - **Talk to APIs with `fetch`.** Adding `@supabase/supabase-js` would have added **~30 KB
-  gzipped to a site shipping 4.3 KB of JS**, to save a few lines. The REST endpoint is a
-  URL and a header.
+  gzipped to a site shipping 3.1 KB gzipped** — roughly a 10× increase in payload, to save
+  a few lines. The REST endpoint is a URL and a header.
 - **Order multi-step submissions by what's recoverable.** Upload files → insert the row →
   send the notification. If the notification fails the enquiry is still captured. Losing an
   email is recoverable; losing the enquiry is not.

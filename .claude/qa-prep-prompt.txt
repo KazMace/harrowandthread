@@ -25,7 +25,8 @@ command away.
    - the Tailwind spacing scale in tailwind.config.mjs is still contiguous (no missing step)
    - `focus:outline-none` appears nowhere in src/
    - @astrojs/sitemap is still pinned to 3.2.1 in package.json
-   - the shipped JS in dist/_astro/*.js is still roughly 4.3KB total
+   - the shipped JS is still ~6.6KB raw / ~3.1KB gzipped: `wc -c dist/_astro/*.js`
+     (use wc, not du — du rounds to 4KB blocks and reports 12K)
    Correct any claim that has gone stale. Do NOT add new rules that are not grounded in
    something that actually happened on this build — no generic filler.
 

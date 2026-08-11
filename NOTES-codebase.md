@@ -98,8 +98,10 @@ and the storage bucket needs insert-only too. Without those policies the anon ke
 anyone read every enquiry. Do not skip this.
 
 **No SDK.** Use plain `fetch` against the Supabase REST and Storage endpoints. Pulling in
-`@supabase/supabase-js` would add ~30KB gzipped to a site that currently ships 4.3KB of
-JavaScript, to save a few lines.
+`@supabase/supabase-js` would add ~30KB gzipped to a site that currently ships **3.1KB
+gzipped (6.6KB raw)** of JavaScript, to save a few lines. Measure with
+`wc -c dist/_astro/*.js` — `du` rounds to 4KB blocks and reports 12K. (An earlier note here
+said 4.3KB; re-measured 2026-08-11.)
 
 **Ordering.** Upload files first, then insert the row with their paths, then notify. If the
 notification fails the enquiry is still captured in Supabase — losing the email is
