@@ -62,6 +62,21 @@ Read only. An earlier session broke it and the client repaired it by hand.
   the prompts: no full-bleed rug photography, no `object-cover` on a rug image, no tight
   aspect-ratio container that clips one. Rugs sit as complete plates on a ground.
 
+## Where work stopped (2026-08-11)
+
+Three throwaway homepage directions are built at `src/pages/lab/direction-{a,b,c}.astro`
+and the client is choosing between them. Comparison page (update this URL, don't make a
+new one): `https://claude.ai/code/artifact/97523aaa-ae34-4940-959e-cb9be921f6f4`
+
+Next, in order: (1) research what rugs real mansions and stately homes actually have;
+(2) generate mansion-scale imagery per `IMAGE-PROMPT-mansion.md`, feeding the client's
+own `/mnt/c/Smash IT 2026/new images/Hero large rug 4.webp` in as `input_references`;
+(3) re-screenshot the three directions with it; (4) client picks; (5) roll across all 12
+pages and delete `src/pages/lab/` and `public/images/lab/`.
+
+**Scale is the commercial point:** 15×10m at these rates is £90k–£180k. Imagery must
+fish for that buyer, not for a 3×2m rug in a suburban lounge.
+
 ## Open — do not implement unilaterally
 
 1. Homepage "Assurances" section — unrequested, client deciding whether to keep.
