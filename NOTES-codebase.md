@@ -49,6 +49,20 @@ shipped and cost a session to find.
 - **The word "fold" must not appear anywhere**, in any construction. Pieces are always rolled
   around a core, at every size — a hand-tufted pile holds a crease permanently.
 
+## Keep reads cheap
+
+This project burns context faster than most because the work is visual. Measured on
+2026-08-11: file/image reads accounted for ~2.1M tokens in one session, roughly double
+everything else combined.
+
+- **Every screenshot or generated image you Read costs ~3–4k tokens.** Look at the ones
+  that decide something; don't review a whole batch out of habit. A montage
+  (`montage a.png b.png -tile 4x2 -geometry 460x300 out.jpg`) puts eight images into one
+  read — use it when surveying rather than judging.
+- **Use `offset`/`limit` on Read** for long files. Never re-read a file you just edited;
+  Edit fails loudly if it didn't apply, so a verification read tells you nothing.
+- Prefer `grep -n` to locate, then Read the specific range.
+
 ## Screenshot harness
 
 ```
