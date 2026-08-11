@@ -8,11 +8,11 @@ Everything left that needs you rather than code. Ordered by what blocks launch.
 
 **Set up the enquiry pipeline.** Decided: Web3Forms **free** tier sends you the notification email, and everything — including the uploaded room photographs — goes to Supabase. Web3Forms never handles the files, so you do **not** need their $12/month Pro plan.
 
-I need four things from you:
+**Status: half done.** Supabase URL and key are in `.env`. Still needed, in this order — each one blocks the next:
 
-1. **An email account** to receive notifications. `enquiries@harrowandthread.com` is already written into the site, so that mailbox needs to exist.
-2. **A Web3Forms access key** — free account at web3forms.com, 250 submissions a month.
-3. **Supabase project URL and anon key** — paste these three lines into `.env`. The `PUBLIC_` prefix is required for the browser to see them, and is a useful reminder that the anon key is not a secret:
+1. **Set up the Harrow & Thread email.** This comes first because Web3Forms registers against a real mailbox. `enquiries@harrowandthread.com` is already written into the site as your contact address, so that is the one to create. Options: your domain registrar usually bundles mailboxes, or Google Workspace / Fastmail / Zoho if you want it properly.
+2. **A Web3Forms access key** — free account at web3forms.com, registered against the mailbox from step 1. 250 submissions a month, no card needed. They email you a UUID.
+3. ~~**Supabase project URL and anon key**~~ — **done**, both are in `.env` (new-format `sb_publishable_` key, which is fine). **But the project host does not resolve in DNS**, so it is either paused, deleted, or one character of the 20-letter ref is wrong. Checked over 30 seconds; other hosts resolve fine, so it is not the network. Open the dashboard, check whether the project is paused and needs resuming, and copy the URL straight from Project Settings → API rather than retyping it. For reference, the three lines are: The `PUBLIC_` prefix is required for the browser to see them, and is a useful reminder that the anon key is not a secret:
 
    ```
    PUBLIC_SUPABASE_URL=https://xxxxxxxx.supabase.co
@@ -21,7 +21,7 @@ I need four things from you:
    ```
 
    The form code is already written and waiting for them. Until they exist the form behaves exactly as it does now, so nothing is broken in the meantime.
-4. **Run `/mcp` in the terminal** to authenticate Supabase over OAuth. I've added the server to `.mcp.json` using the OAuth transport rather than the access-token version, because the token variant would write a secret into a committed file. Once you've authenticated I can create the table, the storage bucket and the security policies myself.
+4. **Run `/mcp` in the terminal** to authenticate Supabase over OAuth. This is also the fastest way to settle the DNS problem above — once authenticated I can read your real project ref straight from the account instead of us guessing at a twenty-letter string. I've added the server to `.mcp.json` using the OAuth transport rather than the access-token version, because the token variant would write a secret into a committed file. Once you've authenticated I can create the table, the storage bucket and the security policies myself.
 
 Per Supabase's own warning, point the MCP at a development project, not live production data.
 
