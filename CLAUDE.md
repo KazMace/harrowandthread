@@ -108,11 +108,18 @@ certification. See COMPLIANCE.md.
 
 ## Open — do not implement unilaterally
 
-1. Homepage "Assurances" section — unrequested, client deciding whether to keep.
-2. Enquiry form fields — proposed required set: name, email, what they're commissioning,
-   size, design tier.
-3. Homepage accordions at the bottom (the client asked for these; still not built).
-4. `.btn-primary` madder red → ink — agreed with the client, still not done.
+1. Homepage "Assurances" section — unrequested, added by an earlier session. The client is
+   deciding whether to keep it. Leave it in place until they say.
+2. Enquiry form fields — the client's instruction was "keep as many as we need, nothing
+   extra". Proposed required set: name, email, what they're commissioning, size, design
+   tier. Currently 4 are required. Awaiting confirmation.
+3. Whether the client wants Privacy and Terms as full accordions on the homepage rather
+   than links. Their brief listed them; I linked instead, because two copies of legal text
+   drift apart and it matters which was live. Flagged to them, not yet answered.
+
+Done today, do not reopen: homepage accordions (built, native `<details>`), and
+`.btn-primary` madder → ink (done, along with every other decorative use of red; form
+error spans and required-field asterisks deliberately stay red).
 
 ## Codebase traps
 
