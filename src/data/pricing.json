@@ -17,7 +17,8 @@
     {
       "id": "geometric-allover",
       "name": "Geometric all-over",
-      "rate": 1250,
+      "rate": null,
+      "rateNote": "AWAITING CLIENT FIGURE. A previous session invented a rate here to space the ladder evenly and shipped it live. Removed 2026-08-11 on the client's instruction. Set `rate` to the real number and it fills in everywhere — rate card, worked examples and JSON-LD. Until then it renders as [rate to confirm] and is withheld from structured data. DO NOT GUESS IT AGAIN.",
       "description": "A geometric pattern repeating across the whole piece",
       "chooseIf": "A geometric pattern across the entire piece"
     },
@@ -45,7 +46,7 @@
       "plain": 1125,
       "pictorial": 2250,
       "geometric-border": 1500,
-      "geometric-allover": 1875
+      "geometric-allover": null
     },
     {
       "label": "3 × 2m",
@@ -53,7 +54,7 @@
       "plain": 4500,
       "pictorial": 9000,
       "geometric-border": 6000,
-      "geometric-allover": 7500
+      "geometric-allover": null
     },
     {
       "label": "4 × 3m",
@@ -61,7 +62,7 @@
       "plain": 9000,
       "pictorial": 18000,
       "geometric-border": 12000,
-      "geometric-allover": 15000
+      "geometric-allover": null
     },
     {
       "label": "6 × 4m",
@@ -69,7 +70,7 @@
       "plain": 18000,
       "pictorial": 36000,
       "geometric-border": 24000,
-      "geometric-allover": 30000
+      "geometric-allover": null
     },
     {
       "label": "15 × 10m",
@@ -77,7 +78,7 @@
       "plain": 112500,
       "pictorial": 225000,
       "geometric-border": 150000,
-      "geometric-allover": 187500
+      "geometric-allover": null
     }
   ]
 }

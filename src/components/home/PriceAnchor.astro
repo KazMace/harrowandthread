@@ -23,7 +23,9 @@ import pricing from '../../data/pricing.json';
         <div class="grid gap-2 sm:gap-12 sm:grid-cols-[minmax(0,14rem)_minmax(0,8rem)_1fr] items-baseline border-b rule py-7 sm:py-8">
           <dt class="display text-2xl sm:text-3xl m-0">{tier.name}</dt>
           <dd class="m-0 text-xl sm:text-2xl tabular-nums whitespace-nowrap">
-            &pound;{tier.rate.toLocaleString()}<span class="text-base text-graphite">/m&sup2;</span>
+            {tier.rate === null
+              ? <span class="text-base text-madder normal-case">[rate to confirm]</span>
+              : <Fragment>&pound;{tier.rate.toLocaleString()}<span class="text-base text-graphite">/m&sup2;</span></Fragment>}
           </dd>
           <dd class="m-0 prose-body text-graphite">{tier.description}</dd>
         </div>

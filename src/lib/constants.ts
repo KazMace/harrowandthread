@@ -2,10 +2,13 @@ export const SITE_NAME = 'Harrow & Thread';
 export const SITE_URL = 'https://harrowandthread.com';
 export const RESPONSE_PROMISE = 'We respond within one working day.';
 
+// `null` = not confirmed by the client. Never substitute a plausible-looking
+// number here; a previous session invented 1250 for geometric-allover and it
+// reached the live rate card and the structured data. See src/data/pricing.json.
 export const RATES = {
   plain: 750,
   'geometric-border': 1000,
-  'geometric-allover': 1250,
+  'geometric-allover': null,
   pictorial: 1500,
 } as const;
 

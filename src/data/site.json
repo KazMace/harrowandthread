@@ -15,13 +15,13 @@
     {
       "label": "Carpets",
       "href": "/carpets"
-    },
-    {
-      "label": "Trade",
-      "href": "/trade"
     }
   ],
   "footerLinks": [
+    {
+      "label": "Trade",
+      "href": "/trade"
+    },
     {
       "label": "FAQ",
       "href": "/faq"

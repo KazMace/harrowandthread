@@ -7,7 +7,8 @@ import ColourRail from '../components/home/ColourRail.astro';
 import Process from '../components/home/Process.astro';
 import RendersGrid from '../components/home/RendersGrid.astro';
 import CarpetsStrip from '../components/home/CarpetsStrip.astro';
-import TradeStrip from '../components/home/TradeStrip.astro';
+// TradeStrip removed from the homepage 2026-08-11: the client sells to end
+// customers. /trade still exists and is still indexed, linked from the footer.
 import Assurances from '../components/home/Assurances.astro';
 import EnquiryCTA from '../components/home/EnquiryCTA.astro';
 import pricing from '../data/pricing.json';
@@ -29,7 +30,10 @@ const serviceSchema = JSON.stringify({
   offers: {
     '@type': 'OfferCatalog',
     name: 'Design tier rate card',
-    itemListElement: pricing.tiers.map((tier) => ({
+    // Only publish rates the client has actually confirmed. An unconfirmed
+    // figure in here gets quoted verbatim by AI answer engines as if it were
+    // a real price — that is how the invented £1,250/m² spread.
+    itemListElement: pricing.tiers.filter((tier) => tier.rate !== null).map((tier) => ({
       '@type': 'Offer',
       name: tier.name,
       description: tier.description,
@@ -58,6 +62,5 @@ const serviceSchema = JSON.stringify({
   <PriceAnchor />
   <Assurances />
   <CarpetsStrip />
-  <TradeStrip />
   <EnquiryCTA />
 </BaseLayout>

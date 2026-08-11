@@ -97,7 +97,9 @@ const extras = [
           {pricing.tiers.map((tier) => (
             <div class="bg-paper p-7 sm:p-8 flex flex-col h-full">
               <h4 class="display text-2xl m-0 mb-4">
-                {tier.name} &mdash; &pound;{tier.rate.toLocaleString()}/m&sup2;
+                {tier.name} &mdash; {tier.rate === null
+                  ? <span class="text-madder">[rate to confirm]</span>
+                  : <Fragment>&pound;{tier.rate.toLocaleString()}/m&sup2;</Fragment>}
               </h4>
               <p class="text-base text-graphite m-0">{tier.chooseIf}</p>
               {tier.caveat && (
@@ -168,7 +170,9 @@ const extras = [
               <tr class={i < pricing.tiers.length - 1 ? 'border-b border-paper/20' : ''}>
                 <th scope="row" class="display text-xl sm:text-2xl font-medium text-left py-6 pr-6 align-top">{tier.name}</th>
                 <td class="text-lg sm:text-2xl tabular-nums py-6 pr-6 align-top whitespace-nowrap">
-                  &pound;{tier.rate.toLocaleString()}<span class="text-sm text-paper/90">/m&sup2;</span>
+                  {tier.rate === null
+                    ? <span class="text-base">[rate to confirm]</span>
+                    : <Fragment>&pound;{tier.rate.toLocaleString()}<span class="text-sm text-paper/90">/m&sup2;</span></Fragment>}
                 </td>
                 <td class="text-sm sm:text-base text-paper/90 py-6 align-top">{tier.description}</td>
               </tr>
@@ -205,7 +209,11 @@ const extras = [
                 <td class="text-sm text-graphite tabular-nums py-5 pr-6 whitespace-nowrap">{ex.area}m&sup2;</td>
                 <td class="text-base tabular-nums py-5 pr-6 whitespace-nowrap">&pound;{ex.plain.toLocaleString()}</td>
                 <td class="text-base tabular-nums py-5 pr-6 whitespace-nowrap">&pound;{ex['geometric-border'].toLocaleString()}</td>
-                <td class="text-base tabular-nums py-5 pr-6 whitespace-nowrap">&pound;{ex['geometric-allover'].toLocaleString()}</td>
+                <td class="text-base tabular-nums py-5 pr-6 whitespace-nowrap">
+                  {ex['geometric-allover'] === null
+                    ? <span class="text-graphite tabular-nums">&mdash;</span>
+                    : <Fragment>&pound;{ex['geometric-allover'].toLocaleString()}</Fragment>}
+                </td>
                 <td class="text-base tabular-nums py-5 whitespace-nowrap">&pound;{ex.pictorial.toLocaleString()}</td>
               </tr>
             ))}
