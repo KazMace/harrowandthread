@@ -73,8 +73,8 @@ Enforced in `tests/smoke.test.mjs`.
 
 | # | Assertion | Source |
 |---|---|---|
-| E1 | No non-essential cookie is set before consent. Assert `document.cookie` and storage are clean on first paint. | C:65 |
-| E2 | Reject is as prominent as Accept — compare computed size, weight and contrast, not just presence. | C:65 |
+| E1 | No non-essential cookie is set before consent. Assert `document.cookie` and storage are clean on first paint. **✅ Verified 2026-08-11: zero cookies, zero localStorage, zero sessionStorage on first paint.** | C:65 |
+| E2 | Reject is as prominent as Accept — compare computed size, weight and contrast, not just presence. **✅ Verified 2026-08-11: "Reject all" and "Accept all" carry identical classes, and Reject comes first in DOM order.** | C:65 |
 | E3 | The choice persists across a reload. | C:65 |
 | E4 | `/cookies` exists and returns 200. | C:66 |
 | E5 | Privacy policy has a data controller contact address, a retention period, and a working deletion route for enquiry uploads (assert the `mailto:` href actually resolves — it was literal template text until 2026-08-11). | C:66–67 |
