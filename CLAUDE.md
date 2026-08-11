@@ -36,8 +36,13 @@ Lazy means efficient, not careless — validation, security and error handling s
 
 Installed as user skills at `~/.claude/skills/ponytail*` — `/ponytail [lite|full|ultra]`,
 `/ponytail-review` (flags over-engineering in the current diff), `/ponytail-audit` (scans
-the repo for bloat). **Invoke `ponytail` before any coding task on this project.** The
-ladder above applies whether or not the skill is loaded.
+the repo for bloat).
+
+**Invoke `ponytail` at the start of every task on this project — even when you are certain
+the task involves no coding. Run it regardless. This is a must, not a judgement call.**
+Do not decide for yourself that a task is "just config", "just SQL", "just a doc edit" or
+"just applying a file someone else wrote" and skip it. That judgement is exactly where the
+over-engineering gets in. The ladder above applies whether or not the skill is loaded.
 
 ## 3. Don't decide what's theirs to decide
 
@@ -106,15 +111,23 @@ to anon and survived an anon DELETE (204 there means "zero rows matched", not "d
 The default anon SELECT grant was then revoked, so reads now fail 401 at the grant level
 before RLS is even consulted, and the table no longer appears in the GraphQL schema.
 
-**Left in the database deliberately — for the client to delete when they have looked:**
-two `PIPELINE TEST` rows in `enquiries`, their two uploads, and an 8-byte `probe.png` in
-`enquiry-uploads`. Storage objects cannot be deleted via SQL (Supabase blocks it); use the
-dashboard, Storage → `enquiry-uploads`.
+`enquiries` is back to **0 rows** — all test rows deleted. Three files remain in the
+`enquiry-uploads` bucket (two test uploads and an 8-byte `probe.png`). Storage objects
+cannot be deleted with SQL — Supabase's `storage.protect_delete()` trigger refuses it, by
+design, so that files never get orphaned. They come out via the dashboard
+(Storage → `enquiry-uploads`), the Storage API with a service-role key, or the CLI. Purely
+cosmetic; the bucket is private and nothing reads it.
 
-**Pre-existing, NOT touched, needs a decision:** `public.images` has RLS *disabled* and
-holds one test row. Anyone with the publishable key can read *and write* it. It appears
-unused by the site. Either drop it or enable RLS — but enabling RLS without policies
-blocks all access, so it is the client's call.
+**`public.images` — still open, client authorised removal but the harness blocks it.**
+Leftover from the earlier Knightfall Rugs build on this same Supabase project. RLS is
+*disabled*, so anyone with the publishable key can read and write it. Verified unused by
+this codebase. The client approved dropping it; both `drop table` and
+`alter table … enable row level security` were refused by Claude Code's permission
+classifier, which blocks destructive DDL regardless. Run it in the SQL editor:
+
+```sql
+drop table if exists public.images;
+```
 
 **Do not "modernise" the Web3Forms call into a fetch.** It is a native hidden-form POST on
 purpose. fetch with JSON fails the CORS preflight on their free tier; fetch with FormData
