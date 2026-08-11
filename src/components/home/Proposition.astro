@@ -5,21 +5,18 @@ const points = [
     of: 'of one',
     title: 'Exclusive to you',
     body: 'We never remake your design, never sell it, never license it to anyone else.',
-    accent: 'text-madder',
   },
   {
     figure: '15×10',
     of: 'metres, max',
     title: 'Any design, any dimension',
     body: 'No minimum size. Your space, your scale, your idea — sketch, photograph or brief.',
-    accent: 'text-indigo',
   },
   {
     figure: '1,400',
     of: 'dye colours',
     title: 'Dyed to match',
     body: 'Hand-tufted in wool, silk blend, bamboo silk or flatweave. Matched to a single reference.',
-    accent: 'text-forest',
   },
 ];
 ---
@@ -30,7 +27,7 @@ const points = [
     <div class="grid gap-x-8 gap-y-14 sm:grid-cols-3 stagger reveal">
       {points.map((p) => (
         <div>
-          <p class={`display text-4xl sm:text-5xl lg:text-6xl leading-none m-0 mb-2 ${p.accent}`}>{p.figure}</p>
+          <p class={`display text-4xl sm:text-5xl lg:text-6xl leading-none m-0 mb-2`}>{p.figure}</p>
           <p class="eyebrow text-graphite mb-7">{p.of}</p>
           <h2 class="display text-2xl mb-3">{p.title}</h2>
           <p class="prose-body text-graphite m-0">{p.body}</p>

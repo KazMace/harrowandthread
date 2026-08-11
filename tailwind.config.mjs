@@ -15,11 +15,11 @@ export default {
       black: '#000000',
 
       // Ground
-      ink: '#111111',
-      paper: '#FFFFFF',
-      chalk: '#F5F3EF',
-      graphite: '#5F5F5C',   // 4.42:1 previously — below AA. #5F5F5C clears 4.5:1 on paper.
-      hairline: '#E4E1DA',
+      ink: '#17150F',
+      paper: '#F7F4EE',
+      chalk: '#EFEAE0',
+      graphite: '#6A6459',   // Direction A muted. Checked ≥4.5:1 on #F7F4EE.
+      hairline: '#DCD5C7',
 
       // The dye range — used as large colour fields, not decoration.
       madder: '#C0392B',
@@ -37,8 +37,8 @@ export default {
     fontFamily: {
       // Family names must match what fontsource registers, or the browser
       // silently falls back to Arial. Verify in node_modules before changing.
-      display: ['Bricolage Grotesque Variable', 'Helvetica Neue', 'Arial', 'sans-serif'],
-      body: ['Inter Tight Variable', 'Helvetica Neue', 'Arial', 'sans-serif'],
+      display: ['Fraunces Variable', 'Georgia', 'serif'],
+      body: ['Schibsted Grotesk Variable', 'system-ui', 'sans-serif'],
     },
     fontSize: {
       utility: ['0.6875rem', { lineHeight: '1.4', letterSpacing: '0.12em' }],
