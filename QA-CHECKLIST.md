@@ -122,8 +122,8 @@ breach.** Do not escalate one as the other.
 | I2 | Malformed emails are rejected (`a@`, `@b.com`, `a b@c.com`, 400-character local part). **⚠ PARTIAL FAIL — see finding below.** | `AGENTS.md` §2 |
 | I3 | Oversized and zero-byte uploads are handled without an unhandled error. **Define "unhandled" before testing** — console error, unhandled rejection, crash, or silent no-op are four different assertions, and the silent no-op is the one that hurts. | `AGENTS.md` §2 |
 | I4 | Wrong types where a number is expected (size fields) are rejected, not coerced silently. **If the input is `type="number"` the browser blocks typing — force the value with `fill()`/`evaluate()` or the test is vacuous.** | `AGENTS.md` §2 |
-| I5 | Script tags and SQL fragments in text fields are neither executed nor reflected unescaped. | `AGENTS.md` §2 |
-| I6 | Double-submit does not produce two submissions. | `AGENTS.md` §2 |
+| I5 | Script tags and SQL fragments in text fields are neither executed nor reflected unescaped. **✅ Verified 2026-08-12** — `<script>` and `<img onerror>` did not execute, nothing reflected raw, payload correctly JSON-encoded. SQL injection is not applicable: Supabase REST takes parameterised JSON, not concatenated SQL. | `AGENTS.md` §2 |
+| I6 | Double-submit does not produce two submissions. **❌ FAILS — see finding below.** | `AGENTS.md` §2 |
 | I7 | A valid submission reaches `/enquire/success`. ⚠ **Do not fill the hidden `website` honeypot** — doing so redirects to `/enquire/success` *without submitting*, producing a false pass. See `AGENTS.md` §3. | C:79–80, verified live 2026-08-11 |
 | I8 | **Inverse honeypot test:** filling `website` produces **no** network request to Supabase or Web3Forms, and still lands on `/enquire/success`. | `AGENTS.md` §2 |
 
@@ -168,6 +168,36 @@ Checked in a real browser on 2026-08-11:
   filled-accept/ghost-reject pattern is the one regulators have criticised specifically.
   **Not changed — the design system is the client's call (`CLAUDE.md` §3).** The minimal fix
   if they want it: give Reject the same `font-medium` and a solid or equally-weighted fill.
+
+---
+
+## ⚠ Open finding — double-click sends two notification emails (2026-08-12)
+
+**Not fixed. `CLAUDE.md` §3 puts the enquiry form off-limits without the client's say-so.**
+
+Reproduced with the backend stubbed, at four different click timings:
+
+| Interaction | Supabase rows | Web3Forms POSTs |
+|---|---|---|
+| Human double-click, 120 ms gap | 1 ✅ | **2 ❌** |
+| Fast double-click, 40 ms gap | 1 ✅ | **2 ❌** |
+| Native `dblclick()` | 1 ✅ | **2 ❌** |
+| Same-tick triple click (artificial) | 1 ✅ | **2 ❌** |
+
+**This is not a test artefact.** It reproduces at ordinary human double-click speed, which is
+exactly what an impatient visitor does when a form appears not to respond.
+
+**Impact is bounded but real:** the database is correctly guarded — one enquiry, one row, no
+duplicate data. The *notification* is not, so the client receives **two emails for one
+enquiry**. Annoying rather than dangerous, and it will look like two separate leads.
+
+A guard does exist — `enquire.astro:462` sets `submitBtn.disabled = true` — but the second
+click's handler is already queued before it runs, and the Web3Forms leg is a separately
+constructed native form POST that the guard never reaches.
+
+**Minimal fix, if the client wants it:** a module-scoped `let sending = false` checked at the
+top of the submit handler, rather than relying on the button's disabled state. Does not
+change the field set.
 
 ---
 
