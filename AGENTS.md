@@ -29,8 +29,8 @@ the QA session with:
 claude --settings .claude/qa-blindfold.json
 ```
 
-Verified working: with that file loaded, a read of `src/pages/index.astro` is refused
-before the tool runs.
+The deny rules bite before the tool runs, not after — a read of `src/pages/index.astro` is
+refused rather than returned.
 
 **Its one hole: `Bash` can still `cat` a file.** Deny rules on shell commands are trivially
 routed around (`cat`, `sed`, `grep`, `<`), so don't pretend that half is sealed. Scan the
@@ -43,11 +43,11 @@ session, and it would blindfold the coding agent too.
 
 - `harrowandthread_core_Design.md` — the brief
 - `COMPLIANCE.md` — the legal contract the site must satisfy
-- `large_scale_luxury_rugs_mansion_guide.md` — positioning (mind the caveats in `CLAUDE.md` §1)
+- `large_scale_luxury_rugs_mansion_guide.md` — positioning (mind the caveats in `CLAUDE.md`, "Where the facts live")
 - the "Settled" section of `CLAUDE.md` — prices, tiers, no-cropped-rugs, trade placement
 
 A spec written by the agent under test is not a spec. That failure has already happened
-once on this project (see `CLAUDE.md` §1).
+once on this project (see `CLAUDE.md`, "Where the facts live").
 
 ### 2. Black-box test generation
 
@@ -63,10 +63,9 @@ anything works inside.
 The QA agent may write test files under `tests/` and run them. It may not edit anything
 under `src/`.
 
-**This is a website, so almost every real check needs a real browser.** `CLAUDE.md` §5 is
-the reason: the whole site fell back to Arial for several sessions because people verified
-by reading config instead of rendering. A test that greps the built HTML would not have
-caught it. A test that reads `getComputedStyle` does.
+**This is a website, so almost every real check needs a real browser.** A test that greps the
+built HTML cannot catch a font falling back to Arial. A test that reads `getComputedStyle`
+can. Verify by rendering, not by reading config.
 
 The harness is Node's built-in test runner driving Playwright — no framework, no config
 file:
@@ -98,30 +97,28 @@ submission reaches `/enquire/success`.
 
 Screenshots count as evidence; `page.screenshot()` into the scratchpad, then look at it.
 
-**The enquiry form is tested with the backend stubbed** (client decision, 2026-08-11).
-Intercept in the browser so nothing reaches Supabase or Web3Forms — no junk rows in
-`enquiries`, no real emails:
+**The enquiry form is tested with the backend stubbed.** Intercept in the browser so nothing
+reaches Supabase or Web3Forms — no junk rows in `enquiries`, no real emails:
 
 ```js
-// Verified working 2026-08-12 — both endpoints intercepted, nothing escaped.
 await context.route('**://*.supabase.co/**', r =>
   r.fulfill({ status: 201, contentType: 'application/json', body: '[]' }));
 await context.route('**://api.web3forms.com/**', r =>
   r.fulfill({ status: 303, headers: { location: `${BASE}/enquire/success` } }));
 ```
 
-**Three traps, all confirmed by running it:**
+**Three traps:**
 
 1. **`fulfill()`, never `abort()`.** Web3Forms is a *native form POST*, so aborting it
    navigates the page to `chrome-error://chromewebdata/` and every subsequent assertion
-   fails for the wrong reason. `page.route()` does intercept the form navigation — that was
-   the open question, and the answer is yes — but only `fulfill()` leaves the page usable.
+   fails for the wrong reason. `page.route()` does intercept the form navigation, but only
+   `fulfill()` leaves the page usable.
 2. **Route on the `context`, not the page**, so a navigation POST is still covered.
 3. **The redirect `location` must be absolute.** A relative `/enquire/success` resolves
    against `api.web3forms.com`, so the browser leaves the stub and fetches their real
    server — which Cloudflare 403s. Playwright does not re-route a redirect it follows, so
-   the request escapes, and the 403 then shows up in the report as a phantom site bug.
-   Cost half an hour on 2026-08-12 before the response URL was logged and it was obvious.
+   the request escapes, and the 403 shows up in the report as a phantom site bug. If you see
+   an unexplained 403, log the response URL first.
 
 **Assert against the notification body, not just the status.** The submission is built
 never to lose a lead: when storage or the database fails, the Web3Forms POST carries an
@@ -132,8 +129,8 @@ or `failed to upload` silently misses `failed+to+upload`:
 decodeURIComponent(body.replace(/\+/g, ' '))
 ```
 
-The live submission path, confirmed: `POST https://<project>.supabase.co/rest/v1/enquiries`
-then `POST https://api.web3forms.com/submit`.
+The live submission path: `POST https://<project>.supabase.co/rest/v1/enquiries` then
+`POST https://api.web3forms.com/submit`.
 
 ### ⚠ The honeypot will fake a passing test
 
@@ -153,9 +150,8 @@ false pass.
 **Rule: never fill `website`.** And a good adversarial suite should include the inverse
 test — fill the honeypot deliberately and assert that **no** network request is made.
 
-The adversarial cases are about our own validation, and a round-trip to a live database
-adds nothing to them. The real pipeline was proven end to end in a live browser on
-2026-08-11.
+The adversarial cases are about our own validation, and a round-trip to a live database adds
+nothing to them.
 
 The cost of stubbing is drift: change the schema or the form and the stub keeps passing
 against a fiction. So keep **one** live end-to-end test in the suite marked
@@ -203,8 +199,10 @@ Start by reading the spec files.
   re-derives context this session already has. Blind QA is the case where that cost buys
   something; "let me farm this out" is not.
 - **A subagent's verdict is not authorisation.** It cannot approve a price change, a copy
-  change, or a design change — see `CLAUDE.md` §3. Bring its report to the client.
+  change, or a design change — see `CLAUDE.md`, "don't decide what's theirs to decide".
+  Bring its report to the client.
 - **A quality score an agent generated is not evidence.** Only a rendered screenshot or a
-  real HTTP response is (`CLAUDE.md` §5).
-- **Agents inherit the hard rules.** Ponytail (§2), never invent a fact (§4), never edit
-  `~/.claude/settings.json` (§7). State them in the prompt; a fresh agent has not read them.
+  real HTTP response is (`CLAUDE.md`, "look at it before saying it works").
+- **Agents inherit the hard rules.** The laziest-thing ladder, never invent a fact, never edit
+  `~/.claude/settings.json` — all under "the rules that are genuinely hard" in `CLAUDE.md`.
+  State them in the prompt; a fresh agent has not read them.
