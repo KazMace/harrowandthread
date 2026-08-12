@@ -124,7 +124,8 @@ breach.** Do not escalate one as the other.
 | I4 | Wrong types where a number is expected (size fields) are rejected, not coerced silently. **If the input is `type="number"` the browser blocks typing — force the value with `fill()`/`evaluate()` or the test is vacuous.** | `AGENTS.md` §2 |
 | I5 | Script tags and SQL fragments in text fields are neither executed nor reflected unescaped. | `AGENTS.md` §2 |
 | I6 | Double-submit does not produce two submissions. | `AGENTS.md` §2 |
-| I7 | A valid submission reaches `/enquire/success`. | C:79–80, verified live 2026-08-11 |
+| I7 | A valid submission reaches `/enquire/success`. ⚠ **Do not fill the hidden `website` honeypot** — doing so redirects to `/enquire/success` *without submitting*, producing a false pass. See `AGENTS.md` §3. | C:79–80, verified live 2026-08-11 |
+| I8 | **Inverse honeypot test:** filling `website` produces **no** network request to Supabase or Web3Forms, and still lands on `/enquire/success`. | `AGENTS.md` §2 |
 
 ---
 

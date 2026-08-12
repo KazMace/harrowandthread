@@ -103,9 +103,41 @@ Intercept in the browser so nothing reaches Supabase or Web3Forms — no junk ro
 `enquiries`, no real emails:
 
 ```js
-await page.route('**/*.supabase.co/**', r => r.fulfill({ status: 201, body: '[]' }));
-await page.route('**/api.web3forms.com/**', r => r.fulfill({ status: 303, headers: { location: '/enquire/success' } }));
+// Verified working 2026-08-12 — both endpoints intercepted, nothing escaped.
+await context.route('**://*.supabase.co/**', r =>
+  r.fulfill({ status: 201, contentType: 'application/json', body: '[]' }));
+await context.route('**://api.web3forms.com/**', r =>
+  r.fulfill({ status: 303, headers: { location: '/enquire/success' } }));
 ```
+
+**Two traps, both confirmed by running it:**
+
+1. **`fulfill()`, never `abort()`.** Web3Forms is a *native form POST*, so aborting it
+   navigates the page to `chrome-error://chromewebdata/` and every subsequent assertion
+   fails for the wrong reason. `page.route()` does intercept the form navigation — that was
+   the open question, and the answer is yes — but only `fulfill()` leaves the page usable.
+2. **Route on the `context`, not the page**, so a navigation POST is still covered.
+
+The live submission path, confirmed: `POST https://<project>.supabase.co/rest/v1/enquiries`
+then `POST https://api.web3forms.com/submit`.
+
+### ⚠ The honeypot will fake a passing test
+
+`/enquire` carries a hidden honeypot field, `name="website"`, inside a
+`class="hidden" aria-hidden="true"` wrapper. `enquire.astro:468` bounces any submission that
+fills it **straight to `/enquire/success` without submitting anything**:
+
+```js
+if (fd.get('website')) { window.location.assign('/enquire/success'); return; }
+```
+
+That is correct anti-spam behaviour — and a trap for an adversarial agent. **An agent that
+fills every field it can find will fill the honeypot, land on `/enquire/success`, and report
+the form as working when nothing was sent.** A green result on I7 obtained that way is a
+false pass.
+
+**Rule: never fill `website`.** And a good adversarial suite should include the inverse
+test — fill the honeypot deliberately and assert that **no** network request is made.
 
 The adversarial cases are about our own validation, and a round-trip to a live database
 adds nothing to them. The real pipeline was proven end to end in a live browser on
