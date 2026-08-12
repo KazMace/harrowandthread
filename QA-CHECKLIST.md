@@ -118,8 +118,8 @@ breach.** Do not escalate one as the other.
 
 | # | Assertion | Source |
 |---|---|---|
-| I1 | Submitting empty is rejected; every required field reports its own error. | `AGENTS.md` §2 (chaos cases) |
-| I2 | Malformed emails are rejected (`a@`, `@b.com`, `a b@c.com`, 400-character local part). | `AGENTS.md` §2 |
+| I1 | Submitting empty is rejected; every required field reports its own error. **✅ Verified 2026-08-12** — 4 visible errors (name, email, iam, commission-type), zero outbound requests, focus moves to the first invalid field. | `AGENTS.md` §2 (chaos cases) |
+| I2 | Malformed emails are rejected (`a@`, `@b.com`, `a b@c.com`, 400-character local part). **⚠ PARTIAL FAIL — see finding below.** | `AGENTS.md` §2 |
 | I3 | Oversized and zero-byte uploads are handled without an unhandled error. **Define "unhandled" before testing** — console error, unhandled rejection, crash, or silent no-op are four different assertions, and the silent no-op is the one that hurts. | `AGENTS.md` §2 |
 | I4 | Wrong types where a number is expected (size fields) are rejected, not coerced silently. **If the input is `type="number"` the browser blocks typing — force the value with `fill()`/`evaluate()` or the test is vacuous.** | `AGENTS.md` §2 |
 | I5 | Script tags and SQL fragments in text fields are neither executed nor reflected unescaped. | `AGENTS.md` §2 |
@@ -168,6 +168,33 @@ Checked in a real browser on 2026-08-11:
   filled-accept/ghost-reject pattern is the one regulators have criticised specifically.
   **Not changed — the design system is the client's call (`CLAUDE.md` §3).** The minimal fix
   if they want it: give Reject the same `font-medium` and a solid or equally-weighted fill.
+
+---
+
+## ⚠ Open finding — no length cap on any form field (2026-08-12)
+
+**Not fixed. `CLAUDE.md` §3 puts the enquiry form off-limits without the client's say-so.**
+
+Reproduced in a browser with the backend stubbed:
+
+| Input | Result |
+|---|---|
+| `a@` | ✅ rejected |
+| `@b.com` | ✅ rejected |
+| `a b@c.com` | ✅ rejected |
+| **400-character local part** (`xxx…@y.com`) | ❌ **accepted — submitted and reached `/enquire/success`** |
+
+**Root cause is broader than email.** `enquire.astro:413` validates with
+`/^[^\s@]+@[^\s@]+\.[^\s@]+$/` — the common permissive pattern, with **no length bound** —
+and **no field on the form carries a `maxlength` attribute at all.** The form is also
+`novalidate`, so the HTML `required` attributes are inert and JS is the only gate.
+
+So any text field accepts unbounded input, which goes straight into the `enquiries` table.
+RFC 5321 caps a local part at 64 characters and a whole address at 254.
+
+**Minimal fix, if the client wants it:** a `maxlength` on the text inputs and a length check
+in the email branch. Both are a few lines and neither changes the field set — which is the
+part `CLAUDE.md` reserves to the client.
 
 ---
 
