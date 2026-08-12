@@ -100,7 +100,12 @@ One genuine texture shot does more for trust than four more AI room scenes. And 
 
 ## 6 · Nice to have
 
-- **Analytics** — Plausible or Fathom, currently commented out in `BaseLayout.astro`.
+- **Analytics** — **none is installed.** Corrected 2026-08-12: nothing in `src/` loads Plausible,
+  Fathom, gtag or GTM. `CookieBanner.astro` has a bare `// Load analytics scripts here` comment
+  and no script; `BaseLayout.astro` has nothing at all. ⚠ Meanwhile `/cookies` tells visitors in
+  the present tense that the site *"uses privacy-first analytics (Plausible or Fathom)"* —
+  describing a data practice that does not exist. Either install one or reword that page. This
+  also gates any paid advertising: spending with no measurement is spending blind.
 - **Delete the two old reference links** from `harrowandthread_core_Design.md` if they're still bothering you.
 - **A second all-over geometric image** once the rate is settled, so the tier has its own picture.
 
