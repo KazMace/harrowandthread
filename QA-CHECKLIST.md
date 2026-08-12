@@ -92,7 +92,7 @@ Enforced in `tests/smoke.test.mjs`.
 | # | Assertion | Source |
 |---|---|---|
 | G1 | **No rug is cropped.** No rug image uses `object-fit: cover`; all four corners of every rug sit inside its frame. | S (client rule, 2026-08-11) |
-| G2 | No image slot is empty. | S |
+| G2 | No image slot is empty. ⚠ **Every image on this site is `loading="lazy"`. A test that checks `naturalWidth` at `networkidle` reports every below-fold image as broken.** Scroll the full page height and wait before asserting, or the result is meaningless. | S |
 | G3 | No stock photograph of another company's finished rug is presented as an H&T commission. | C:23–25 |
 
 ## H. Craft and performance
@@ -141,6 +141,14 @@ Checked in a real browser on 2026-08-11:
   The banner is deliberately withheld until `scrollY > 120` or a 6s fallback, so it is
   genuinely true that nothing is set before consent.
 - **G1 — pass, and now enforced** in `tests/smoke.test.mjs` across 7 pages.
+- **G2 — pass.** All 12 pages: 8 images total, all lazy, all load on scroll. Zero broken.
+  The first run of this check reported 7 "broken" images on `/` — a false positive from not
+  scrolling. See the warning on G2 above.
+- **F3, F4, F5, H3, H4, E4 — pass**, swept across all 12 pages: exactly one `h1` per page and
+  no skipped heading levels; every non-hidden input has a bound label; a skip link is present
+  on every page; nav is byte-identical across all 12 (`Commissions|Carpets|Enquire`) as is
+  the footer; **trade does not appear in the nav**; every page returns 200.
+  Now enforced in `tests/smoke.test.mjs`.
 - **E2 — ⚠ OPEN QUESTION, needs the client.** An earlier note in this file claimed the two
   buttons "carry identical classes". **That was wrong, and it was reached by reading source
   rather than rendering — the exact failure `CLAUDE.md` §5 exists to prevent.** Measured

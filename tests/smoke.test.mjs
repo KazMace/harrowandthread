@@ -60,6 +60,48 @@ test('no image is cropped or distorted on any page', async () => {
   assert.deepEqual(failures, [], `\n  ${failures.join('\n  ')}\n`);
 });
 
+// Structural invariants across every page. These are settled client rules and
+// accessibility floors that regress silently when a page is added or a nav edited.
+const ALL_PAGES = ['/', '/commissions', '/carpets', '/care', '/faq', '/trade',
+                   '/enquire', '/terms', '/privacy', '/cookies', '/enquire/success'];
+
+test('structure holds on every page: headings, labels, skip link, nav, trade placement', async () => {
+  const page = await browser.newPage({ userAgent: UA });
+  const failures = [];
+  const navs = new Set();
+
+  for (const path of ALL_PAGES) {
+    const resp = await page.goto(BASE + path, { waitUntil: 'networkidle' });
+    if (resp.status() !== 200) failures.push(`${path}: HTTP ${resp.status()}`);
+
+    const r = await page.evaluate(() => {
+      const levels = [...document.querySelectorAll('h1,h2,h3,h4,h5,h6')].map(h => +h.tagName[1]);
+      const skips = levels.flatMap((l, i) => i && l - levels[i - 1] > 1 ? [`${levels[i - 1]}->${l}`] : []);
+      return {
+        h1: levels.filter(l => l === 1).length,
+        skips,
+        unlabelled: [...document.querySelectorAll('input,select,textarea')]
+          .filter(e => e.type !== 'hidden' && !e.labels?.length
+                       && !e.getAttribute('aria-label') && !e.getAttribute('aria-labelledby'))
+          .map(e => e.name || e.id || e.type),
+        skipLink: !!document.querySelector('a[href^="#"]'),
+        nav: [...document.querySelectorAll('header nav a')].map(a => a.textContent.trim()).join('|'),
+      };
+    });
+
+    navs.add(r.nav);
+    if (r.h1 !== 1) failures.push(`${path}: ${r.h1} h1 elements, expected 1`);
+    if (r.skips.length) failures.push(`${path}: skipped heading levels ${r.skips.join(',')}`);
+    if (r.unlabelled.length) failures.push(`${path}: unlabelled inputs ${r.unlabelled.join(',')}`);
+    if (!r.skipLink) failures.push(`${path}: no skip link`);
+    // Settled client rule: trade is footer-only, never in the nav.
+    if (/trade/i.test(r.nav)) failures.push(`${path}: "trade" in nav — it is footer-only`);
+  }
+
+  if (navs.size > 1) failures.push(`nav differs across pages: ${[...navs].join('  //  ')}`);
+  assert.deepEqual(failures, [], `\n  ${failures.join('\n  ')}\n`);
+});
+
 // COMPLIANCE.md: four things materially affect the purchase decision and must be
 // prominent on the page that sells them — not buried as their only appearance in
 // an accordion. Repeating them in the homepage FAQ is fine; that is not burying.
