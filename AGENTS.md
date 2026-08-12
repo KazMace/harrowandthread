@@ -107,16 +107,30 @@ Intercept in the browser so nothing reaches Supabase or Web3Forms — no junk ro
 await context.route('**://*.supabase.co/**', r =>
   r.fulfill({ status: 201, contentType: 'application/json', body: '[]' }));
 await context.route('**://api.web3forms.com/**', r =>
-  r.fulfill({ status: 303, headers: { location: '/enquire/success' } }));
+  r.fulfill({ status: 303, headers: { location: `${BASE}/enquire/success` } }));
 ```
 
-**Two traps, both confirmed by running it:**
+**Three traps, all confirmed by running it:**
 
 1. **`fulfill()`, never `abort()`.** Web3Forms is a *native form POST*, so aborting it
    navigates the page to `chrome-error://chromewebdata/` and every subsequent assertion
    fails for the wrong reason. `page.route()` does intercept the form navigation — that was
    the open question, and the answer is yes — but only `fulfill()` leaves the page usable.
 2. **Route on the `context`, not the page**, so a navigation POST is still covered.
+3. **The redirect `location` must be absolute.** A relative `/enquire/success` resolves
+   against `api.web3forms.com`, so the browser leaves the stub and fetches their real
+   server — which Cloudflare 403s. Playwright does not re-route a redirect it follows, so
+   the request escapes, and the 403 then shows up in the report as a phantom site bug.
+   Cost half an hour on 2026-08-12 before the response URL was logged and it was obvious.
+
+**Assert against the notification body, not just the status.** The submission is built
+never to lose a lead: when storage or the database fails, the Web3Forms POST carries an
+explicit `WARNING:` line instead. That body is form-encoded, so decode it before matching
+or `failed to upload` silently misses `failed+to+upload`:
+
+```js
+decodeURIComponent(body.replace(/\+/g, ' '))
+```
 
 The live submission path, confirmed: `POST https://<project>.supabase.co/rest/v1/enquiries`
 then `POST https://api.web3forms.com/submit`.

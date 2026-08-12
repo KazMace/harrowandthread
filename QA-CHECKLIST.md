@@ -120,12 +120,12 @@ breach.** Do not escalate one as the other.
 |---|---|---|
 | I1 | Submitting empty is rejected; every required field reports its own error. **✅ Verified 2026-08-12** — 4 visible errors (name, email, iam, commission-type), zero outbound requests, focus moves to the first invalid field. | `AGENTS.md` §2 (chaos cases) |
 | I2 | Malformed emails are rejected (`a@`, `@b.com`, `a b@c.com`, 400-character local part). **⚠ PARTIAL FAIL — see finding below.** | `AGENTS.md` §2 |
-| I3 | Oversized and zero-byte uploads are handled without an unhandled error. **Define "unhandled" before testing** — console error, unhandled rejection, crash, or silent no-op are four different assertions, and the silent no-op is the one that hurts. | `AGENTS.md` §2 |
-| I4 | Wrong types where a number is expected (size fields) are rejected, not coerced silently. **If the input is `type="number"` the browser blocks typing — force the value with `fill()`/`evaluate()` or the test is vacuous.** | `AGENTS.md` §2 |
+| I3 | Oversized and zero-byte uploads are handled without an unhandled error. **Define "unhandled" before testing** — console error, unhandled rejection, crash, or silent no-op are four different assertions, and the silent no-op is the one that hurts. **✅ Verified 2026-08-12** — zero-byte uploads normally; a 55MB file is skipped by the form's own 10MB cap and the notification email carries `WARNING: one or more images the sender attached failed to upload.`; a 413 from Supabase produces both warning lines. No page errors, no crash, no silent no-op — the lead is never lost. One gap noted below. | `AGENTS.md` §2 (chaos cases) |
+| I4 | Wrong types where a number is expected (size fields) are rejected, not coerced silently. **If the input is `type="number"` the browser blocks typing — force the value with `fill()`/`evaluate()` or the test is vacuous.** **✅ PASS on coercion, ❌ FAIL on range** — forcing `size-w = "abc"` via `evaluate()` reads back as `""`, so the browser's own sanitisation holds and no junk reaches the payload. But `-50` submits — see finding below. | `AGENTS.md` §2 |
 | I5 | Script tags and SQL fragments in text fields are neither executed nor reflected unescaped. **✅ Verified 2026-08-12** — `<script>` and `<img onerror>` did not execute, nothing reflected raw, payload correctly JSON-encoded. SQL injection is not applicable: Supabase REST takes parameterised JSON, not concatenated SQL. | `AGENTS.md` §2 |
 | I6 | Double-submit does not produce two submissions. **❌ FAILS — see finding below.** | `AGENTS.md` §2 |
 | I7 | A valid submission reaches `/enquire/success`. ⚠ **Do not fill the hidden `website` honeypot** — doing so redirects to `/enquire/success` *without submitting*, producing a false pass. See `AGENTS.md` §3. | C:79–80, verified live 2026-08-11 |
-| I8 | **Inverse honeypot test:** filling `website` produces **no** network request to Supabase or Web3Forms, and still lands on `/enquire/success`. | `AGENTS.md` §2 |
+| I8 | **Inverse honeypot test:** filling `website` produces **no** network request to Supabase or Web3Forms, and still lands on `/enquire/success`. **✅ Verified 2026-08-12** — zero outbound requests to either endpoint, visitor still lands on `/enquire/success`. The anti-spam bounce works exactly as designed, which is also why a suite that fills every field reports a false pass on I7. | `AGENTS.md` §2 |
 
 ---
 
@@ -225,6 +225,43 @@ RFC 5321 caps a local part at 64 characters and a whole address at 254.
 **Minimal fix, if the client wants it:** a `maxlength` on the text inputs and a length check
 in the email branch. Both are a few lines and neither changes the field set — which is the
 part `CLAUDE.md` reserves to the client.
+
+---
+
+## ⚠ Open finding — negative sizes are accepted (2026-08-12)
+
+**Not fixed. `CLAUDE.md` §3 puts the enquiry form off-limits without the client's say-so.**
+
+Both size inputs declare `min="0"`, but the form is `novalidate`, so the attribute is inert
+and nothing else checks the range. Forced through a browser with the backend stubbed:
+
+| Forced value | Reads back as | Reaches the payload |
+|---|---|---|
+| `abc` in `size-w` | `""` — the browser's own sanitisation holds | no ✅ |
+| `-50` in `size-h` | `-50` | **yes ❌** — `"size_h":"-50"` |
+
+So type coercion is genuinely safe (that half of I4 passes and the credit belongs to the
+browser, not to the form), but a negative dimension submits, lands in the `enquiries` table
+as a string, and appears in the notification email as a real measurement.
+
+**Minimal fix, if the client wants it:** a range check alongside the existing email check.
+Does not change the field set. The assertion is already written and sitting skipped in
+`tests/enquiry-adversarial.test.mjs` as **I4b** — un-skip it once they decide.
+
+---
+
+## Noted, minor — two of five images are discarded without a word (2026-08-12)
+
+Not a failure of I3, and not escalated to a finding: the page states the limit in the open
+("Up to 3 images, 10MB each"), and the 10MB half of it is handled properly — an oversized
+file is skipped **and** the notification email says so.
+
+The count limit is not. Attaching five images uploads three and discards two, and neither
+the visitor nor the client is told: the "some images failed" warning is only raised for
+files that *fail*, not for files trimmed off the end before the loop runs. Verified
+2026-08-12: 5 files in → 3 upload requests → zero warnings in the email.
+
+Worth a sentence to the client, no more. The disclosed limit means nobody was misled.
 
 ---
 
