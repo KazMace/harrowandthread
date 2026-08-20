@@ -38,9 +38,13 @@ homepage accordions never got built and an invented palette became "the design s
    the enquiry form. A quality score you generated yourself is not authorisation.
 5. **Never edit `~/.claude/settings.json`.** Read only — an earlier session broke it and the
    client repaired it by hand.
-6. **Look at it before saying it works.** Screenshot in a real browser. The whole site fell
+6. **Never print a full secret — API key, deployment URL, token — into chat or tool output.**
+   Happened three times on 2026-08-20 reading `.env` and diagnosing a live URL. To check a
+   secret without displaying it: `grep -c`, `awk` field counts, a suffix check, or comparing
+   just the last few characters.
+7. **Look at it before saying it works.** Screenshot in a real browser. The whole site fell
    back to Arial for several sessions because people verified by reading config.
-7. **Commit at the end of any session that changed files.** Never `reset --hard`, force-push,
+8. **Commit at the end of any session that changed files.** Never `reset --hard`, force-push,
    rewrite history, or delete the client's `.md` files.
 
 If you think the client is wrong, say so in two sentences, then do what they asked unless they
