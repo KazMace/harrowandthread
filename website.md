@@ -61,12 +61,13 @@ practices, SEO) on real mobile artifacts with simulated throttling — not estim
   `colours.json`, `faq.ts`. Copy changes then never risk a markup regression.
 - **One layout.** `BaseLayout.astro` owns `<head>`, JSON-LD, the skip link, and the inline
   `.js` class script. Per-page layouts fragment the head and the structured data drifts.
-- **Talk to APIs with `fetch`.** Adding `@supabase/supabase-js` would have added **~30 KB
-  gzipped to a site shipping 3.1 KB gzipped** — roughly a 10× increase in payload, to save
-  a few lines. The REST endpoint is a URL and a header.
-- **Order multi-step submissions by what's recoverable.** Upload files → insert the row →
-  send the notification. If the notification fails the enquiry is still captured. Losing an
-  email is recoverable; losing the enquiry is not.
+- **Talk to APIs with `fetch`.** No SDK has ever been needed here — first for Supabase's
+  REST endpoint (a URL and a header), now for the Google Apps Script Web App that
+  replaced it (2026-08-20): still a URL, still `fetch`, still no dependency.
+- **A backend doesn't have to mean a server.** The enquiry pipeline has never had one —
+  first two free third-party APIs called from the browser, now a Google Apps Script Web
+  App, which is itself just a URL that runs code as its owner's Google account. Static
+  site in, no adapter, no hosting decision, no secret shipped to the browser.
 
 ### ❌ Don't
 
@@ -79,25 +80,37 @@ practices, SEO) on real mobile artifacts with simulated throttling — not estim
   the memory of what the last one wrote.
 - **Don't let a generated document outrank the client's.** If you write a spec, checklist
   or audit, label it as derived and cite the source line for every claim.
-- **Don't "modernise" a working integration.** The Web3Forms call is a native hidden-form
-  POST *on purpose*: `fetch` with JSON fails the CORS preflight on their free tier, and
-  `fetch` with `FormData` gets no `Access-Control-Allow-Origin`. A native form POST isn't
-  subject to CORS at all. Both `fetch` versions fail **silently from the visitor's point of
-  view** — the worst possible failure. Leave a comment saying so, or someone will "fix" it.
+- **Don't "modernise" a working integration without checking why it's shaped that way
+  first.** This bit twice on the same form for two different reasons: the retired
+  Web3Forms leg needed a native hidden-form POST because `fetch` failed its CORS
+  preflight both as JSON and as FormData; its replacement, a Google Apps Script Web App,
+  needs `Content-Type: text/plain` on the `fetch` because Apps Script can't answer a
+  preflight `OPTIONS` at all (different mechanism, same symptom). Both fail **silently
+  from the visitor's point of view** if "corrected". Leave a comment saying why, or
+  someone will "fix" it back into a silent failure.
 
 ### Architecture pattern worth reusing: serverless enquiry capture
 
+Current shape (2026-08-20), one destination:
+
 ```
 browser
-  ├─ 1. POST files      -> Supabase Storage bucket (private)
-  ├─ 2. POST row        -> Supabase table (incl. storage paths)
-  └─ 3. POST text+links -> Web3Forms -> email notification
+  └─ POST { fields, images: base64[] } as text/plain JSON
+       -> Google Apps Script Web App
+            ├─ Drive (photos, link-shared)
+            ├─ Sheet (the log)
+            └─ Gmail (HTML notification, clickable links)
 ```
 
-No server, no build step, nothing secret in the repo. Both keys involved (Web3Forms
-*access key*, Supabase *anon* key) are designed to be public — **which is only true with
-Row Level Security on.** Insert-only policy for `anon`, no select/update/delete, and the
-same on the bucket. Without that, the anon key lets anyone read every enquiry.
+No server, no build step, no adapter, nothing secret in the repo — the Apps Script runs
+as its owner's Google account, so there's no key to leak in the first place. Superseded a
+two-vendor version (Supabase Storage + table, Web3Forms for email) that worked the same
+"no server" way but needed a public anon key kept safe only by Row Level Security, and
+carried each vendor's free-tier ceiling. The pattern that transfers to the next project:
+**a static site can still have real backend behaviour — file storage, a database-shaped
+log, transactional email — through a Web App even one paid tier never intended to be a
+web framework.** Check what a "public by design" key is actually allowed to do before
+trusting it, whichever vendor it's from.
 
 ---
 

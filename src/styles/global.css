@@ -2,7 +2,7 @@
    NOTE: the family names declared in tailwind.config.mjs must match the names
    these packages register ('… Variable'), or the browser silently falls back
    to Arial with no error. Latin subsets only. */
-@import '@fontsource-variable/fraunces/index.css';
+@import '@fontsource-variable/cormorant-garamond/wght.css';
 @import '@fontsource-variable/schibsted-grotesk/index.css';
 
 @tailwind base;
@@ -30,7 +30,6 @@
   h1, h2, h3, h4 {
     font-family: theme('fontFamily.display');
     font-weight: 400;
-    font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 144;
     text-wrap: balance;
   }
 
@@ -116,7 +115,6 @@
   .display {
     font-family: theme('fontFamily.display');
     font-weight: 400;
-    font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 144;
     text-wrap: balance;
     /* Never break-word here: it splits words mid-glyph ("Commissio / ns").
        Long words are handled by sizing headings to fit at 375px; overflow-x:

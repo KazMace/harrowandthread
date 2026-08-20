@@ -6,35 +6,38 @@ Everything left that needs you rather than code. Ordered by what blocks launch.
 
 ## 1 · Blocks launch — legally or functionally
 
-~~**Set up the enquiry pipeline.**~~ **DONE — 2026-08-11. Both legs live and proven end to end.**
+**Finish setting up the enquiry pipeline — 10 minutes, in your Google account.**
+2026-08-20: Supabase and Web3Forms are gone. Both had the same shape of problem —
+free-tier limits that would start costing money exactly as enquiries grew, and Supabase's
+free plan kept falling asleep from disuse, which is what broke a live enquiry this
+session. Replaced with one thing: a Google Apps Script that saves photos to Drive, logs
+the enquiry to a Sheet, and emails you — using your existing free Gmail, nothing paid.
 
-Web3Forms free tier sends you the notification email; everything, including the uploaded room photographs, goes to Supabase. Web3Forms never handles the files, so you do **not** need their $12/month Pro plan.
+**The code side is done and tested.** What's left is entirely on your side, in your Google
+account, not mine to do for you — I don't have login access to it. Full steps are in
+`google-apps-script/README.md`, roughly: make a Sheet, make a Drive folder, paste
+`google-apps-script/Code.gs` into script.google.com, deploy it, paste the resulting web
+address into the site's `.env` file as `PUBLIC_GAS_URL`. Until that's done the form falls
+back to not sending anywhere — same silent-failure shape as the old bug, so please don't
+leave this one sitting for weeks.
 
-All four steps are finished: the mailbox, the Web3Forms key, the Supabase keys, and the MCP authentication. The schema is applied — `enquiries` table, `enquiry-uploads` storage bucket, insert-only security policies.
+**The photo link in the email now actually opens.** The old system's link showed as
+plain, dead text in some email apps (a permanent Web3Forms limitation, not something more
+money would have fixed). This one is a real clickable link, and the photo also shows
+inline in the email itself.
 
-**It was tested for real, in a browser, not just read over.** A full submission with an attached image: photo uploaded to storage, row written to the database, notification email sent, visitor landed on the "Received" page. Every field arrived in the right place.
-
-**The security was proved, not assumed.** The anon key is public by design — it ships in your page source — so the table has to be insert-only or anyone viewing the page could read every enquiry you have ever received. Tested by writing a row and then trying to read it back as a stranger: the write succeeded, the read failed, and a delete attempt left the row untouched. Same for the uploads — a stranger can send a file but cannot read one back, list the bucket, or reach it by URL.
-
-**Still worth knowing:** free-tier Supabase pauses after about a week idle, and a paused project stops answering DNS entirely. If that happens mid-enquiry you still get the email, and it arrives stamped *"WARNING: this enquiry could NOT be saved to the database. This email is the only record of it."* So a lead is never lost silently — but treat the email as your real record and the database as the convenience. Once the site is taking real enquiries it stays warm on its own.
-
-**Why this sat at the top for so long:** the failure is invisible from the front end. The page says "Received" whether or not anything was sent, and it did exactly that — silently discarding every enquiry — for weeks before it was caught. That is now closed.
+**Trade-off you're accepting, same as before:** the Drive photo link opens straight away,
+no login — a long random address, not something a stranger could guess or browse to, but
+not access-controlled either. If you'd rather it required signing in, say so and I'll
+switch it — costs you an extra click every time you open one.
 
 ---
 
-**→ Confirm which contact address is actually live.** The site shows `enquiries@harrowandthread.com` on all 12 pages, in `/cookies`, on `/enquire`, and in the structured data search engines read. An earlier session switched everything to `meadow.mace@harrowandthread.com` on the grounds that it was "the mailbox that exists", and then the next session switched it straight back — so I can't tell from the code which of those is true, and I'm not going to guess.
+**→ Confirm which contact address is actually live.** The site shows `enquiries@harrowandthread.com` on all 12 pages, in `/cookies`, on `/enquire`, and in the structured data search engines read. An earlier session switched everything to `meadow.mace@harrowandthread.com` on the grounds that it was "the mailbox that exists", and then the next session switched it straight back — so I can't tell from the code which of those is true, and I'm not going to guess. This is now a separate question from where enquiries actually land: that's whichever Gmail account you deploy the script under (`NOTIFY_EMAIL` in `Code.gs`), and it does not have to be `enquiries@harrowandthread.com` at all.
 
 If `enquiries@` is a real mailbox or an alias forwarding to you, nothing needs doing. If it isn't, **every contact address on the site is dead**, including the one `/enquire` tells people to use when the form fails. Send me a test email to it and tell me whether it arrives.
 
-**→ Two minutes of tidying in the Supabase dashboard.** My test data is still there. Storage → `enquiry-uploads` holds three files (two test uploads and an 8-byte `probe.png`); select and delete them. The database rows are already cleared. Storage files can only be removed through the dashboard, not with SQL — Supabase blocks that deliberately so files can't be orphaned.
-
-**→ Drop a leftover table.** `public.images` is left over from the Knightfall Rugs build on this same Supabase project. It has security switched off, so anyone with your public key can read *and write* it. Nothing on this site uses it. You approved removing it but my tooling refuses to run destructive commands, so paste this into the Supabase SQL editor:
-
-```sql
-drop table if exists public.images;
-```
-
-**→ Check your Web3Forms submission limit.** The free tier caps monthly submissions. That cap is now the single point of failure in the pipeline — hitting it costs you a commission enquiry, not pennies. Worth knowing the number and whether they warn you as you approach it.
+**→ Old Supabase project — yours to close out or keep, your call.** Nothing in the codebase uses it any more. It still holds a leftover, insecure table (`public.images`, security switched off, from a different build on the same project) that I flagged and you already approved removing, but my tooling refuses to run destructive database commands. Since nothing here depends on that project any more, the simplest close-out is deleting the whole Supabase project rather than fixing one table in it — up to you. If you'd rather just drop the table: `drop table if exists public.images;` in their SQL editor.
 
 ---
 
@@ -117,6 +120,8 @@ Direction A rolled across all 12 pages. Every image slot filled. Accordions buil
 
 **Done since this list was written:** design rights assigned to the client with IPO registration offered and the fee included; lead times qualified by scale and complexity; budget selector removed; room photographs invited on the enquiry upload; plate sizes corrected after your audit; wall hangings redone with loops and a threaded pole.
 
-**Done 2026-08-11:** the enquiry pipeline finished and proven end to end — database schema applied, insert-only security verified by attack rather than assumption, and a real submission with an attached photograph tested in a browser through to the "Received" page.
+**Done 2026-08-11:** the enquiry pipeline finished and proven end to end on Supabase + Web3Forms — since replaced, see above.
 
-**The code side is done.** What's left is the list above — and apart from the three short dashboard jobs in section 1, none of it is code.
+**Done 2026-08-20:** enquiry backend rebuilt on Google (Apps Script + Drive + Sheet), the dead photo link fixed, and `npm test` repaired (it was silently running zero tests).
+
+**The code side is done.** What's left is the list above — and apart from the Google setup step and the short Supabase close-out in section 1, none of it is code.

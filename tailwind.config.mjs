@@ -37,7 +37,7 @@ export default {
     fontFamily: {
       // Family names must match what fontsource registers, or the browser
       // silently falls back to Arial. Verify in node_modules before changing.
-      display: ['Fraunces Variable', 'Georgia', 'serif'],
+      display: ['Cormorant Garamond Variable', 'Georgia', 'serif'],
       body: ['Schibsted Grotesk Variable', 'system-ui', 'sans-serif'],
     },
     fontSize: {
@@ -47,12 +47,14 @@ export default {
       base: ['1.0625rem', { lineHeight: '1.6' }],
       lg: ['1.25rem', { lineHeight: '1.5' }],
       xl: ['1.5rem', { lineHeight: '1.35' }],
-      '2xl': ['2rem', { lineHeight: '1.15', letterSpacing: '-0.015em' }],
-      '3xl': ['2.75rem', { lineHeight: '1.08', letterSpacing: '-0.02em' }],
-      '4xl': ['3.75rem', { lineHeight: '1.02', letterSpacing: '-0.025em' }],
-      '5xl': ['5rem', { lineHeight: '0.98', letterSpacing: '-0.03em' }],
-      '6xl': ['7rem', { lineHeight: '0.94', letterSpacing: '-0.035em' }],
-      '7xl': ['9.5rem', { lineHeight: '0.9', letterSpacing: '-0.04em' }],
+      // Display steps (2xl-7xl) cut 20% from every value below, site-wide, per
+      // the client's fold/readability request — not per-page tweaks.
+      '2xl': ['1.6rem', { lineHeight: '1.15', letterSpacing: '-0.015em' }],
+      '3xl': ['2.2rem', { lineHeight: '1.08', letterSpacing: '-0.02em' }],
+      '4xl': ['3rem', { lineHeight: '1.02', letterSpacing: '-0.025em' }],
+      '5xl': ['4rem', { lineHeight: '0.98', letterSpacing: '-0.03em' }],
+      '6xl': ['5.6rem', { lineHeight: '0.94', letterSpacing: '-0.035em' }],
+      '7xl': ['7.6rem', { lineHeight: '0.9', letterSpacing: '-0.04em' }],
     },
     // Full contiguous scale on purpose. A previous build used a sparse scale,
     // so classes like `gap-9` / `text-xs` silently resolved to nothing instead

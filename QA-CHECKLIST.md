@@ -106,8 +106,16 @@ Enforced in `tests/smoke.test.mjs`.
 
 ## I. Enquiry form — adversarial
 
-Backend calls are intercepted with `page.route()`; nothing reaches Supabase or Web3Forms.
-See `AGENTS.md` §3.
+⚠ **Backend replaced 2026-08-20 — Supabase and Web3Forms are gone, see `STATUS.md`.**
+The table below is a historical record against the *old* backend and cites specifics that
+no longer exist (Supabase's 10MB storage cap, the `WARNING:` notification lines, a 413
+from Supabase). **I3, I4 and I8 were re-run against the new Google Apps Script backend
+the same day** — all pass, see `tests/enquiry-adversarial.test.mjs`. **I2, I5, I6 and I7
+have NOT been re-verified against the new backend** — don't treat their old "PASS"/"FAIL"
+marks below as current until someone actually re-runs them.
+
+Backend calls are intercepted with `page.route()`; nothing reaches the real Apps Script
+endpoint. See `AGENTS.md` §3.
 
 ⚠ **I1–I6 are general robustness, NOT client requirements.** They were originally cited to
 `C:79–80`, which reads *"Form endpoint configured and a real test submission sent"* — that

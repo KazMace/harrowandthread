@@ -85,8 +85,8 @@ optional —
   under `file://` the stylesheet silently does not load and every visual assertion tests an
   unstyled page.
 - **Use a realistic user agent plus `--disable-blink-features=AutomationControlled`.**
-  Cloudflare 403s default headless Chromium on Web3Forms. Without these the enquiry-form
-  tests fail for a reason that has nothing to do with the code.
+  Left over from the Web3Forms era (Cloudflare 403s default headless Chromium) but kept —
+  cheap insurance against the same class of bot-check anywhere else in the stack.
 
 What a browser-based black-box test can actually assert here: computed styles and fonts,
 that no rug image is cropped (`object-fit`, and all four corners inside the frame — the
@@ -97,40 +97,42 @@ submission reaches `/enquire/success`.
 
 Screenshots count as evidence; `page.screenshot()` into the scratchpad, then look at it.
 
-**The enquiry form is tested with the backend stubbed.** Intercept in the browser so nothing
-reaches Supabase or Web3Forms — no junk rows in `enquiries`, no real emails:
+**The enquiry form is tested with the backend stubbed.** Since 2026-08-20 the backend is a
+single Google Apps Script Web App (`google-apps-script/Code.gs`), replacing Supabase +
+Web3Forms — see `STATUS.md` for why. Intercept in the browser so no real Drive uploads,
+Sheet rows, or emails happen:
 
 ```js
-await context.route('**://*.supabase.co/**', r =>
-  r.fulfill({ status: 201, contentType: 'application/json', body: '[]' }));
-await context.route('**://api.web3forms.com/**', r =>
-  r.fulfill({ status: 303, headers: { location: `${BASE}/enquire/success` } }));
+await context.route('**://script.google.com/**', r =>
+  r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) }));
 ```
 
-**Three traps:**
+**Two traps carried over from the old suite, both still real:**
 
-1. **`fulfill()`, never `abort()`.** Web3Forms is a *native form POST*, so aborting it
-   navigates the page to `chrome-error://chromewebdata/` and every subsequent assertion
-   fails for the wrong reason. `page.route()` does intercept the form navigation, but only
-   `fulfill()` leaves the page usable.
-2. **Route on the `context`, not the page**, so a navigation POST is still covered.
-3. **The redirect `location` must be absolute.** A relative `/enquire/success` resolves
-   against `api.web3forms.com`, so the browser leaves the stub and fetches their real
-   server — which Cloudflare 403s. Playwright does not re-route a redirect it follows, so
-   the request escapes, and the 403 shows up in the report as a phantom site bug. If you see
-   an unexplained 403, log the response URL first.
+1. **`fulfill()`, never `abort()`.** Aborting a request the page is waiting on tends to
+   surface as the wrong kind of failure — assert on what the page actually renders, not on
+   the network error text.
+2. **Route on the `context`, not the page**, so a navigation-triggered request is still
+   covered.
 
-**Assert against the notification body, not just the status.** The submission is built
-never to lose a lead: when storage or the database fails, the Web3Forms POST carries an
-explicit `WARNING:` line instead. That body is form-encoded, so decode it before matching
-or `failed to upload` silently misses `failed+to+upload`:
+**One request, not three.** The old pipeline made a storage POST, a database POST, and a
+Web3Forms POST, and a failure in any leg needed its own assertion. Now there's exactly one
+`fetch()` (`enquire.astro`'s submit handler) carrying fields *and* downscaled images as a
+single `text/plain` JSON body, and the whole outcome is `{ ok: true | false }`. Assert
+against the parsed body, not string-matching a form-encoded payload:
 
 ```js
-decodeURIComponent(body.replace(/\+/g, ' '))
+const body = JSON.parse(sent[0]?.body ?? '{}');
 ```
 
-The live submission path: `POST https://<project>.supabase.co/rest/v1/enquiries` then
-`POST https://api.web3forms.com/submit`.
+The live submission path is one call: `POST https://script.google.com/macros/s/<id>/exec`.
+
+**`text/plain`, not `application/json`, is deliberate — don't "fix" it.** Apps Script Web
+Apps can't answer a CORS preflight (their hosting 302-redirects to a
+`googleusercontent.com` URL, and browsers won't follow a redirect for a preflight `OPTIONS`).
+`text/plain` makes it a CORS "simple request", which skips preflight entirely. If you see a
+CORS error on this endpoint, check the `Content-Type` header first before assuming the
+script's `doOptions()` needs work.
 
 ### ⚠ The honeypot will fake a passing test
 
@@ -153,10 +155,12 @@ test — fill the honeypot deliberately and assert that **no** network request i
 The adversarial cases are about our own validation, and a round-trip to a live database adds
 nothing to them.
 
-The cost of stubbing is drift: change the schema or the form and the stub keeps passing
+The cost of stubbing is drift: change the script or the form and the stub keeps passing
 against a fiction. So keep **one** live end-to-end test in the suite marked
-`{ skip: true }`, and run it deliberately after any schema or form change — not on every
-`npm test`.
+`{ skip: true }`, and run it deliberately after any script or form change — not on every
+`npm test`. (`tests/enquiry-live.test.mjs` filled this role for the Supabase pipeline and
+was deleted with it on 2026-08-20 — recreate its equivalent against the Apps Script `/exec`
+URL before the next backend-touching change, rather than skipping this rung.)
 
 ### 4. The no-fix feedback loop
 

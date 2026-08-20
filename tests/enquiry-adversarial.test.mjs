@@ -1,6 +1,13 @@
 // I3, I4 and I8 from QA-CHECKLIST.md — the three adversarial cases the overnight
 // run did not reach. Backend stubbed per AGENTS.md: nothing leaves the browser, so
-// no junk rows in `enquiries` and no real notification emails.
+// no real Drive uploads, Sheet rows or emails.
+//
+// Rewritten 2026-08-20 for the Google Apps Script pipeline (replaced Supabase +
+// Web3Forms). One endpoint now, not two: the client POSTs fields + downscaled
+// images as a single text/plain JSON body and gets back { ok: true|false }. There
+// is no more separate "storage failed but the row saved" state — it's all one
+// request, so I3's old per-leg warning assertions don't apply; what replaces them
+// is below.
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
@@ -12,7 +19,6 @@ import { chromium } from 'playwright';
 // smoke.test.mjs owns 4321 and `node --test` runs test files in parallel processes.
 const PORT = 4322;
 const BASE = `http://localhost:${PORT}`;
-// Cloudflare 403s a default headless UA on Web3Forms — see CLAUDE.md.
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36';
 
 let server, browser, tmp;
@@ -29,33 +35,29 @@ before(async () => {
 
 after(async () => { await browser?.close(); server?.kill(); });
 
-const OK_SUPABASE = { status: 201, contentType: 'application/json', body: '[]' };
+const OK_GAS = { status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) };
 
-// Route on the CONTEXT, not the page, so the native form POST is covered too.
-// fulfill(), never abort() — aborting navigates to chrome-error:// and every later
-// assertion then fails for the wrong reason. Both traps are documented in AGENTS.md.
-async function openForm(supabase = OK_SUPABASE) {
+// Route on the CONTEXT, not the page, so any navigation-triggered request is still
+// covered. fulfill(), never abort() — aborting a request the page is waiting on
+// tends to surface as the wrong kind of failure. Both traps carried over from the
+// Supabase-era suite, still true here.
+async function openForm(gas = OK_GAS) {
   const ctx = await browser.newContext({ userAgent: UA });
   const sent = [];
-  const record = (r, response) => {
+  await ctx.route('**://script.google.com/**', (r) => {
     sent.push({ url: r.request().url(), body: r.request().postData() });
-    return r.fulfill(response);
-  };
-  await ctx.route('**://*.supabase.co/**', r => record(r, supabase));
-  // The location MUST be absolute. A relative one resolves against api.web3forms.com,
-  // so the browser then fetches their real server and Cloudflare 403s it — a leak out
-  // of the stub, and a phantom error in the report.
-  await ctx.route('**://api.web3forms.com/**', r =>
-    record(r, { status: 303, headers: { location: `${BASE}/enquire/success` } }));
+    return r.fulfill(gas);
+  });
 
   const page = await ctx.newPage();
   const errors = [];
-  page.on('pageerror', e => errors.push(`pageerror: ${e.message}`));
-  // A bare "Failed to load resource: 403" tells you nothing about which resource.
-  page.on('response', r => {
-    if (r.status() >= 400) errors.push(`HTTP ${r.status()} ${r.request().method()} ${r.url()}`);
+  page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
+  page.on('response', (r) => {
+    if (r.status() >= 400 && !r.url().includes('script.google.com')) {
+      errors.push(`HTTP ${r.status()} ${r.request().method()} ${r.url()}`);
+    }
   });
-  page.on('console', m => {
+  page.on('console', (m) => {
     if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(`console: ${m.text()}`);
   });
   await page.goto(`${BASE}/enquire`, { waitUntil: 'networkidle' });
@@ -79,70 +81,60 @@ async function submit(page) {
 
 // Everything the visitor can actually perceive after a submit. Scoped to the form —
 // the cookie banner is also an aria-live region and would otherwise be counted.
-const outcome = page => page.evaluate(() => ({
+const outcome = (page) => page.evaluate(() => ({
   url: location.pathname,
   visible: [...document.querySelectorAll('#enquiry-form [id^="err-"], #enquiry-form [aria-live], #enquiry-form [role="alert"]')]
-    .map(e => e.textContent.trim()).filter(Boolean),
+    .map((e) => e.textContent.trim()).filter(Boolean),
   submitDisabled: document.querySelector('button[type="submit"]')?.disabled ?? null,
 }));
 
-// "Unhandled" needs defining before testing, per the note on I3. Four different things
-// get called that, and the silent no-op is the one that hurts. The submission is
-// deliberately designed never to lose a lead: when storage or the database fails, the
-// notification email carries an explicit WARNING line. So the assertion is not "nothing
-// went wrong" — it is that whatever went wrong reaches a human.
-// The notification is a form-encoded POST body: decode it, or every phrase you look
-// for is sitting there as `failed+to+upload` and quietly fails to match.
-const notification = sent =>
-  decodeURIComponent((sent.find(s => s.url.endsWith('/submit'))?.body ?? '').replace(/\+/g, ' '));
-const uploads = sent => sent.filter(s => s.url.includes('/storage/v1/object/')).length;
+const payload = (sent) => JSON.parse(sent[0]?.body ?? '{}');
 
-test('I3 — upload failures are reported to the client, not silently dropped', async () => {
+test('I3 — a bad photo does not lose the enquiry, and a backend failure is never silent', async () => {
   const zero = join(tmp, 'zero.png');
-  const huge = join(tmp, 'huge.png');
-  writeFileSync(zero, Buffer.alloc(0));
-  writeFileSync(huge, Buffer.alloc(55 * 1024 * 1024)); // over the form's own 10MB cap
+  writeFileSync(zero, Buffer.alloc(0)); // not a decodable image — createImageBitmap rejects
   const five = Array.from({ length: 5 }, (_, i) => {
     const p = join(tmp, `ref${i}.png`);
-    writeFileSync(p, Buffer.alloc(64));
+    // A real, verified-decodable 1x1 PNG — createImageBitmap must succeed for the
+    // 3-file-cap case to actually test what it claims to. Confirmed with a standalone
+    // Playwright check during this rewrite: a hand-rolled "minimal PNG" byte sequence
+    // used earlier in this session LOOKED structurally valid (correct chunk lengths,
+    // correct CRCs by eye) but Chromium's decoder rejected it with "InvalidStateError:
+    // The source image could not be decoded" — so this one is the well-known,
+    // widely-used 1x1 transparent PNG, not hand-assembled.
+    writeFileSync(p, Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
+      'base64'));
     return p;
   });
 
   const cases = [
-    // label, files, supabase stub, expected: uploads attempted, warning required
-    ['zero-byte', [zero], OK_SUPABASE, { attempts: 1, warns: null }],
-    ['55MB (over the 10MB cap)', [huge], OK_SUPABASE, { attempts: 0, warns: /failed to upload/i }],
-    // Observed: 3 uploaded, 2 discarded, and NO warning to either party — `storageFailed`
-    // is never set for files trimmed off the end. The page does say "Up to 3 images", so
-    // the limit is disclosed; only the discarding is silent. Recorded in QA-CHECKLIST.md,
-    // not asserted, because tightening it is the client's call (CLAUDE.md §3).
-    ['5 files (over the 3-file cap)', five, OK_SUPABASE, { attempts: 3, warns: null }],
-    ['storage and insert return 413', [zero],
-      { status: 413, contentType: 'application/json', body: '{"error":"Payload too large"}' },
-      { attempts: 1, warns: /could NOT be saved/i }],
+    // label, files, GAS stub, expected outcome
+    ['zero-byte (undecodable)', [zero], OK_GAS,
+      { url: '/enquire/success', images: 0, note: 'downscale fails -> enquiry still sends, with no photos' }],
+    ['5 files (over the 3-file cap)', five, OK_GAS,
+      { url: '/enquire/success', images: 3, note: 'only the first 3 are ever read from the picker' }],
+    ['backend returns 500', [], { status: 500, contentType: 'application/json', body: '{"ok":false}' },
+      { url: '/enquire', images: null, note: 'must tell the visitor, not silently drop the lead' }],
   ];
 
   const failures = [];
   const report = [];
-  for (const [label, files, supabase, expect] of cases) {
-    const { page, sent, errors } = await openForm(supabase);
+  for (const [label, files, gas, expect] of cases) {
+    const { page, sent, errors } = await openForm(gas);
     await fillRequired(page);
-    await page.setInputFiles('#reference-images', files);
+    if (files.length) await page.setInputFiles('#reference-images', files);
     await submit(page);
     const o = await outcome(page);
-    const mail = notification(sent);
-    report.push(`  ${label}: url=${o.url} uploads=${uploads(sent)} visible=${JSON.stringify(o.visible)}` +
-      `\n      warnings=${JSON.stringify(mail.match(/WARNING[^&]*/g) ?? [])}`);
+    const body = payload(sent);
+    report.push(`  ${label}: url=${o.url} images=${body.images?.length ?? 'n/a'} visible=${JSON.stringify(o.visible)}`);
 
-    // The injected 413 is the fault under test, not a defect.
-    const real = errors.filter(e => !/HTTP 413/.test(e));
-    if (real.length) failures.push(`${label}: ${real.join('; ')}`);
-    if (o.url === '/enquire' && !o.visible.length)
+    if (errors.length) failures.push(`${label}: ${errors.join('; ')}`);
+    if (o.url !== expect.url) failures.push(`${label}: landed on ${o.url}, expected ${expect.url}`);
+    if (expect.images !== null && body.images?.length !== expect.images)
+      failures.push(`${label}: sent ${body.images?.length ?? 0} images, expected ${expect.images}`);
+    if (expect.url === '/enquire' && !o.visible.length)
       failures.push(`${label}: silent no-op — no navigation and nothing the visitor can see`);
-    if (uploads(sent) !== expect.attempts)
-      failures.push(`${label}: ${uploads(sent)} upload attempts, expected ${expect.attempts}`);
-    if (expect.warns && !expect.warns.test(mail))
-      failures.push(`${label}: notification email carries no warning matching ${expect.warns} — the client is never told`);
     await page.context().close();
   }
 
@@ -163,22 +155,22 @@ test('I4 — wrong types in the size fields are rejected, not coerced silently',
 
   await submit(page);
   const o = await outcome(page);
-  const payload = sent.map(s => s.body ?? '').join(' ');
+  const body = payload(sent);
 
   console.log(`\nI4 observed:\n  forced values readback=${JSON.stringify(forced)}` +
-    `\n  url=${o.url} requests=${sent.length} visible=${JSON.stringify(o.visible)}` +
-    `\n  payload=${payload.slice(0, 400)}\n`);
+    `\n  url=${o.url} visible=${JSON.stringify(o.visible)}` +
+    `\n  payload=${JSON.stringify(body).slice(0, 400)}\n`);
 
   const failures = [...errors];
   // The browser's own value sanitisation should have emptied the text case.
   if (forced.text !== '') failures.push(`"abc" survived in size-w as ${JSON.stringify(forced.text)}`);
   assert.deepEqual(failures, [], `\n  ${failures.join('\n  ')}\n`);
   // Negative sizes are the open half of I4 — see the skipped test below.
-  assert.match(payload, /"size_h":"-50"/, 'the -50 case did not reach the payload as expected');
+  assert.equal(body.size_h, '-50', 'the -50 case did not reach the payload as expected');
 });
 
 // OPEN FINDING, awaiting the client. min="0" is declared on both size inputs, but the
-// form is novalidate, so nothing enforces it and "-50" reaches the database as a string.
+// form is novalidate, so nothing enforces it and "-50" reaches the Sheet as a string.
 // Un-skip once the client decides — the enquiry form is theirs (CLAUDE.md §3), and a QA
 // test must not fix what it finds (AGENTS.md §4).
 test('I4b — negative sizes are rejected', { skip: 'open finding — see QA-CHECKLIST.md' }, async () => {
@@ -186,7 +178,7 @@ test('I4b — negative sizes are rejected', { skip: 'open finding — see QA-CHE
   await fillRequired(page);
   await page.evaluate(() => { document.getElementById('size-h').value = '-50'; });
   await submit(page);
-  assert.doesNotMatch(sent.map(s => s.body ?? '').join(' '), /-50/);
+  assert.notEqual(payload(sent).size_h, '-50');
 });
 
 test('I8 — filling the honeypot submits nothing and still lands on success', async () => {
@@ -198,9 +190,9 @@ test('I8 — filling the honeypot submits nothing and still lands on success', a
   await submit(page);
   const o = await outcome(page);
   console.log(`\nI8 observed:\n  url=${o.url} requests=${sent.length} ` +
-    `urls=${JSON.stringify(sent.map(s => s.url))}\n`);
+    `urls=${JSON.stringify(sent.map((s) => s.url))}\n`);
 
-  assert.deepEqual(sent.map(s => s.url), [], 'honeypot submission escaped to the backend');
+  assert.deepEqual(sent.map((s) => s.url), [], 'honeypot submission escaped to the backend');
   assert.equal(o.url, '/enquire/success', 'honeypot submission did not land on /enquire/success');
   assert.deepEqual(errors, []);
 });

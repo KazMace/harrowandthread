@@ -1,0 +1,10 @@
+import { chromium } from 'playwright';
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
+await page.goto('http://localhost:4321/', { waitUntil: 'networkidle' });
+await page.evaluate(() => window.scrollTo(0, 400));
+await page.waitForTimeout(500);
+const paddingBottom = await page.evaluate(() => getComputedStyle(document.body).paddingBottom);
+console.log('body padding-bottom:', paddingBottom);
+await page.screenshot({ path: 'scratchpad/mobile-banner-check.png' });
+await browser.close();

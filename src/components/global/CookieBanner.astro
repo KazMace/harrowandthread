@@ -41,8 +41,19 @@
   // Hold the banner back until the visitor has engaged, so it never covers the
   // hero on first paint. Consent is still requested before any non-essential
   // cookie is set — nothing analytic runs until Accept is pressed.
+
+  // Reserves the banner's own height at the foot of the page so it never
+  // sits over body copy — the banner pushes content up instead of covering it.
+  function reserveSpace() {
+    if (!banner || banner.classList.contains('hidden')) {
+      document.body.style.paddingBottom = '';
+      return;
+    }
+    document.body.style.paddingBottom = `${banner.offsetHeight}px`;
+  }
+
   if (needsConsent) {
-    const reveal = () => banner?.classList.remove('hidden');
+    const reveal = () => { banner?.classList.remove('hidden'); reserveSpace(); };
     if (window.scrollY > 120) {
       reveal();
     } else {
@@ -61,6 +72,7 @@
   function setConsent(value: string) {
     localStorage.setItem('cookie-consent', value);
     banner?.classList.add('hidden');
+    reserveSpace();
     if (value === 'accepted') {
       // Load analytics scripts here
     }
@@ -68,6 +80,7 @@
 
   acceptBtn?.addEventListener('click', () => setConsent('accepted'));
   rejectBtn?.addEventListener('click', () => setConsent('rejected'));
+  window.addEventListener('resize', reserveSpace);
 
   // Step aside near the foot of the page so the closing CTA is never covered.
   // The banner is not dismissed — no consent is implied — it just moves.

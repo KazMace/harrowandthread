@@ -75,41 +75,56 @@ Screenshot at viewport size and scroll, **not** full-page — full-page captures
 downscaled ~4× and make real content look blank, which has caused false "it's broken"
 conclusions.
 
-## Enquiry form architecture (decided 2026-08-11)
+## Enquiry form architecture (rebuilt 2026-08-20, replaced Supabase + Web3Forms)
 
-Two destinations, no server, no build step, nothing secret in the repo.
+One destination, no server, no build step, nothing secret in the repo — because the
+"server" is a Google Apps Script Web App, which runs as the client's own Google account
+rather than needing a secret shipped to the browser.
 
 ```
 browser
-  ├─ 1. POST files      -> Supabase Storage bucket `enquiry-uploads`
-  ├─ 2. POST row        -> Supabase table `enquiries` (incl. storage paths)
-  └─ 3. POST text+links -> Web3Forms  -> email notification
+  └─ 1. POST { fields, images: [{name, mimeType, dataB64}] } as text/plain JSON
+       -> Apps Script Web App (google-apps-script/Code.gs)
+            ├─ Drive: save each photo, share "anyone with the link"
+            ├─ Sheet: append one row (the enquiry log)
+            └─ Gmail: HTML notification, real clickable links + inline thumbnails
 ```
 
-**Why this split:** Web3Forms' free tier does not support file attachments (Pro is
-$12/mo yearly). Since every enquiry has to land in Supabase anyway, Storage holds the
-files and the notification email carries links to them. Free tier is then sufficient —
-Web3Forms is only ever asked to send text.
+**Why the switch.** Supabase's free plan auto-pauses after ~7 days idle and paused = no
+DNS at all — it broke a live enquiry. Web3Forms' free tier caps monthly submissions and,
+more decisively, cannot make an emailed link clickable at *any* paid tier — confirmed
+against their own public roadmap ("custom email templates" is a pending, unbuilt feature
+request). Google was already in the client's hands and has neither problem.
 
-**Keys.** Both keys involved are designed to be public: the Web3Forms *access key* and
-the Supabase *anon* key. That is only safe with Row Level Security on — the `enquiries`
-table needs an **insert-only** policy for the `anon` role and no select/update/delete,
-and the storage bucket needs insert-only too. Without those policies the anon key lets
-anyone read every enquiry. Do not skip this.
+**Why `text/plain`, not `application/json`.** Apps Script Web Apps cannot answer a CORS
+preflight — their hosting 302-redirects to a `googleusercontent.com` URL, and a browser
+won't follow a redirect for a preflight `OPTIONS`. `text/plain` makes the POST a CORS
+"simple request", which skips preflight entirely. `doPost` parses it with
+`JSON.parse(e.postData.contents)`. Do not "modernise" this to `application/json` — see
+the trap this exact phrasing describes in `AGENTS.md` for the *previous* backend; it's
+the same class of mistake with a different mechanism.
 
-**No SDK.** Use plain `fetch` against the Supabase REST and Storage endpoints. Pulling in
-`@supabase/supabase-js` would add ~30KB gzipped to a site that currently ships **3.1KB
-gzipped (6.6KB raw)** of JavaScript, to save a few lines. Measure with
-`wc -c dist/_astro/*.js` — `du` rounds to 4KB blocks and reports 12K. (An earlier note here
-said 4.3KB; re-measured 2026-08-11.)
+**Downscale before sending, client-side, no dependency.** `createImageBitmap` +
+`<canvas>` resize a phone photo to ~2000px on the long edge before base64-encoding it —
+native platform API, per the laziness ladder in `CLAUDE.md`. This keeps the POST body
+well under Apps Script's 50MB cap (base64 inflates bytes ~33%) and makes the form faster
+on mobile data. `createImageBitmap` is picky about what it'll decode — a genuinely
+invalid or empty file rejects; the client catches that and sends the enquiry anyway,
+without photos, rather than losing the lead over one bad file.
 
-**Ordering.** Upload files first, then insert the row with their paths, then notify. If the
-notification fails the enquiry is still captured in Supabase — losing the email is
-recoverable, losing the enquiry is not.
+**Link sharing, not access control.** The Drive photo link is "anyone with the link" —
+the client's explicit choice, same trade-off already made once for the Supabase fix it
+replaced: click and it opens, no login, but anyone holding the exact (long, random) URL
+can view it. Nothing lets a stranger *list* the folder or guess a link.
 
-**MCP.** `.mcp.json` uses the HTTP + OAuth transport deliberately, so no personal access
-token is written to a committed file. Run `/mcp` to authenticate. Per Supabase's own
-warning, point it at a development project, never production data.
+**No SDK, still.** Plain `fetch`, one call. Current JS: **6.2KB raw / ~2.8KB gzipped**
+across the two hoisted bundles — measure with `wc -c dist/_astro/*.js` then `gzip -c … |
+wc -c`; `du` rounds to 4KB blocks and misreports. (Re-measured 2026-08-20; was 3.1KB
+gzipped under the old architecture — the downscale function added a little.)
+
+**Setup is now a client task, not a code task.** The script needs a Sheet ID and a Drive
+folder ID pasted in, then a deployment — see `google-apps-script/README.md`. Until
+`PUBLIC_GAS_URL` is set in `.env`, the form falls back to a native POST.
 
 ## Image generation
 

@@ -12,20 +12,20 @@ export const faq = [
     category: "Ordering &amp; Production",
     items: [
       { q: "How long does it take to produce my piece?",
-        a: ["Production typically takes 4 weeks from the date your order is confirmed. Complex designs or larger sizes will require additional time. We will provide an estimated delivery date at order confirmation."] },
+        a: ["Production typically takes six to seven weeks from the date your order is confirmed. Complex designs or larger sizes will require additional time. We will provide an estimated delivery date at order confirmation."] },
       { q: "Can I modify my order after it is placed?",
         a: ["Change anything you like up to sign-off. After that it is fixed: once the frame is warped and the dye is mixed, the piece cannot be altered."] },
       { q: "What is the production process?",
         a: ["After design approval, we source your specific materials, set up your custom dyes if applicable, and begin tufting. Your piece passes through multiple quality checkpoints during production, with a final inspection before shipping.", "Once your design is selected, we map the pattern to the exact scale of your ordered dimensions. When you approve the final design and colour choices, production begins upon receipt of a 50% non-refundable deposit. The remaining 50% balance is payable once your bespoke piece is complete and ready to ship."] },
       { q: "What are your minimum and maximum sizes?",
-        a: ["Rugs: no minimum, up to 15m &times; 10m. Wall hangings: minimum 1.5m&sup2; (shortest side at least 1m), up to approximately 18m&sup2; (6m &times; 3m). Wall-to-wall carpets: up to 15m &times; 10m."] },
+        a: ["Rugs: no minimum, up to 15m &times; 10m. Wall hangings: minimum 1.5m&sup2; (shortest side at least 1m), up to approximately 18m&sup2; (6m &times; 3m). Wall-to-wall carpets: up to 15m &times; 10m.", "Above 6 metres in any one dimension, the piece is joined from multiple sections, seamed together."] },
     ],
   },
   {
     category: "Materials &amp; Construction",
     items: [
       { q: "Can I see a sample before I commit?",
-        a: ["Not a physical swatch, no. We work to the ARS 1,400 dye system: you choose a colour reference, and we match the wool to that reference exactly. It is the same standard the mills work to, and it is more precise than matching to a posted sample that has aged in transit.", "What you do get before committing: a design visualisation mapped to your exact dimensions, your chosen colour references confirmed in writing, and a sign-off stage where nothing is made until you approve it. Dyed wool sits slightly differently to a screen &mdash; we confirm that with you at sign-off."] },
+        a: ["Not a physical swatch, no. We work to the ARS 1,400 dye system: you choose a colour reference, and we match the wool to that reference as closely as the dyeing process allows &mdash; typically within about 5%. It is the same standard the mills work to, and it holds up better than matching to a posted sample that has aged in transit.", "What you do get before committing: a design visualisation mapped to your exact dimensions, your chosen colour references confirmed in writing, and a sign-off stage where nothing is made until you approve it. Dyed wool sits slightly differently to a screen &mdash; we confirm that with you at sign-off."] },
       { q: "What materials do you use?",
         a: ["Wool for most commissions — it is hard-wearing, takes dye beautifully and resists staining without treatment. Silk blend and bamboo silk add sheen and depth at a price; flatweave is lighter, reversible and suits high traffic. Material affects texture and appearance. The starting rate is set by design tier; your final rate is confirmed at quote, once we know the design."] },
       { q: "What is the difference between pile and flatweave?",
@@ -38,7 +38,7 @@ export const faq = [
     category: "Shipping &amp; Delivery",
     items: [
       { q: "Do you ship internationally?",
-        a: ["Shipping is included and fully insured to the UK, Europe and the United States. For delivery elsewhere, contact us to confirm delivery to your country. Every shipment is fully insured and tracked."] },
+        a: ["Shipping is included and fully insured to the UK, Europe and the United States for most commissions. Exceptionally large or heavy pieces may carry an additional freight charge, passed on at cost and confirmed with you at quote, before you commit. For delivery elsewhere, contact us to confirm delivery to your country. Every shipment is fully insured and tracked."] },
       { q: "Who pays customs and duties?",
         a: ["Import duties, destination VAT and customs charges are payable by the recipient on arrival. This applies to deliveries to the US, EU and any other destination outside the UK."] },
       { q: "How is my piece packaged for shipping?",

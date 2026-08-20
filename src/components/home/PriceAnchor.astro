@@ -13,14 +13,16 @@ import pricing from '../../data/pricing.json';
       <p class="text-sm text-graphite max-w-[42ch] m-0">
         Priced by area and design tier, and the rate covers the whole piece
         &mdash; material, dyeing, tufting, finishing and insured delivery to the
-        UK, Europe and the United States. Your rate is confirmed at quote, once
-        we know the design.
+        UK, Europe and the United States, with an additional freight charge for
+        exceptionally large or heavy pieces. Your rate is confirmed at quote,
+        once we know the design.
       </p>
     </div>
 
-    <dl class="m-0 border-t-2 border-ink">
+    <dl class="m-0 border-t-2 border-ink lg:grid lg:grid-cols-3">
       {pricing.tiers.map((tier) => (
-        <div class="grid gap-2 sm:gap-12 sm:grid-cols-[minmax(0,14rem)_minmax(0,8rem)_1fr] items-baseline border-b rule py-7 sm:py-8">
+        <div class="grid gap-2 sm:gap-12 sm:grid-cols-[minmax(0,14rem)_minmax(0,11rem)_1fr] items-baseline border-b rule py-7 sm:py-8
+                    lg:flex lg:flex-col lg:items-start lg:gap-3 lg:border-b-0 lg:border-r lg:rule lg:py-10 lg:pl-8 lg:pr-8 lg:first:pl-0 lg:last:border-r-0 lg:last:pr-0">
           <dt class="display text-2xl sm:text-3xl m-0">{tier.name}</dt>
           <dd class="m-0 text-xl sm:text-2xl tabular-nums whitespace-nowrap">
             <span class="text-base text-graphite tracking-normal">from </span>&pound;{tier.rate.toLocaleString()}<span class="text-base text-graphite">/m&sup2;</span>

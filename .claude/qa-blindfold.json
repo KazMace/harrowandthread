@@ -4,7 +4,7 @@
       "Read(./src/**)",
       "Read(./astro.config.mjs)",
       "Read(./tailwind.config.mjs)",
-      "Read(./supabase/**)",
+      "Read(./google-apps-script/**)",
       "Edit(./src/**)",
       "Edit(./astro.config.mjs)",
       "Edit(./tailwind.config.mjs)"

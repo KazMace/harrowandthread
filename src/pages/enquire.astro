@@ -290,7 +290,7 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
             <li class="border-t rule pt-4">
               <span class="eyebrow text-graphite block mb-2">03</span>
               <p class="text-base text-ink m-0 mb-1">Production begins on deposit</p>
-              <p class="text-sm text-graphite m-0">Production begins on receipt of the 50% deposit. That deposit is non-refundable from the point it is paid. The balance is due before dispatch, about four weeks later.</p>
+              <p class="text-sm text-graphite m-0">Production begins on receipt of the 50% deposit. That deposit is non-refundable from the point it is paid. The balance is due before dispatch, about six to seven weeks later.</p>
             </li>
           </ol>
 
@@ -366,10 +366,36 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
   // silently discarded while the visitor was told it had been sent. On success
   // we let the native POST proceed to the configured endpoint, which redirects
   // to /enquire/success.
-  const SB_URL = import.meta.env.PUBLIC_SUPABASE_URL;
-  const SB_KEY = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-  const W3F_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY;
+  // Google Apps Script Web App /exec URL. Replaced Supabase + Web3Forms on 2026-08-20 —
+  // both free tiers cap out under growth, and Supabase's free plan auto-pauses after a
+  // week idle. See google-apps-script/Code.gs for the receiving end.
+  const GAS_URL = import.meta.env.PUBLIC_GAS_URL;
   const CONTACT_EMAIL = 'enquiries@harrowandthread.com';
+
+  // Native platform resize, no dependency (CLAUDE.md laziness ladder): a phone photo at
+  // 12MP JPEGs down to a few hundred KB, well inside the Apps Script 50MB POST cap once
+  // base64 inflates it ~33%, and it's what actually made the form fast on mobile data.
+  async function downscaleToBase64(file: File, maxDim = 2000, quality = 0.82) {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, maxDim / Math.max(bitmap.width, bitmap.height));
+    const w = Math.round(bitmap.width * scale);
+    const h = Math.round(bitmap.height * scale);
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d')!.drawImage(bitmap, 0, 0, w, h);
+    const blob: Blob = await new Promise((resolve) =>
+      canvas.toBlob((b) => resolve(b!), 'image/jpeg', quality));
+    const bytes = new Uint8Array(await blob.arrayBuffer());
+    // Chunked, not one spread — String.fromCharCode(...bytes) on a few hundred KB risks
+    // "Maximum call stack size exceeded".
+    let binary = '';
+    for (let i = 0; i < bytes.length; i += 8192) binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
+    return {
+      name: file.name.replace(/[^a-zA-Z0-9._-]/g, '_'),
+      mimeType: 'image/jpeg',
+      dataB64: btoa(binary),
+    };
+  }
 
   form?.addEventListener('submit', (e) => {
     let valid = true;
@@ -433,20 +459,11 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
 
     // ---- Valid submission -------------------------------------------------
     //
-    // Two destinations. Files and the full record go to Supabase; Web3Forms
-    // only sends a notification email, so its free tier (no attachments) is
-    // enough. Files upload FIRST: if the notification later fails the enquiry
-    // is still captured, and losing an email is recoverable where losing the
-    // enquiry is not.
-    //
-    // Both keys here are public by design. That is only safe because the
-    // `enquiries` table and the `enquiry-uploads` bucket are insert-only for
-    // the anon role. Without those RLS policies anyone reading this page could
-    // read every enquiry ever sent. See NOTES-codebase.md.
-    //
-    // Until the keys exist this whole block is skipped and the form posts
-    // natively exactly as before.
-    if (!SB_URL || !SB_KEY) return;
+    // One destination now: a Google Apps Script Web App. It saves photos to
+    // Drive, appends a row to a Sheet, and emails a notification with real
+    // clickable links — see google-apps-script/Code.gs. Until the URL exists
+    // this whole block is skipped and the form posts natively as before.
+    if (!GAS_URL) return;
 
     e.preventDefault();
 
@@ -464,94 +481,44 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
 
       const fd = new FormData(form);
 
-      // Honeypot: behave exactly as success, store nothing.
+      // Honeypot: behave exactly as success, store nothing. No network call at
+      // all — AGENTS.md: an agent that fills every field it finds will fill
+      // this too, so it must never leave a trace to assert against.
       if (fd.get('website')) { window.location.assign('/enquire/success'); return; }
 
-      const sbHeaders = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` };
+      const fields: Record<string, string> = {};
+      for (const [k, v] of fd.entries()) {
+        if (k === 'website' || k === 'reference-images') continue;
+        fields[k.replace(/-/g, '_')] = typeof v === 'string' ? v : '';
+      }
 
       const picker = document.getElementById('reference-images') as HTMLInputElement | null;
       const chosen = Array.from(picker?.files ?? []).slice(0, 3);
-      const folder = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-      const uploaded: string[] = [];
-      let storageFailed = false;
-      let dbSaved = false;
-      let mailSent = false;
-
-      // 1 · Room photographs and references -> Supabase Storage
-      for (const file of chosen) {
-        try {
-          if (file.size > 10 * 1024 * 1024) throw new Error('too large');
-          const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-          const res = await fetch(
-            `${SB_URL}/storage/v1/object/enquiry-uploads/${folder}/${safe}`,
-            { method: 'POST', headers: sbHeaders, body: file }
-          );
-          if (!res.ok) throw new Error('upload failed');
-          uploaded.push(`${folder}/${safe}`);
-        } catch { storageFailed = true; }
-      }
-
-      // 2 · The record -> Supabase. Hyphenated field names become columns.
-      const row: Record<string, unknown> = { upload_paths: uploaded };
-      for (const [k, v] of fd.entries()) {
-        if (k === 'website' || k === 'reference-images') continue;
-        row[k.replace(/-/g, '_')] = typeof v === 'string' ? v : null;
-      }
+      let images: Array<{ name: string; mimeType: string; dataB64: string }> = [];
       try {
-        const ins = await fetch(`${SB_URL}/rest/v1/enquiries`, {
-          method: 'POST',
-          headers: { ...sbHeaders, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
-          body: JSON.stringify(row),
-        });
-        dbSaved = ins.ok;
-      } catch { dbSaved = false; }
-
-      // 3 · Notification email. Sent even when Supabase failed, and told so, so
-      // a lead is never lost while the database is unreachable. Web3Forms' free
-      // tier only accepts browser-side calls — which this is.
-      // 3 · Notification email, sent as a NATIVE form POST rather than fetch.
-      //
-      // fetch() to Web3Forms is blocked by CORS: with a JSON content-type the
-      // preflight is rejected, and even as FormData the response carries no
-      // Access-Control-Allow-Origin for our origin. A native form submission is
-      // not subject to CORS at all, which is exactly why Web3Forms' own example
-      // is a plain <form>. Their `redirect` field brings the visitor back to our
-      // success page afterwards. Do not "modernise" this into a fetch.
-      if (W3F_KEY) {
-        const alerts: string[] = [];
-        if (!dbSaved) alerts.push('WARNING: this enquiry could NOT be saved to the database. This email is the only record of it.');
-        if (storageFailed) alerts.push('WARNING: one or more images the sender attached failed to upload.');
-
-        const post = document.createElement('form');
-        post.method = 'POST';
-        post.action = 'https://api.web3forms.com/submit';
-        post.style.display = 'none';
-
-        const add = (k: string, v: string) => {
-          const i = document.createElement('input');
-          i.type = 'hidden'; i.name = k; i.value = v;
-          post.appendChild(i);
-        };
-        add('access_key', W3F_KEY);
-        add('subject', `New commission enquiry — ${row.name ?? 'unnamed'}`);
-        add('from_name', 'Harrow & Thread website');
-        add('redirect', `${window.location.origin}/enquire/success`);
-        for (const [k, v] of Object.entries(row)) {
-          if (k === 'upload_paths') continue;
-          if (v != null && v !== '') add(k, String(v));
-        }
-        add('images', uploaded.length
-          ? uploaded.map((pth) => `${SB_URL}/storage/v1/object/enquiry-uploads/${pth}`).join(' | ')
-          : 'none attached');
-        if (alerts.length) add('alerts', alerts.join(' '));
-
-        document.body.appendChild(post);
-        post.submit();   // navigates; Web3Forms redirects to /enquire/success
-        return;
+        images = await Promise.all(chosen.map((f) => downscaleToBase64(f)));
+      } catch {
+        // A photo that fails to decode shouldn't lose the enquiry — send without it.
       }
 
-      // Only a total failure is worth stopping the visitor for.
-      if (dbSaved || mailSent) { window.location.assign('/enquire/success'); return; }
+      let ok = false;
+      try {
+        // no-cors: Apps Script Web Apps serve their real response from a
+        // googleusercontent.com redirect with no CORS headers, so the browser
+        // lets the request through but always blocks reading the reply — even
+        // on success (confirmed: the row lands, the fetch still throws). We
+        // can't read the result, so a request that doesn't throw is the only
+        // signal available. Do not "fix" this by trying to read res.json().
+        await fetch(GAS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ ...fields, images }),
+        });
+        ok = true;
+      } catch { ok = false; }
+
+      if (ok) { window.location.assign('/enquire/success'); return; }
 
       say(`We could not send your enquiry. Please try again, or email us directly at ${CONTACT_EMAIL}.`, true);
       if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send enquiry'; }

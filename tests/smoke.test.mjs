@@ -6,7 +6,8 @@ import { spawn } from 'node:child_process';
 import { chromium } from 'playwright';
 
 const BASE = 'http://localhost:4321';
-// Cloudflare 403s a default headless UA on Web3Forms — see CLAUDE.md.
+// Left over from the retired Web3Forms backend (Cloudflare 403'd default headless
+// Chromium there) but kept as cheap insurance against the same bot-check anywhere else.
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36';
 
 let server, browser;
