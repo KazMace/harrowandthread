@@ -33,9 +33,12 @@ switch it — costs you an extra click every time you open one.
 
 ---
 
-**→ Confirm which contact address is actually live.** The site shows `enquiries@harrowandthread.com` on all 12 pages, in `/cookies`, on `/enquire`, and in the structured data search engines read. An earlier session switched everything to `meadow.mace@harrowandthread.com` on the grounds that it was "the mailbox that exists", and then the next session switched it straight back — so I can't tell from the code which of those is true, and I'm not going to guess. This is now a separate question from where enquiries actually land: that's whichever Gmail account you deploy the script under (`NOTIFY_EMAIL` in `Code.gs`), and it does not have to be `enquiries@harrowandthread.com` at all.
-
-If `enquiries@` is a real mailbox or an alias forwarding to you, nothing needs doing. If it isn't, **every contact address on the site is dead**, including the one `/enquire` tells people to use when the form fails. Send me a test email to it and tell me whether it arrives.
+**Contact address — settled 2026-08-21.** `enquiries@harrowandthread.com` is gone from the
+whole site — it was never confirmed live. Every remaining direct-contact spot (`/cookies`,
+`/privacy`'s data-deletion contact, the `/enquire` form's own failure message, and the
+structured data search engines and AI tools read) now points at `meadow.mace@harrowandthread.com`,
+confirmed as a real inbox. The footer link and the old redundant line on `/enquire` were dropped
+entirely in favour of a plain link to the form — no email needed there at all.
 
 **→ Old Supabase project — yours to close out or keep, your call.** Nothing in the codebase uses it any more. It still holds a leftover, insecure table (`public.images`, security switched off, from a different build on the same project) that I flagged and you already approved removing, but my tooling refuses to run destructive database commands. Since nothing here depends on that project any more, the simplest close-out is deleting the whole Supabase project rather than fixing one table in it — up to you. If you'd rather just drop the table: `drop table if exists public.images;` in their SQL editor.
 

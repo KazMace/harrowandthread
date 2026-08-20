@@ -303,10 +303,6 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
               A &pound;200 design fee applies only if you ask us to assign a designer,
               and is credited in full against your commission.
             </p>
-            <p class="text-sm text-graphite m-0">
-              Prefer to write directly?
-              <a href="mailto:enquiries@harrowandthread.com" class="link-underline text-ink">enquiries@harrowandthread.com</a>
-            </p>
           </div>
         </aside>
       </div>
@@ -370,7 +366,7 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
   // both free tiers cap out under growth, and Supabase's free plan auto-pauses after a
   // week idle. See google-apps-script/Code.gs for the receiving end.
   const GAS_URL = import.meta.env.PUBLIC_GAS_URL;
-  const CONTACT_EMAIL = 'enquiries@harrowandthread.com';
+  const CONTACT_EMAIL = 'meadow.mace@harrowandthread.com';
 
   // Native platform resize, no dependency (CLAUDE.md laziness ladder): a phone photo at
   // 12MP JPEGs down to a few hundred KB, well inside the Apps Script 50MB POST cap once

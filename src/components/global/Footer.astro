@@ -49,10 +49,10 @@ import site from '../../data/site.json';
           {site.company.number && <p class="m-0">Company number: {site.company.number}</p>}
           <p class="m-0">{site.company.address}</p>
           <p class="m-0 pt-1">
-            <!-- No break-words: it split the address mid-domain
-                 ("harrowandthread." / "com"), which reads as broken. -->
-            <a href={`mailto:${site.company.email}`} class="text-paper/75 hover:text-paper no-underline whitespace-nowrap">
-              {site.company.email}
+            <!-- Points at the enquiry form, not a mailto: link — commissions should
+                 go through the form even though site.company.email is now live. -->
+            <a href="/enquire" class="text-paper/75 hover:text-paper no-underline whitespace-nowrap">
+              Enquire
             </a>
           </p>
         </div>
