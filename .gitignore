@@ -9,3 +9,5 @@ dist/
 .Env
 *.env
 design-directions.html
+undefined/
+lighthouse.*/
