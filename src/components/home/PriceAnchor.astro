@@ -11,8 +11,8 @@ import pricing from '../../data/pricing.json';
     <div class="flex flex-wrap items-end justify-between gap-6 mb-10 sm:mb-14">
       <h2 class="display text-3xl sm:text-4xl m-0">Rates</h2>
       <p class="text-sm text-graphite max-w-[42ch] m-0">
-        Priced by area and design tier, and the rate covers the whole piece
-        &mdash; material, dyeing, tufting, finishing and insured delivery to the
+        Priced by area and design tier, and the rate covers the whole piece:
+        material, dyeing, weaving, finishing and insured delivery to the
         UK, Europe and the United States, with an additional freight charge for
         exceptionally large or heavy pieces. Your rate is confirmed at quote,
         once we know the design.
@@ -40,8 +40,8 @@ import pricing from '../../data/pricing.json';
         </p>
         <p class="text-sm text-graphite m-0">
           A &pound;{pricing.designFee} design fee applies only if you ask us to assign
-          a designer, and is credited in full against your commission. Import
-          duties and destination VAT are payable by the recipient on arrival.
+          a designer, and is credited in full against your commission.
+          {pricing.customsNote}
         </p>
       </div>
       <a href="/commissions#pricing" class="link-underline text-sm font-medium shrink-0">

@@ -1,34 +1,49 @@
 ---
-// Direction A: the opening carries no photograph. Composure comes from the
-// margins and the type, so the page cannot be let down by an image — and the
-// old full-bleed treatment used object-cover, which cropped the one real rug
-// on the site down to a sliver behind the headline. Nothing here can crop.
+import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
+
+// Full-bleed room photo, type overlaid — Kaiser's call, reversing the earlier
+// "no photograph" decision (see the plan for why that one was pulled and the
+// guard rails here). `hero-grand` is a room-context shot with no rug at the
+// crop edge, so `fit="cover"` cropping it never touches the no-crop rule,
+// which only protects plates that show a whole rug (see RendersGrid.astro).
+//
+// Deliberately NOT wrapped in .reveal/.stagger: the hero is the largest
+// contentful paint on the page, and .js .reveal starts at opacity:0 until a
+// deferred script runs — an image inside it would not count as the real LCP.
 ---
 
-<!-- Top padding only trimmed from the shared .section-pad token (was 80px/
-     144px — a lot of empty space above a hero with a slim header already
-     above it). Everything else below is back to the original spacing.
-     The CTA now sits right under the headline, not after the paragraph, so
-     it isn't at the mercy of how much text/margin comes before it. -->
-<section class="pt-8 sm:pt-14 pb-20 sm:pb-36">
-  <div class="shell">
-    <p class="eyebrow text-graphite mb-8 sm:mb-10">
-      Bespoke hand-tufted rugs, wall hangings and carpets
+<section class="pt-0">
+  <div class="media h-[26rem] xs:h-[30rem] sm:h-[36rem] lg:h-[44rem]">
+    <ImagePlaceholder
+      id="grand/hero-grand"
+      width={2400}
+      height={1350}
+      alt="A grand, light-filled reception room with tall windows, ready for a bespoke hand-woven rug"
+      fit="cover"
+      class="w-full h-full"
+      loading="eager"
+      sizes="100vw"
+    >
+      <div slot="overlay" class="h-full flex items-end" style="background: linear-gradient(to top, rgba(23,21,15,0.75), rgba(23,21,15,0.15) 45%, transparent 70%);">
+        <div class="shell pb-10 sm:pb-16 w-full">
+          <p class="eyebrow text-paper/85 mb-6">
+            Bespoke hand-woven rugs, wall hangings and carpets
+          </p>
+          <h1 class="display text-4xl xs:text-5xl sm:text-6xl lg:text-7xl text-paper m-0 mb-8 max-w-[16ch]">
+            One rug. Yours. Never made twice.
+          </h1>
+          <a href="/enquire" class="btn btn-invert inline-flex">Start a commission</a>
+        </div>
+      </div>
+    </ImagePlaceholder>
+  </div>
+
+  <div class="shell pt-8 pb-14 sm:pt-10 sm:pb-20">
+    <p class="prose-body text-graphite m-0 max-w-[42ch]">
+      Designed for the room it goes in, dyed to your colour and woven to your
+      dimensions, then never repeated for anyone else. Up to fifteen
+      metres by ten. About six to seven weeks from sign-off for a
+      straightforward piece; larger and more complex commissions take longer.
     </p>
-
-    <h1 class="display text-4xl xs:text-5xl sm:text-6xl lg:text-7xl m-0 max-w-[16ch]">
-      One rug. Yours. Never made twice.
-    </h1>
-
-    <a href="/enquire" class="btn btn-primary inline-flex mt-8 sm:mt-10">Start a commission</a>
-
-    <div class="mt-14 sm:mt-20 pt-8 border-t rule">
-      <p class="prose-body text-graphite m-0 max-w-[42ch]">
-        Designed for the room it goes in, dyed to your colour and tufted to your
-        dimensions &mdash; then never repeated for anyone else. Up to fifteen
-        metres by ten. About six to seven weeks from sign-off for a
-        straightforward piece; larger and more complex commissions take longer.
-      </p>
-    </div>
   </div>
 </section>

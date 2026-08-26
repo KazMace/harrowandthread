@@ -1,15 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/home/Hero.astro';
-import PriceAnchor from '../components/home/PriceAnchor.astro';
-import Proposition from '../components/home/Proposition.astro';
-import ColourRail from '../components/home/ColourRail.astro';
-import Process from '../components/home/Process.astro';
+import CategoryTiles from '../components/home/CategoryTiles.astro';
 import RendersGrid from '../components/home/RendersGrid.astro';
+import ColourRail from '../components/home/ColourRail.astro';
 import CarpetsStrip from '../components/home/CarpetsStrip.astro';
-// TradeStrip removed from the homepage 2026-08-11: the client sells to end
-// customers. /trade still exists and is still indexed, linked from the footer.
-import Assurances from '../components/home/Assurances.astro';
+import TheMaison from '../components/home/TheMaison.astro';
+import PriceAnchor from '../components/home/PriceAnchor.astro';
 import Details from '../components/home/Details.astro';
 import EnquiryCTA from '../components/home/EnquiryCTA.astro';
 import pricing from '../data/pricing.json';
@@ -22,12 +19,12 @@ const serviceSchema = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Service',
   '@id': 'https://harrowandthread.com/#commission-service',
-  name: 'Bespoke Hand-Tufted Rug, Wall Hanging and Carpet Commissions',
+  name: 'Bespoke Hand-Woven Rug, Wall Hanging and Carpet Commissions',
   serviceType: 'Bespoke rug commission',
   provider: { '@id': 'https://harrowandthread.com/#organization' },
   areaServed: ['GB', 'EU', 'US'],
   description:
-    'Made-to-order hand-tufted rugs, wall hangings and wall-to-wall carpets in wool, silk blend, bamboo silk or flatweave. Priced per square metre by design tier. About six to seven weeks from sign-off for a straightforward piece; larger and more complex commissions take longer, confirmed at sign-off.',
+    'Made-to-order hand-woven rugs, wall hangings and wall-to-wall carpets in wool, silk blend, bamboo silk or flatweave. Priced per square metre by design tier. About six to seven weeks from sign-off for a straightforward piece; larger and more complex commissions take longer, confirmed at sign-off.',
   offers: {
     '@type': 'OfferCatalog',
     name: 'Design tier rate card',
@@ -51,18 +48,17 @@ const serviceSchema = JSON.stringify({
 ---
 
 <BaseLayout
-  title="Bespoke Hand-Tufted Rugs, Made to Order in the UK — Harrow &amp; Thread"
-  description="Bespoke hand-tufted rugs, wall hangings and wall-to-wall carpets, each designed for one room and dyed to match from 1,400 colours. Priced from £600 per square metre, insured delivery to the UK, Europe and the US."
+  title="Bespoke Hand-Woven Rugs, Made to Order in the UK | Harrow &amp; Thread"
+  description="Bespoke hand-woven rugs, wall hangings and wall-to-wall carpets, each designed for one room and dyed to match from 1,400 colours. Priced from £600 per square metre, insured delivery to the UK, Europe and the US."
   schema={serviceSchema}
 >
   <Hero />
-  <Proposition />
-  <ColourRail />
-  <Process />
+  <CategoryTiles />
   <RendersGrid />
-  <PriceAnchor />
-  <Assurances />
+  <ColourRail />
   <CarpetsStrip />
+  <TheMaison />
+  <PriceAnchor />
   <Details />
   <EnquiryCTA />
 </BaseLayout>

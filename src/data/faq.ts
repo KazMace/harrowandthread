@@ -25,13 +25,13 @@ export const faq = [
     category: "Materials &amp; Construction",
     items: [
       { q: "Can I see a sample before I commit?",
-        a: ["Not a physical swatch, no. We work to the ARS 1,400 dye system: you choose a colour reference, and we match the wool to that reference as closely as the dyeing process allows &mdash; typically within about 5%. It is the same standard the mills work to, and it holds up better than matching to a posted sample that has aged in transit.", "What you do get before committing: a design visualisation mapped to your exact dimensions, your chosen colour references confirmed in writing, and a sign-off stage where nothing is made until you approve it. Dyed wool sits slightly differently to a screen &mdash; we confirm that with you at sign-off."] },
+        a: ["Not a physical swatch, no. We work to the ARS 1,400 dye system: you choose a colour reference, and we match the wool to that reference as closely as the dyeing process allows, typically within about 5%. It is the same standard the mills work to, and it holds up better than matching to a posted sample that has aged in transit.", "What you do get before committing: a design visualisation mapped to your exact dimensions, your chosen colour references confirmed in writing, and a sign-off stage where nothing is made until you approve it. Dyed wool sits slightly differently to a screen, so we confirm that with you at sign-off."] },
       { q: "What materials do you use?",
-        a: ["Wool for most commissions — it is hard-wearing, takes dye beautifully and resists staining without treatment. Silk blend and bamboo silk add sheen and depth at a price; flatweave is lighter, reversible and suits high traffic. Material affects texture and appearance. The starting rate is set by design tier; your final rate is confirmed at quote, once we know the design."] },
+        a: ["Wool for most commissions, because it is hard-wearing, takes dye beautifully and resists staining without treatment. Silk blend and bamboo silk add sheen and depth at a price; flatweave is lighter, reversible and suits high traffic. Material affects texture and appearance. The starting rate is set by design tier; your final rate is confirmed at quote, once we know the design."] },
       { q: "What is the difference between pile and flatweave?",
-        a: ["Pile is tufted yarn standing upright — it has depth and it is warm underfoot. Flatweave has no pile: lighter, reversible, and better under furniture or in a busy hallway."] },
+        a: ["Pile is tufted yarn standing upright: it has depth and it is warm underfoot. Flatweave has no pile: lighter, reversible, and better under furniture or in a busy hallway."] },
       { q: "How do I choose the right pile height?",
-        a: ["6mm is sleek and easy to clean, best where there is traffic. 12mm balances comfort and practicality. 20mm is the softest and needs the most care. If you are unsure, take 12mm — it suits almost every room."] },
+        a: ["6mm is sleek and easy to clean, best where there is traffic. 12mm balances comfort and practicality. 20mm is the softest and needs the most care. If you are unsure, take 12mm: it suits almost every room."] },
     ],
   },
   {
@@ -40,9 +40,9 @@ export const faq = [
       { q: "Do you ship internationally?",
         a: ["Shipping is included and fully insured to the UK, Europe and the United States for most commissions. Exceptionally large or heavy pieces may carry an additional freight charge, passed on at cost and confirmed with you at quote, before you commit. For delivery elsewhere, contact us to confirm delivery to your country. Every shipment is fully insured and tracked."] },
       { q: "Who pays customs and duties?",
-        a: ["Import duties, destination VAT and customs charges are payable by the recipient on arrival. This applies to deliveries to the US, EU and any other destination outside the UK."] },
+        a: ["Following the UK-India trade deal that took effect in July 2026, UK deliveries no longer carry import duty. VAT and, for deliveries to the US, EU and any other destination outside the UK, import duty remain payable by the recipient on arrival."] },
       { q: "How is my piece packaged for shipping?",
-        a: ["Always rolled around a core, wrapped in polythene and boxed. Every piece travels rolled, whatever its size — a hand-tufted pile holds a crease permanently, so we never risk one."] },
+        a: ["Always rolled around a core, wrapped in polythene and boxed. Every piece travels rolled, whatever its size: a hand-tufted pile holds a crease permanently, so we never risk one."] },
       { q: "What if my piece arrives damaged?",
         a: ["All shipments are fully insured. If your piece arrives damaged, please contact us immediately with photographs. We will manage the insurance claim and prioritise producing a replacement."] },
     ],
@@ -51,7 +51,7 @@ export const faq = [
     category: "Returns",
     items: [
       { q: "What is your return policy?",
-        a: ["A commission cannot be returned, because it exists only for you. That is why nothing is made until you have approved the design, the dimensions and the dye reference in writing. If a piece arrives faulty, contact us — your statutory rights under the Consumer Rights Act 2015 are unaffected."] },
+        a: ["A commission cannot be returned, because it exists only for you. That is why nothing is made until you have approved the design, the dimensions and the dye reference in writing. If a piece arrives faulty, contact us: your statutory rights under the Consumer Rights Act 2015 are unaffected."] },
     ],
   },
   {
@@ -69,15 +69,15 @@ export const faq = [
     category: "Owning the design",
     items: [
       { q: "Who owns the design?",
-        a: ["You do. On final payment we assign the copyright and design rights in your design to you, in writing. We keep no right to reuse it, license it or sell it &mdash; which is what makes the one-of-one guarantee mean something rather than being a promise you have to trust.",
-            "If you would like the design entered on the UK register of designs, we will file the application for you and the fee is included. A UK registered design lasts five years and can be renewed up to twenty-five. Copyright itself arises automatically the moment a design is created &mdash; there is no UK copyright register, so nothing needs filing for that."] },
+        a: ["You do. On final payment we assign the copyright and design rights in your design to you, in writing. We keep no right to reuse it, license it or sell it, which is what makes the one-of-one guarantee mean something rather than being a promise you have to trust.",
+            "If you would like the design entered on the UK register of designs, we will file the application for you and the fee is included. A UK registered design lasts five years and can be renewed up to twenty-five. Copyright itself arises automatically the moment a design is created: there is no UK copyright register, so nothing needs filing for that."] },
     ],
   },
   {
     category: "Wall hangings",
     items: [
       { q: "How does a wall hanging actually hang?",
-        a: ["Wide loops are sewn along the top edge of the piece. A pole threads through the loops and rests on two brackets fixed to the wall, so the piece hangs flat with its fringe at the bottom.", "The loops are part of the piece. The pole, the brackets and the wall fixings are not supplied &mdash; you choose those to suit the piece and the wall. A large hand-tufted piece is heavy, so confirm your wall and fixings will carry it."] },
+        a: ["Wide loops are sewn along the top edge of the piece. A pole threads through the loops and rests on two brackets fixed to the wall, so the piece hangs flat with its fringe at the bottom.", "The loops are part of the piece. The pole, the brackets and the wall fixings are not supplied: you choose those to suit the piece and the wall. A large hand-woven piece is heavy, so confirm your wall and fixings will carry it."] },
     ],
   },
 ];

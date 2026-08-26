@@ -1,35 +1,17 @@
 ---
-import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
+import EditorialBlock from '../ui/EditorialBlock.astro';
 ---
 
-<!-- Archetype: 50/50 split, image flush to the page edge. -->
-<section class="bg-indigo text-paper">
-  <div class="grid md:grid-cols-2 items-stretch">
-    <div class="media order-2 md:order-1 min-h-[18rem] md:min-h-[32rem]">
-      <ImagePlaceholder
-        id="carpets-teaser"
-        width={1600}
-        height={900}
-        alt="A hand-tufted wall-to-wall carpet in warm oatmeal, filling a generously proportioned room with large windows"
-        caption="Design visualisation"
-        class="w-full"
-        sizes="(max-width: 1024px) 100vw, 50vw"
-      />
-    </div>
-
-    <div class="order-1 md:order-2 flex items-center">
-      <div class="px-6 py-14 sm:px-14 sm:py-20 lg:px-20">
-        <p class="eyebrow text-paper/70 mb-6">Also</p>
-        <h2 class="display text-3xl sm:text-4xl lg:text-5xl mb-6 max-w-[14ch]">
-          Wall-to-wall, made to your room.
-        </h2>
-        <p class="text-paper/75 text-lg mb-8 max-w-[38ch]">
-          The same hand-tufting, the same 1,400 colours, all three design tiers &mdash;
-          fitted to the room rather than laid on it. Supply only, with full
-          measurement guidance.
-        </p>
-        <a href="/carpets" class="btn btn-invert">Wall-to-wall carpets</a>
-      </div>
-    </div>
-  </div>
-</section>
+<EditorialBlock
+  imageId="carpets-teaser"
+  imageWidth={1600}
+  imageHeight={900}
+  imageAlt="A hand-woven wall-to-wall carpet in warm oatmeal, filling a generously proportioned room with large windows"
+  imageCaption="Design visualisation"
+  eyebrow="Also"
+  heading="Wall-to-wall carpets"
+  body="The same hand-weaving, the same 1,400 colours, all three design tiers, fitted to the room rather than laid on it. Supply only, with full measurement guidance."
+  linkHref="/carpets"
+  linkLabel="Wall-to-wall carpets"
+  tone="indigo"
+/>

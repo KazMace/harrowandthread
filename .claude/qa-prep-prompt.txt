@@ -1,4 +1,4 @@
-Scheduled 23:01 prep run for the Harrow & Thread project at /home/kaiser_mace/harrowandthread.
+Scheduled 23:01 prep run for the Harrow & Thread project at /home/kaiser_mace/projects/harrowandthread.
 
 You have NO prior conversation context. Read CLAUDE.md, AGENTS.md and QA-CHECKLIST.md first.
 

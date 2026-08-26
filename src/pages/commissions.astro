@@ -20,7 +20,7 @@ const wallHangingRules = [
   },
   {
     title: 'Pole, brackets and fixings are not supplied',
-    body: 'You choose the pole and the wall fixings to suit the piece and the wall. A large hand-tufted piece is heavy — confirm your wall and fixings will carry it.',
+    body: 'You choose the pole and the wall fixings to suit the piece and the wall. A large hand-woven piece is heavy, so confirm your wall and fixings will carry it.',
   },
   {
     title: 'You are responsible for hanging the piece',
@@ -29,15 +29,15 @@ const wallHangingRules = [
 ];
 
 const extras = [
-  { title: `Design fee — £${pricing.designFee}`, body: pricing.designFeeNote },
+  { title: `Design fee: £${pricing.designFee}`, body: pricing.designFeeNote },
   { title: 'Shipping', body: pricing.shippingNote },
   { title: 'Customs and duties', body: pricing.customsNote },
 ];
 ---
 
 <BaseLayout
-  title="Bespoke Hand-Tufted Rugs &amp; Wall Hangings — From £600/m² — Harrow &amp; Thread"
-  description="Commission a hand-tufted rug or wall hanging designed for one room, at any dimension up to 15m × 10m. Wool, silk blend, bamboo silk or flatweave, dyed to match from 1,400 colours. From £600 per square metre, confirmed at quote."
+  title="Bespoke Hand-Woven Rugs &amp; Wall Hangings, From £600/m² | Harrow &amp; Thread"
+  description="Commission a hand-woven rug or wall hanging designed for one room, at any dimension up to 15m × 10m. Wool, silk blend, bamboo silk or flatweave, dyed to match from 1,400 colours. From £600 per square metre, confirmed at quote."
 >
   <!-- Archetype: page header. Eyebrow, one real h1, lede. -->
   <section class="section-pad">
@@ -47,18 +47,18 @@ const extras = [
         A single piece,<br />made for one room.
       </h1>
       <p class="lede text-graphite m-0 max-w-[44ch]">
-        A commission starts with the room. We compose the design around its dimensions, its sightlines and where the light falls, then dye the wool to your colour and tuft it to size. You choose the material, the pile, the design tier and the scale. We make it, insure it and ship it. One of one &mdash; and the design becomes legally yours.
+        A commission starts with the room. We compose the design around its dimensions, its sightlines and where the light falls, then dye the wool to your colour and weave it to size. You choose the material, the pile, the design tier and the scale. We make it, insure it and ship it. One of one, and the design becomes legally yours.
       </p>
     </div>
   </section>
 
-  <!-- Archetype: composite specification section — cards, list rail, colour
+  <!-- Archetype: composite specification section: cards, list rail, colour
        band and single column, so the choices never read as one repeated block. -->
   <section class="section-pad bg-chalk">
     <div class="shell">
       <h2 class="display text-3xl sm:text-4xl m-0 mb-12 sm:mb-16">What you choose</h2>
 
-      <!-- Materials — four-up cards -->
+      <!-- Materials: four-up cards -->
       <div class="mb-20 sm:mb-28">
         <h3 class="eyebrow text-graphite mb-8">Materials</h3>
         <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-4 stagger reveal">
@@ -71,7 +71,7 @@ const extras = [
         </div>
       </div>
 
-      <!-- Pile height — full-width rail of rows -->
+      <!-- Pile height: full-width rail of rows -->
       <div class="mb-20 sm:mb-28">
         <h3 class="eyebrow text-graphite mb-8">Pile height</h3>
         <dl class="m-0 border-t rule reveal">
@@ -84,7 +84,7 @@ const extras = [
         </dl>
       </div>
 
-      <!-- Size — colour band -->
+      <!-- Size: colour band -->
       <div class="mb-20 sm:mb-28">
         <div class="bg-ink text-paper px-6 py-12 sm:px-12 sm:py-16">
           <h3 class="eyebrow text-paper/90 mb-6">Size</h3>
@@ -97,14 +97,14 @@ const extras = [
         </div>
       </div>
 
-      <!-- Design tier — three-up cards -->
+      <!-- Design tier: three-up cards -->
       <div class="mb-20 sm:mb-28">
         <h3 class="eyebrow text-graphite mb-8">Design tier</h3>
         <div class="grid gap-8 sm:grid-cols-3 stagger reveal">
           {pricing.tiers.map((tier) => (
             <div class="bg-paper p-7 sm:p-8 flex flex-col h-full">
               <h4 class="display text-2xl m-0 mb-4">
-                {tier.name} &mdash; from &pound;{tier.rate.toLocaleString()}/m&sup2;
+                {tier.name}: from &pound;{tier.rate.toLocaleString()}/m&sup2;
               </h4>
               <p class="text-base text-graphite m-0">{tier.chooseIf}</p>
               {tier.caveat && (
@@ -115,7 +115,7 @@ const extras = [
         </div>
       </div>
 
-      <!-- Colour — single column -->
+      <!-- Colour: single column -->
       <div>
         <h3 class="eyebrow text-graphite mb-6">Colour</h3>
         <p class="text-lg sm:text-xl m-0 max-w-narrow">
@@ -136,7 +136,7 @@ const extras = [
         <div>
           <div class="space-y-6">
             <p class="text-lg sm:text-xl m-0">
-              You pick a reference from <a href={site.externalLinks.arsColours} class="link-underline" rel="noopener noreferrer">arscolors.com</a> and we dye the wool to match it as closely as the dyeing process allows &mdash; typically within about 5% of the reference. It is the standard the mills work to, and it holds up better than matching to a posted swatch that has aged in transit.
+              You pick a reference from <a href={site.externalLinks.arsColours} class="link-underline" rel="noopener noreferrer">arscolors.com</a> and we dye the wool to match it as closely as the dyeing process allows, typically within about 5% of the reference. It is the standard the mills work to, and it holds up better than matching to a posted swatch that has aged in transit.
             </p>
             <p class="text-lg sm:text-xl m-0">
               The reference is what counts, not the image on your display. Screens vary; the dye number does not.
@@ -234,13 +234,13 @@ const extras = [
   </section>
 
   <!-- Archetype: 50/50 split, image flush to the page edge. -->
-  <section class="bg-chalk">
+  <section id="wall-hangings" class="bg-chalk scroll-mt-24">
     <div class="grid md:grid-cols-2 items-stretch">
       <div class="order-1 flex items-center">
         <div class="px-6 py-14 sm:px-14 sm:py-20 lg:pl-gutter lg:pr-20">
           <h2 class="display text-3xl sm:text-4xl m-0 mb-6 max-w-[12ch]">Wall hangings</h2>
           <p class="text-lg text-graphite m-0 max-w-[40ch]">
-            A hand-tufted textile piece for the wall. Same materials, same colour system, same three design tiers. A variant of the same commission.
+            A hand-woven textile piece for the wall. Same materials, same colour system, same three design tiers. A variant of the same commission.
           </p>
         </div>
       </div>
@@ -250,7 +250,7 @@ const extras = [
           id="wall-hanging-context"
           width={1600}
           height={900}
-          alt="A hand-tufted textile wall hanging in an abstract composition of layered earth tones and muted blues, mounted on a white wall in a modern living room"
+          alt="A hand-woven textile wall hanging in an abstract composition of layered earth tones and muted blues, mounted on a white wall in a modern living room"
           caption="Design visualisation"
           class="w-full"
           sizes="(max-width: 1024px) 100vw, 50vw"
@@ -278,12 +278,12 @@ const extras = [
       <div class="max-w-narrow">
         <h2 class="display text-3xl sm:text-4xl m-0 mb-6">Timeline</h2>
         <p class="text-lg sm:text-xl m-0">
-          About six to seven weeks from sign-off for a straightforward piece. Scale and complexity extend it &mdash; a large pictorial takes considerably longer than a small plain one, and the honest figure cannot be known until the design is agreed. Your date is confirmed at sign-off, before the deposit.
+          About six to seven weeks from sign-off for a straightforward piece. Scale and complexity extend it: a large pictorial takes considerably longer than a small plain one, and the honest figure cannot be known until the design is agreed. Your date is confirmed at sign-off, before the deposit.
         </p>
 
-        <h2 class="display text-3xl sm:text-4xl m-0 mb-6 mt-16">You own the design</h2>
+        <h2 id="ownership" class="display text-3xl sm:text-4xl m-0 mb-6 mt-16 scroll-mt-24">You own the design</h2>
         <p class="text-lg sm:text-xl m-0">
-          On final payment we assign the copyright and design rights to you in writing. We keep no right to reuse, license or sell your design. If you would like it entered on the UK register of designs, we file the application for you and the registration fee is included &mdash; five years' protection, and yours to renew in five-year steps to twenty-five.
+          On final payment we assign the copyright and design rights to you in writing. We keep no right to reuse, license or sell your design. If you would like it entered on the UK register of designs, we file the application for you and the registration fee is included: five years' protection, and yours to renew in five-year steps to twenty-five.
         </p>
 
         <h2 class="display text-3xl sm:text-4xl m-0 mt-16 sm:mt-20 mb-8">Terms in brief</h2>
@@ -291,6 +291,7 @@ const extras = [
           <p class="text-base m-0 py-6 border-b rule">A 50% non-refundable deposit confirms your order and begins production. The remaining 50% balance is payable before dispatch.</p>
           <p class="text-base m-0 py-6 border-b rule">Your order is for bespoke goods made to your personal specification. Under the Consumer Contracts Regulations 2013, you do not have the right to cancel once production has commenced.</p>
           <p class="text-base m-0 py-6 border-b rule">Every shipment is fully insured at our expense. If your piece is lost or damaged in transit, we manage the claim and prioritise a replacement.</p>
+          <p class="text-base m-0 py-6 border-b rule">Bespoke goods are not returnable once production starts, but your rights under the Consumer Rights Act 2015, including for a faulty piece, are unaffected.</p>
           <p class="text-base m-0 py-6">Full terms at <a href="/terms" class="link-underline">/terms</a>.</p>
         </div>
       </div>

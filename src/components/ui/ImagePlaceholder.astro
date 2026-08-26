@@ -14,6 +14,12 @@ export interface Props {
   sizes?: string;
   formats?: string[];
   loading?: 'lazy' | 'eager';
+  /** 'contain' (default) never crops — width/height set the aspect-ratio and
+   *  the image is shown whole. 'cover' fills the wrapper and WILL crop, so it
+   *  is opt-in per call site. Never use 'cover' on a plate that shows a whole
+   *  rug — see the no-crop rule in RendersGrid.astro. The wrapper must supply
+   *  an explicit height for 'cover' to have anything to fill. */
+  fit?: 'contain' | 'cover';
 }
 
 const {
@@ -26,9 +32,13 @@ const {
   sizes = '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw',
   formats = ['avif', 'webp', 'jpeg'],
   loading = 'lazy',
+  fit = 'contain',
 } = Astro.props;
 
-const candidateWidths = [640, 1024, 1600, 2400].filter((w) => w <= width);
+// 800 covers the `grand/` source masters (shot at 800/1600/2400, not the
+// 640/1024/1600 the rest of the site uses) so a subdirectory id like
+// 'grand/hero-grand' resolves its real files instead of silently finding none.
+const candidateWidths = [640, 800, 1024, 1600, 2400].filter((w) => w <= width);
 const publicImagesDir = join(process.cwd(), 'public', 'images');
 
 // Only reference files that actually exist on disk. A <source> pointing at a
@@ -68,22 +78,34 @@ const hash = [...id].reduce((a, c) => a + c.charCodeAt(0), 0);
 const ground = pendingGrounds[hash % pendingGrounds.length];
 ---
 
-<figure class={`relative m-0 ${className}`} {...(!hasRealImage && { role: 'img', 'aria-label': alt })}>
+<figure class={`relative m-0 ${fit === 'cover' ? 'h-full' : ''} ${className}`} {...(!hasRealImage && { role: 'img', 'aria-label': alt })}>
   {hasRealImage ? (
-    <picture>
+    <picture class={fit === 'cover' ? 'block h-full' : ''}>
       {srcsetAvif && <source srcset={srcsetAvif} sizes={sizes} type="image/avif" />}
       {srcsetWebp && <source srcset={srcsetWebp} sizes={sizes} type="image/webp" />}
       {srcsetJpeg && <source srcset={srcsetJpeg} sizes={sizes} type="image/jpeg" />}
-      <img
-        src={imgSrc}
-        alt={alt}
-        width={width}
-        height={height}
-        loading={loading}
-        decoding={loading === 'eager' ? 'sync' : 'async'}
-        class="w-full h-auto"
-        style={`aspect-ratio: ${width} / ${height}`}
-      />
+      {fit === 'cover' ? (
+        <img
+          src={imgSrc}
+          alt={alt}
+          width={width}
+          height={height}
+          loading={loading}
+          decoding={loading === 'eager' ? 'sync' : 'async'}
+          class="w-full h-full object-cover"
+        />
+      ) : (
+        <img
+          src={imgSrc}
+          alt={alt}
+          width={width}
+          height={height}
+          loading={loading}
+          decoding={loading === 'eager' ? 'sync' : 'async'}
+          class="w-full h-auto"
+          style={`aspect-ratio: ${width} / ${height}`}
+        />
+      )}
     </picture>
   ) : (
     <div class="w-full h-full" style={`background-color: ${ground.bg};`}></div>
@@ -100,5 +122,11 @@ const ground = pendingGrounds[hash % pendingGrounds.length];
     >
       {caption}
     </figcaption>
+  )}
+
+  {Astro.slots.has('overlay') && (
+    <div class="absolute inset-0">
+      <slot name="overlay" />
+    </div>
   )}
 </figure>

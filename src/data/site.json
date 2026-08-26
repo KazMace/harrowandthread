@@ -1,6 +1,6 @@
 {
   "siteName": "Harrow & Thread",
-  "tagline": "Hand-tufted rugs, wall hangings and carpets, made to order",
+  "tagline": "Hand-woven rugs, wall hangings and carpets, made to order",
   "company": {
     "name": "Harrow & Thread",
     "number": "",
@@ -17,6 +17,10 @@
       "href": "/carpets"
     }
   ],
+  "enquireLink": {
+    "label": "Enquire",
+    "href": "/enquire"
+  },
   "footerLinks": [
     {
       "label": "Trade",

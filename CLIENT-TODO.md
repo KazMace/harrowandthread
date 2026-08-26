@@ -61,6 +61,18 @@ entirely in favour of a plain link to the form — no email needed there at all.
 
 ---
 
+## 1a · Booking calendar (added 2026-08-23)
+
+Plan is in `BOOKING-PLAN.md`. Your part, in the browser, no code:
+
+- [ ] Create `cal.com/harrowandthread` on your existing Google account
+- [ ] Connect Google Calendar, set working hours and minimum booking notice
+- [ ] Upload logo, set brand colour
+- [ ] Create two booking types: "Design consultation" (30 min) and "Home visit and measure" (90 min)
+- [ ] Send the two Cal.com URLs back so `/book` can be finished
+
+---
+
 ## 2 · Blocks a real customer segment
 
 **Fire-rating certification** — BS 4790 and EN 13501. Without it no hotel, developer or commercial project can specify your product, so this closes the whole contract market even though the site now sells to end customers.
@@ -88,11 +100,42 @@ One genuine texture shot does more for trust than four more AI room scenes. And 
 
 ## 4 · Three decisions I've been holding
 
-**The "Assurances" section** on the homepage — "What you're covered for", four guarantees. An earlier session added it without asking. Keep or cut?
+**~~The "Assurances" section~~ — resolved 2026-08-26.** It's no longer a standalone section: folded into the new closer block ("A commission is a significant commitment...") alongside the old Proposition/Process sections, as part of the homepage rebuild. Every guarantee it made still appears, either there or on `/commissions` and `/terms`.
 
 **Enquiry form fields.** Budget is now removed as you asked. Four remain required: name, email, what they're commissioning, and who they are. Still open: should size and design tier also be required, and should timeline and design starting point be cut too?
 
 **Privacy and Terms in the homepage accordions.** Your brief listed them. I linked to the pages instead, because two copies of legal text drift apart and it matters which one was live. Say the word if you want them inline.
+
+---
+
+## 4a · Hand-woven rename (2026-08-26) — real work still needed
+
+**What changed:** every general product description on the site now says "hand-woven"
+instead of "hand-tufted" — titles, meta descriptions, the homepage, the schema.org data AI
+tools read, alt text. Hand-tufted still exists as a real, offered construction option; this
+was a rename of the headline description, not a removal. No pricing changed.
+
+**What I deliberately left alone, and why:** four spots describe the actual physical
+*process* of tufting, not just the product label, and I don't have the equivalent facts for
+hand-woven construction to safely rewrite them:
+- `/faq` — "Pile is tufted yarn standing upright" (what pile physically is)
+- `/faq` — "a hand-tufted pile holds a crease permanently" (a packing/rolling claim)
+- `/faq` — "we source materials, set up dyes, and begin tufting" (the production-process answer)
+- `/care` — "Use a cleaner who specialises in hand-tufted or antique rugs" (cleaning expertise)
+
+These are all still accurate for the hand-tufted option, so nothing on the site is wrong
+right now. But once you have real hand-woven construction details, these four spots need a
+proper rewrite (or a second answer covering weaving specifically) so the FAQ doesn't lead
+with tufting while the rest of the site leads with weaving. Flag this back to me when the
+pricing and construction detail is ready and I'll do that pass alongside it.
+
+**Customs copy updated too.** You mentioned a UK-India trade deal removing customs on these
+pieces. I verified it: real, in effect from **15 July 2026**, and it removes UK import duty
+on Indian-made textiles and carpets. It does **not** remove VAT, and it does **not** affect
+customers outside the UK (EU/US still pay their own country's import duty as before) — so I
+wrote the accurate, narrower version into `/terms`, `/carpets`, `/commissions` and the FAQ,
+not a blanket "no customs" claim. Worth you double-checking this matches how your actual
+shipping works (does the UK deal apply the way I've assumed, given the mill relationship?).
 
 ---
 
@@ -119,7 +162,19 @@ One genuine texture shot does more for trust than four more AI room scenes. And 
 
 ## Where the build stands
 
-Direction A rolled across all 12 pages. Every image slot filled. Accordions built. All rugs shown whole, never cropped — verified structurally, no `object-cover` anywhere. Zero horizontal overflow across 12 pages × 11 widths. One `h1` per page, no heading skips. Fonts confirmed rendering. Form validated both paths. 4.3 KB of JavaScript. Compliance greps clean.
+Direction A rolled across all 12 pages. Every image slot filled. Accordions built. Every rug and wall hanging plate is shown whole, never cropped — verified structurally by an automated test. Zero horizontal overflow across 12 pages × 11 widths. One `h1` per page, no heading skips. Fonts confirmed rendering. Form validated both paths. 4.3 KB of JavaScript. Compliance greps clean.
+
+**2026-08-26 — homepage rebuilt in an LV-influenced, photo-led style.** Full-bleed hero
+with type overlaid, category tiles, larger catalogue plates, a merged closer section, and
+an overlay-menu header. See `reference/lv-style/LV-STYLE-REFERENCE.md` for the full style
+reference and `reference/lv-style/PHOTO-SLOTS.md` for what real photography needs to land
+in which slot. **One thing to check when real photos replace the placeholders:** the hero
+now uses `object-fit: cover` (the one approved exception to "never crop" — a room-context
+shot, not a rug plate). I tested it against the current placeholder photo and its rug sits
+close enough to the frame edge that cropping cuts it at most screen widths — flagged, not
+fixed, since it's a placeholder. When the real hero photo is chosen, check it against
+`PHOTO-SLOTS.md`'s hero row before it ships: no rug edge may be visible right at the frame
+boundary.
 
 **Done since this list was written:** design rights assigned to the client with IPO registration offered and the fee included; lead times qualified by scale and complexity; budget selector removed; room photographs invited on the enquiry upload; plate sizes corrected after your audit; wall hangings redone with loops and a threaded pole.
 

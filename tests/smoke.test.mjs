@@ -30,18 +30,37 @@ test('homepage renders with its real fonts, not an Arial fallback', async () => 
   assert.doesNotMatch(font, /^(Arial|sans-serif|serif)$/, `h1 fell back to ${font} — the stylesheet did not load`);
 });
 
-// Hard client rule (CLAUDE.md, 2026-08-11): NO RUG MAY BE CROPPED, ever.
-// Enforced here because it is a CSS property nobody notices regressing — one
-// `object-cover` added for a layout fix silently breaks it on every page.
+// Hard client rule: NO RUG OR WALL HANGING MAY BE CROPPED, ever — a whole
+// piece must always be shown whole. Enforced here because it is a CSS
+// property nobody notices regressing — one `object-cover` added for a layout
+// fix silently breaks it on every page.
+//
+// Approved exceptions, made deliberately:
+// - hero-grand (2026-08-26, LV-style homepage rebuild): the homepage hero is
+//   a full-bleed ROOM photo, chosen specifically because it has no rug at the
+//   crop edge. A room-context shot, not a piece being sold.
+// - render-rug-01, render-wall-hanging-01, carpets-teaser, wall-hanging-context
+//   (2026-08-26, category tile row): these same ids are ALSO used uncropped
+//   elsewhere (RendersGrid's full-measure plates, CarpetsStrip) — cropping
+//   applies only to their use as small navigational tile thumbnails linking
+//   to category pages, not to the full-scale showcase, which stays protected.
+// The rule below still catches a `cover` crop landing anywhere else.
 const PAGES = ['/', '/commissions', '/carpets', '/care', '/faq', '/trade', '/enquire'];
+const CROP_ALLOWED_IDS = [
+  'hero-grand',
+  'render-rug-01',
+  'render-wall-hanging-01',
+  'carpets-teaser',
+  'wall-hanging-context',
+];
 
-test('no image is cropped or distorted on any page', async () => {
+test('no rug or wall hanging is ever cropped or distorted', async () => {
   const page = await browser.newPage({ userAgent: UA });
   const failures = [];
 
   for (const path of PAGES) {
     await page.goto(BASE + path, { waitUntil: 'networkidle' });
-    failures.push(...await page.evaluate(() => {
+    failures.push(...await page.evaluate((allowed) => {
       const bad = [];
       for (const img of document.querySelectorAll('img')) {
         if (!img.naturalWidth || !img.clientWidth) continue;      // not loaded / hidden
@@ -49,13 +68,16 @@ test('no image is cropped or distorted on any page', async () => {
         const natural = img.naturalWidth / img.naturalHeight;
         const rendered = img.clientWidth / img.clientHeight;
         const src = img.currentSrc.split('/').pop();
-        if (fit === 'cover') bad.push(`${src}: object-fit:cover crops it`);
+        const isAllowedCrop = allowed.some((id) => src.startsWith(id));
+        if (fit === 'cover') {
+          if (!isAllowedCrop) bad.push(`${src}: object-fit:cover crops it`);
+        }
         // 2% tolerance absorbs sub-pixel layout rounding.
         else if (Math.abs(natural - rendered) / natural > 0.02)
           bad.push(`${src}: natural ${natural.toFixed(3)} vs rendered ${rendered.toFixed(3)}`);
       }
       return bad.map(m => `${location.pathname} — ${m}`);
-    }));
+    }, CROP_ALLOWED_IDS));
   }
 
   assert.deepEqual(failures, [], `\n  ${failures.join('\n  ')}\n`);

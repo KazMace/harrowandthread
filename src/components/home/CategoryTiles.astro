@@ -1,0 +1,66 @@
+---
+import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
+
+// LV's shortcut-tile row, scaled to four categories instead of eight — we
+// don't have LV's catalogue depth, so padding the row out to match their
+// count would be inventing sections that don't exist.
+// All four boxes render at the same 4:3 shape (matching the Wall Hangings
+// photo's natural ratio), so the row reads as one even line of tiles. The
+// other three are real photos with a wider natural ratio, so getting them
+// into 4:3 means cropping via fit="cover" below — allow-listed in
+// tests/smoke.test.mjs alongside the hero, since these are navigational
+// thumbnails linking to category pages, not the full-scale rug showcase
+// further down the page (RendersGrid, which stays fully protected).
+const tiles = [
+  {
+    id: 'render-rug-01', width: 1024, height: 768,
+    label: 'Rugs',
+    href: '/commissions',
+    alt: 'A hand-woven rug with a flowing painterly design',
+  },
+  {
+    id: 'render-wall-hanging-01', width: 1024, height: 768,
+    label: 'Wall hangings',
+    href: '/commissions#wall-hangings',
+    alt: 'A hand-woven wool wall hanging with a painterly abstract design',
+  },
+  {
+    id: 'carpets-teaser', width: 1024, height: 768,
+    label: 'Carpets',
+    href: '/carpets',
+    alt: 'A hand-woven wall-to-wall carpet filling a room',
+  },
+  {
+    id: 'wall-hanging-context', width: 1024, height: 768,
+    label: 'Trade',
+    href: '/trade',
+    alt: 'A hand-woven piece styled in a finished interior',
+  },
+];
+---
+
+<section class="section-pad border-t rule">
+  <div class="shell">
+    <h2 class="display text-2xl sm:text-3xl mb-10 sm:mb-14 max-w-[20ch]">
+      Explore a selection of the work.
+    </h2>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 stagger reveal">
+      {tiles.map((t) => (
+        <a href={t.href} class="group no-underline block">
+          <div class="media aspect-[4/3]">
+            <ImagePlaceholder
+              id={t.id}
+              width={t.width}
+              height={t.height}
+              alt={t.alt}
+              fit="cover"
+              sizes="(max-width: 768px) 50vw, 25vw"
+            />
+          </div>
+          <p class="eyebrow text-ink mt-4 group-hover:text-graphite">{t.label}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

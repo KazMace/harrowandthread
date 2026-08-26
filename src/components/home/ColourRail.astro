@@ -7,24 +7,15 @@ import site from '../../data/site.json';
 const families = [...new Set(colours.map((c) => c.family))];
 ---
 
-<!-- Archetype: full-bleed colour statement. The signature moment — the
+<!-- Archetype: full-bleed colour statement. The signature moment: the
      product's defining property (colour range) IS the visual system.
      Deliberately non-interactive: no picker, no search, no swatch library. -->
 <section class="bg-ink text-paper section-pad overflow-hidden">
   <div class="shell mb-12 sm:mb-16">
-    <div class="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
-      <div>
-        <p class="eyebrow text-paper/70 mb-6">Colour</p>
-        <h2 class="display text-4xl sm:text-5xl lg:text-6xl m-0 max-w-[18ch]">
-          1,400 dye colours. Yours is one of them.
-        </h2>
-      </div>
-      <p class="text-paper/60 text-base max-w-[34ch] m-0 md:pb-2">
-        Every piece is dyed to match a single reference. Browse the system at
-        <a href={site.externalLinks.arsColours} class="link-underline text-paper">arscolors.com</a>
-        and note the codes you want.
-      </p>
-    </div>
+    <p class="eyebrow text-paper/70 mb-6">Colour</p>
+    <h2 class="display text-4xl sm:text-5xl lg:text-6xl m-0 max-w-[18ch]">
+      1,400 dye colours. Yours is one of them.
+    </h2>
   </div>
 
   <!-- The dye card: laid on a light ground with fine gaps, so dark swatches
@@ -39,7 +30,7 @@ const families = [...new Set(colours.map((c) => c.family))];
               <div
                 class="flex-1 min-w-0"
                 style={`background-color: ${c.hex}`}
-                title={`${c.name} — ${c.hex}`}
+                title={`${c.name}: ${c.hex}`}
               ></div>
             ))}
           </div>
@@ -48,11 +39,12 @@ const families = [...new Set(colours.map((c) => c.family))];
     </div>
   </div>
 
+  <!-- One link out, matching the rest of the homepage's rhythm. The sign-off
+       caveat that used to sit here already lives on /commissions verbatim
+       ("How colour works"), not repeated, not lost. -->
   <div class="shell mt-8 sm:mt-10">
-    <p class="text-paper/75 text-sm m-0 max-w-[62ch]">
-      A selection of the range. Dyed wool sits slightly differently to a screen
-      &mdash; we confirm the exact colour reference with you at sign-off, before
-      anything is made.
-    </p>
+    <a href={site.externalLinks.arsColours} class="link-underline text-paper" rel="noopener noreferrer">
+      Browse the full range at arscolors.com
+    </a>
   </div>
 </section>

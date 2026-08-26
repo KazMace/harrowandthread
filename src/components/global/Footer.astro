@@ -1,39 +1,52 @@
 ---
 import site from '../../data/site.json';
+
+// LV's footer shape (Help / Services / About / Connect), fitted to what this
+// site actually has. footerLinks stays one flat array in site.json — no
+// schema change needed — split here by label into the three groups that make
+// sense for a small commission business, alongside site.nav for "Explore".
+const explore = [...site.nav, { label: 'Trade', href: '/trade' }];
+const help = site.footerLinks.filter((l) => ['FAQ', 'Care'].includes(l.label));
+const legal = site.footerLinks.filter((l) => ['Terms', 'Privacy', 'Cookies'].includes(l.label));
 ---
 
 <footer class="bg-ink text-paper">
   <div class="shell py-16 sm:py-20">
     <div class="grid gap-12 sm:gap-10 sm:grid-cols-2 md:grid-cols-12">
+      <!-- Statement + company details + the ONE enquiry CTA in the footer
+           (previously repeated three times across this component). -->
       <div class="sm:col-span-2 md:col-span-4">
         <p class="display text-2xl sm:text-3xl m-0 mb-4 max-w-[18ch]">
-          Bespoke hand-tufted rugs, made once.
+          Bespoke hand-woven rugs, made once.
         </p>
-        <a href="/enquire" class="link-underline text-paper text-sm font-medium">
+        <a href={site.enquireLink.href} class="link-underline text-paper text-sm font-medium">
           Start a commission &rarr;
         </a>
+
+        <div class="text-sm text-paper/60 space-y-1.5 mt-10">
+          <p class="eyebrow text-paper/65 mb-2">{site.company.name}</p>
+          {site.company.number && <p class="m-0">Company number: {site.company.number}</p>}
+          <p class="m-0">{site.company.address}</p>
+        </div>
       </div>
 
       <div class="md:col-span-3">
-        <p class="eyebrow text-paper/65 mb-5">Pages</p>
+        <p class="eyebrow text-paper/65 mb-5">Explore</p>
         <ul class="space-y-2.5 list-none p-0 m-0">
-          {site.nav.map((item) => (
+          {explore.map((item) => (
             <li>
               <a href={item.href} class="text-sm text-paper/75 hover:text-paper no-underline">
                 {item.label}
               </a>
             </li>
           ))}
-          <li>
-            <a href="/enquire" class="text-sm text-paper/75 hover:text-paper no-underline">Enquire</a>
-          </li>
         </ul>
       </div>
 
       <div class="md:col-span-2">
-        <p class="eyebrow text-paper/65 mb-5">Information</p>
+        <p class="eyebrow text-paper/65 mb-5">Help</p>
         <ul class="space-y-2.5 list-none p-0 m-0">
-          {site.footerLinks.map((item) => (
+          {help.map((item) => (
             <li>
               <a href={item.href} class="text-sm text-paper/75 hover:text-paper no-underline">
                 {item.label}
@@ -43,19 +56,17 @@ import site from '../../data/site.json';
         </ul>
       </div>
 
-      <div class="sm:col-span-2 md:col-span-3">
-        <p class="eyebrow text-paper/65 mb-5">{site.company.name}</p>
-        <div class="text-sm text-paper/60 space-y-1.5">
-          {site.company.number && <p class="m-0">Company number: {site.company.number}</p>}
-          <p class="m-0">{site.company.address}</p>
-          <p class="m-0 pt-1">
-            <!-- Points at the enquiry form, not a mailto: link — commissions should
-                 go through the form even though site.company.email is now live. -->
-            <a href="/enquire" class="text-paper/75 hover:text-paper no-underline whitespace-nowrap">
-              Enquire
-            </a>
-          </p>
-        </div>
+      <div class="md:col-span-3">
+        <p class="eyebrow text-paper/65 mb-5">Legal</p>
+        <ul class="space-y-2.5 list-none p-0 m-0">
+          {legal.map((item) => (
+            <li>
+              <a href={item.href} class="text-sm text-paper/75 hover:text-paper no-underline">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
 

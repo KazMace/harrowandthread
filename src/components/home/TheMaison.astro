@@ -1,0 +1,50 @@
+---
+// LV's closer pattern: one heading, one paragraph, three linked tiles.
+// Replaces Proposition + Process + Assurances (the three text-led blocks that
+// fought a photo-led homepage). Nothing those three said is deleted — the
+// room-size and colour-count facts already live in Hero/ColourRail, the
+// design-and-sign-off sequence and the "yours alone" promise are restated
+// here, and the fuller detail for every one of them is on /commissions and
+// /terms, linked below rather than duplicated at length on the homepage.
+const tiles = [
+  {
+    title: 'Design & sign-off',
+    body: 'Nothing is made until you approve it: the design mapped to your room, colours confirmed in writing, before a single thread is woven.',
+    href: '/commissions',
+    label: 'The commission process',
+  },
+  {
+    title: 'Yours, alone',
+    body: 'One commission, one piece. We never remake it, sell it, or license it to anyone else, and on final payment the design is yours in writing.',
+    href: '/commissions#ownership',
+    label: 'How ownership works',
+  },
+  {
+    title: 'Protected, by us and by law',
+    body: 'Every shipment is insured at our expense. Your statutory rights, including under the Consumer Rights Act 2015, stand whatever else we promise.',
+    href: '/terms',
+    label: 'Full terms',
+  },
+];
+---
+
+<section class="section-pad border-t rule">
+  <div class="shell">
+    <h2 class="display text-3xl sm:text-4xl lg:text-5xl m-0 mb-6 max-w-[16ch]">
+      A commission is a significant commitment. Here is what protects you.
+    </h2>
+    <p class="prose-body text-graphite m-0 mb-14 sm:mb-20 max-w-measure">
+      Stated up front, rather than buried in the small print.
+    </p>
+
+    <div class="grid gap-10 sm:gap-x-8 sm:gap-y-12 sm:grid-cols-3 stagger reveal">
+      {tiles.map((t) => (
+        <div class="border-t-2 border-ink pt-6">
+          <h3 class="display text-xl sm:text-2xl mb-3">{t.title}</h3>
+          <p class="prose-body text-graphite m-0 mb-5">{t.body}</p>
+          <a href={t.href} class="link-underline text-sm font-medium">{t.label} &rarr;</a>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

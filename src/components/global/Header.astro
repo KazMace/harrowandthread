@@ -13,21 +13,9 @@ const currentPath = Astro.url?.pathname || '/';
       <Logo class="text-lg sm:text-xl" />
     </a>
 
-    <nav class="hidden sm:flex items-center gap-9" aria-label="Main navigation">
-      {site.nav.map((item) => (
-        <a
-          href={item.href}
-          class={`text-sm no-underline link-underline ${currentPath === item.href ? 'text-ink' : 'text-graphite hover:text-ink'}`}
-        >
-          {item.label}
-        </a>
-      ))}
-      <a href="/enquire" class="btn btn-primary !py-3 !px-7 !text-sm">Enquire</a>
-    </nav>
-
     <button
       id="mobile-menu-toggle"
-      class="sm:hidden flex items-center justify-center w-11 h-11 -mr-3 text-ink"
+      class="flex items-center justify-center w-11 h-11 -mr-3 text-ink"
       aria-label="Open menu"
       aria-expanded="false"
     >
@@ -60,11 +48,17 @@ const currentPath = Astro.url?.pathname || '/';
   </button>
 
   {site.nav.map((item) => (
-    <a href={item.href} class="display text-3xl no-underline text-paper py-2">
+    <a
+      href={item.href}
+      class="display text-3xl no-underline text-paper py-2"
+      aria-current={currentPath === item.href ? 'page' : undefined}
+    >
       {item.label}
     </a>
   ))}
-  <a href="/enquire" class="display text-3xl no-underline text-ink py-2">Enquire</a>
+  <!-- text-paper, not text-ink: this sits on bg-ink, and text-ink on bg-ink
+       made this link invisible; every sibling above already used text-paper. -->
+  <a href={site.enquireLink.href} class="display text-3xl no-underline text-paper py-2">{site.enquireLink.label}</a>
 </div>
 
 <script>

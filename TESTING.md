@@ -1,4 +1,7 @@
-# Agents — how to use subagents on Harrow & Thread
+# Testing — the blind QA routine
+
+Moved out of `AGENTS.md` 2026-08-22 so it loads when someone is actually testing, not on
+every session. `AGENTS.md` still holds the short list of agent rules and points here.
 
 The point of a subagent here is **not** parallelism. It is to get a second pair of eyes
 that has not already convinced itself the work is correct.
@@ -14,27 +17,36 @@ file exists.
 Use it whenever a change needs to be *verified*, not just written: the enquiry pipeline,
 the forms, the structured data, the compliance-sensitive copy, anything with a contract.
 
+**Propose it first.** Spawning a fresh agent has a real cost — a cold context re-deriving
+everything this session already knows. Say what you want to verify and why a blind pass is
+worth it, get the go-ahead, then run it. Don't spawn it silently.
+
 ### 1. The blindfold — context isolation
 
 The QA agent never sees the implementation. Spawn it fresh (`subagent_type: "Explore"` or
 `"general-purpose"` — **not** `"fork"`, a fork inherits your context and defeats the point),
 and give it only the spec.
 
-**Enforce the blindfold, don't ask for it.** A sentence in a prompt is a request; a deny
-rule is a wall. `.claude/qa-blindfold.json` denies `Read` on `src/**` and the config files,
-and `Edit` on the same — so the QA agent physically cannot read the code or fix it. Launch
-the QA session with:
+**Preferred: enforce the blindfold with a deny rule, not just a prompt.** Launching a second
+interactive `claude` CLI session from inside this one isn't something an agent can drive
+well, so the in-session route is the default:
+
+- State the deny list directly in the fresh agent's prompt — "do not open any file under
+  `src/`, `astro.config.mjs`, `tailwind.config.mjs`, or `google-apps-script/`" — since the
+  spawned agent has no way to load `.claude/qa-blindfold.json` itself.
+- After it reports, scan its transcript for any shell read of those paths (`cat`, `sed`,
+  `grep`, `<` all route around a prompt-only rule) before trusting the result.
+
+If you do want the harder guarantee, `.claude/qa-blindfold.json` denies `Read`/`Edit` on
+`src/**` and the config files at the tool level — launch that route with:
 
 ```bash
 claude --settings .claude/qa-blindfold.json
 ```
 
 The deny rules bite before the tool runs, not after — a read of `src/pages/index.astro` is
-refused rather than returned.
-
-**Its one hole: `Bash` can still `cat` a file.** Deny rules on shell commands are trivially
-routed around (`cat`, `sed`, `grep`, `<`), so don't pretend that half is sealed. Scan the
-QA agent's transcript for shell reads of `src/` before you trust its report.
+refused rather than returned. Its one hole is the same as above: `Bash` can still `cat` a
+file, so scan the transcript regardless.
 
 Do not put these denies in `.claude/settings.local.json` — that file loads for *every*
 session, and it would blindfold the coding agent too.
@@ -146,8 +158,8 @@ if (fd.get('website')) { window.location.assign('/enquire/success'); return; }
 
 That is correct anti-spam behaviour — and a trap for an adversarial agent. **An agent that
 fills every field it can find will fill the honeypot, land on `/enquire/success`, and report
-the form as working when nothing was sent.** A green result on I7 obtained that way is a
-false pass.
+the form as working when nothing was sent.** A green result on this rung obtained that way
+is a false pass.
 
 **Rule: never fill `website`.** And a good adversarial suite should include the inverse
 test — fill the honeypot deliberately and assert that **no** network request is made.
@@ -160,7 +172,8 @@ against a fiction. So keep **one** live end-to-end test in the suite marked
 `{ skip: true }`, and run it deliberately after any script or form change — not on every
 `npm test`. (`tests/enquiry-live.test.mjs` filled this role for the Supabase pipeline and
 was deleted with it on 2026-08-20 — recreate its equivalent against the Apps Script `/exec`
-URL before the next backend-touching change, rather than skipping this rung.)
+URL before the next backend-touching change, rather than skipping this rung. Tracked as an
+open item in `STATUS.md`.)
 
 ### 4. The no-fix feedback loop
 
@@ -194,19 +207,3 @@ Spec files: <list them>
 
 Start by reading the spec files.
 ```
-
----
-
-## The rest of the agent rules on this project
-
-- **Do not spawn agents the client did not ask for.** Every fresh agent starts cold and
-  re-derives context this session already has. Blind QA is the case where that cost buys
-  something; "let me farm this out" is not.
-- **A subagent's verdict is not authorisation.** It cannot approve a price change, a copy
-  change, or a design change — see `CLAUDE.md`, "don't decide what's theirs to decide".
-  Bring its report to the client.
-- **A quality score an agent generated is not evidence.** Only a rendered screenshot or a
-  real HTTP response is (`CLAUDE.md`, "look at it before saying it works").
-- **Agents inherit the hard rules.** The laziest-thing ladder, never invent a fact, never edit
-  `~/.claude/settings.json` — all under "the rules that are genuinely hard" in `CLAUDE.md`.
-  State them in the prompt; a fresh agent has not read them.

@@ -18,37 +18,37 @@ const plates = [
     id: 'render-rug-01', width: 1600, height: 900, no: 'I',
     title: 'Reception hall, 15 × 10m',
     spec: 'Pictorial · wool · 12mm pile · indigo, madder, ochre, sage, ivory',
-    alt: 'An enormous hand-tufted rug with a flowing painterly design in indigo, madder and ochre, shown whole in a double-height mansion reception hall with a grand piano and seating standing on it',
+    alt: 'An enormous hand-woven rug with a flowing painterly design in indigo, madder and ochre, shown whole in a double-height mansion reception hall with a grand piano and seating standing on it',
   },
   {
     id: 'render-rug-04', width: 1600, height: 900, no: 'II',
     title: 'Saloon, 12 × 8m',
     spec: 'Geometric · wool · 12mm pile · indigo, gold, ivory',
-    alt: 'A large hand-tufted rug with a classical medallion design in indigo, gold and ivory, shown whole in a grand panelled saloon',
+    alt: 'A large hand-woven rug with a classical medallion design in indigo, gold and ivory, shown whole in a grand panelled saloon',
   },
   {
     id: 'render-rug-02', width: 1600, height: 1199, no: 'III',
     title: 'Library, 8 × 6m',
     spec: 'Geometric · wool · 6mm pile · charcoal, saffron, cream',
-    alt: 'A hand-tufted rug with a bold geometric design in charcoal and saffron, shown whole on the floor of a panelled private library',
+    alt: 'A hand-woven rug with a bold geometric design in charcoal and saffron, shown whole on the floor of a panelled private library',
   },
   {
     id: 'render-rug-03', width: 1600, height: 1199, no: 'IV',
     title: 'Principal bedroom, 6 × 4m',
     spec: 'Plain · wool · 20mm pile · deep teal, matched to a single reference',
-    alt: 'A plain deep teal hand-tufted rug with a deep pile, shown whole beneath a four-poster bed in a grand bedroom',
+    alt: 'A plain deep teal hand-woven rug with a deep pile, shown whole beneath a four-poster bed in a grand bedroom',
   },
   {
     id: 'render-wall-hanging-01', width: 1600, height: 1199, no: 'V',
     title: 'Wall hanging, 4 × 3m',
     spec: 'Pictorial · wool · 20mm pile · rust, plum, sage, ivory',
-    alt: 'A hand-tufted wool wall hanging with a painterly abstract design, hung from wide loops threaded onto a turned wooden pole on the panelled wall of a grand saloon',
+    alt: 'A hand-woven wool wall hanging with a painterly abstract design, hung from wide loops threaded onto a turned wooden pole on the panelled wall of a grand saloon',
   },
   {
     id: 'render-wall-hanging-02', width: 1600, height: 1199, no: 'VI',
     title: 'Wall hanging, 3.5 × 2.5m',
     spec: 'Geometric · wool · 12mm pile · indigo, saffron, ivory',
-    alt: 'A hand-tufted wool wall hanging with a bold geometric design in indigo and saffron, hung from wide loops threaded onto a turned wooden pole in a double-height drawing room',
+    alt: 'A hand-woven wool wall hanging with a bold geometric design in indigo and saffron, hung from wide loops threaded onto a turned wooden pole in a double-height drawing room',
   },
 ];
 ---
@@ -67,17 +67,17 @@ const plates = [
 
     {plates.map((p) => (
       <figure class="m-0 mb-20 sm:mb-28 last:mb-0">
-        <div class="bg-paper p-2 sm:p-4 max-w-[66rem] mx-auto shadow-[0_1px_0_theme(colors.hairline)]">
+        <div class="max-w-[80rem] mx-auto">
           <ImagePlaceholder
             id={p.id}
             width={p.width}
             height={p.height}
             alt={p.alt}
-            sizes="(min-width: 1100px) 66rem, 92vw"
+            sizes="(min-width: 1100px) 80rem, 92vw"
             formats={['webp']}
           />
         </div>
-        <figcaption class="max-w-[66rem] mx-auto mt-5 sm:mt-6">
+        <figcaption class="max-w-[80rem] mx-auto mt-5 sm:mt-6">
           <span class="eyebrow text-graphite block mb-2">Plate {p.no}</span>
           <h3 class="display text-2xl sm:text-3xl m-0 mb-2">{p.title}</h3>
           <p class="text-sm text-graphite m-0">{p.spec}</p>
