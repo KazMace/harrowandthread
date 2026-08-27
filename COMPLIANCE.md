@@ -23,7 +23,8 @@ still needs to review the policy pages before launch.
 - **No stock photograph of another company's finished rug** presented as an H&T
   commission — same DMCC exposure as a fake testimonial. Atmospheric stock (interiors,
   texture, materials) is permitted.
-- **"Hand-tufted" only.** Never "handwoven" or "woven" as a product descriptor. Also never
+- **"Hand-woven" only.** (Reversed 2026-08-26 on client instruction — the rule used to be
+  the exact opposite.) Never "hand-tufted" or "tufted" as a product descriptor. Also never
   claim knot density or invite inspection of the reverse — those belong to hand-knotted
   rugs and H&T does not make them.
 

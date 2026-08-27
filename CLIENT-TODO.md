@@ -108,7 +108,11 @@ One genuine texture shot does more for trust than four more AI room scenes. And 
 
 ---
 
-## 4a · Hand-woven rename (2026-08-26) — real work still needed
+## 4a · Hand-woven rename (2026-08-26) — ~~real work still needed~~ finished 2026-08-27
+
+**2026-08-27: the four leftover spots below are now rewritten** in neutral wording (no
+invented weaving claims), so no "tufted" remains anywhere on the site. `COMPLIANCE.md` and
+QA rule A3 were reversed to match, on your instruction. The paragraphs below are history.
 
 **What changed:** every general product description on the site now says "hand-woven"
 instead of "hand-tufted" — titles, meta descriptions, the homepage, the schema.org data AI

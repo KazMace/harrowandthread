@@ -16,7 +16,7 @@ Sources: `COMPLIANCE.md` (C), `harrowandthread_core_Design.md` (D),
 |---|---|---|
 | A1 | No testimonial, review, rating, client name or client location appears anywhere in the rendered HTML. Specifically absent: Sarah Mitchell, James Chen, Emma Richardson, Thomas Weber, Isabella Santos, Oliver Thompson. | C:10–14, D:197–226 |
 | A2 | No `aggregateRating` and no `Review` type in any JSON-LD block. | C:13–14 |
-| A3 | The word "handwoven" / "hand-woven" appears nowhere as a product descriptor. "Hand-tufted" only. | C:26–28 |
+| A3 | The word "hand-tufted" / "tufted" appears nowhere as a product descriptor. "Hand-woven" only. (Rule reversed 2026-08-26 on client instruction; it used to be the exact opposite.) | C:26–29 |
 | A4 | No knot-density claim, and no invitation to inspect the reverse of a rug. | C:27–28 |
 | A5 | The string "Ltd" does not appear as part of the company name. | C:18–19 |
 | A6 | No VAT claim: no "VAT included", no VAT line, no implication VAT is collected. Destination VAT on exports is permitted. | C:20–22 |
