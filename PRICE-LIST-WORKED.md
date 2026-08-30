@@ -46,4 +46,4 @@ Formulas: Total cost = goods + shipping + £40 cert + VAT. Sell = Total × 3 (20
 1. Mill says the final price is only confirmed after size and design are agreed. These are standard rates.
 2. FedEx charges fluctuate; shipping figures are approximate.
 3. Sumak shipping rate is my assumption, ask the mill.
-4. How the sell £/m² lands against the live site tiers (Plain from £600 / Geometric from £900 / Pictorial from £1,200) is uneven: flatweaves at ×3 sell below £600/m²; hand-knotted pure silk sells above £1,200/m². The site tiers are design-based, this list is construction-based — mapping one to the other is a client decision, not made here.
+4. The £600/£900/£1,200 tiers still on the live site were placeholders, not real numbers (Kaiser, 2026-08-30). This sheet is the only pricing source now. The site's pricing page will need updating from this sheet at some point.
