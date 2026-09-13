@@ -26,7 +26,7 @@ const legal = site.footerLinks.filter((l) => ['Terms', 'Privacy', 'Cookies'].inc
         <div class="text-sm text-paper/60 space-y-1.5 mt-10">
           <p class="eyebrow text-paper/65 mb-2">{site.company.name}</p>
           {site.company.number && <p class="m-0">Company number: {site.company.number}</p>}
-          <p class="m-0">{site.company.address}</p>
+          {!site.company.address.startsWith('[') && <p class="m-0">{site.company.address}</p>}
         </div>
       </div>
 

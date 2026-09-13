@@ -46,9 +46,9 @@ entirely in favour of a plain link to the form — no email needed there at all.
 
 ---
 
-**Trading address.** Renders as `[Trading address]` in the footer of all 12 pages right now.
+**Trading address.** Down the road, when the virtual office exists: put it in `src/data/site.json` as `company.address` and it appears in the footer and Privacy by itself. Until then those lines render nothing.
 
-**"Last updated" dates** on `/terms`, `/privacy` and `/cookies`. Currently `[Date before launch]`.
+**"Last updated" dates** on `/terms`, `/privacy` and `/cookies`: set to 13 September 2026 at launch.
 
 **Solicitor review** — pay a solicitor to read `/terms`, `/privacy` and `/cookies` before launch. That's all it means. I've kept them compliant at build level, but I'm not qualified to give legal advice and you're taking £4,500+ non-refundable deposits on goods that cannot be returned. An hour of someone's time.
 
