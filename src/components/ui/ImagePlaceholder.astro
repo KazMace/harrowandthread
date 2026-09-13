@@ -38,7 +38,7 @@ const {
 // 800 covers the `grand/` source masters (shot at 800/1600/2400, not the
 // 640/1024/1600 the rest of the site uses) so a subdirectory id like
 // 'grand/hero-grand' resolves its real files instead of silently finding none.
-const candidateWidths = [640, 800, 1024, 1600, 2400].filter((w) => w <= width);
+const candidateWidths = [640, 800, 1024, 1600, 2400, 3200].filter((w) => w <= width);
 const publicImagesDir = join(process.cwd(), 'public', 'images');
 
 // Only reference files that actually exist on disk. A <source> pointing at a
@@ -113,7 +113,7 @@ const ground = pendingGrounds[hash % pendingGrounds.length];
 
   {caption && (
     <figcaption
-      class="eyebrow absolute bottom-0 left-0 right-0 px-4 pb-3 pt-8 pointer-events-none"
+      class="text-utility uppercase absolute bottom-0 left-0 right-0 px-3 pb-2 pt-8 text-right pointer-events-none opacity-80"
       style={
         hasRealImage
           ? 'color: #FFFFFF; background: linear-gradient(to top, rgba(17,17,17,0.55), transparent);'

@@ -2,8 +2,8 @@ User-agent: *
 Allow: /
 
 # AI assistants and answer engines are explicitly allowed. For a commission
-# business, being cited in an AI answer to "bespoke rug cost per square metre"
-# is a lead source, not a leak.
+# business, being cited in an AI answer to "bespoke hand-woven rug made to
+# order" is a lead source, not a leak.
 User-agent: GPTBot
 Allow: /
 

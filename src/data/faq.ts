@@ -5,12 +5,14 @@ export const faq = [
     category: "Design Process",
     items: [
       { q: "Can you work from my design idea?",
-        a: ["We can take any design idea you have, whether inspired by photographs, sketches, or a link to an image with a pattern you like. Alternatively, our team can assign a dedicated designer to work alongside you and craft a custom design for a £200 fee, credited in full against your commission."] },
+        a: ["We can take any design idea you have, whether inspired by photographs, sketches, or a link to an image with a pattern you like. Alternatively, our team can assign a dedicated designer to work alongside you and craft a custom design. A design fee applies in that case, stated in your proposal and credited in full against your commission."] },
     ],
   },
   {
     category: "Ordering &amp; Production",
     items: [
+      { q: "What is the investment?",
+        a: ["Every commission is priced individually. Tell us the room, the size and roughly what you have in mind, and we reply within one working day with an indication. Once the material and the design are agreed, your written proposal sets out the investment in full, before any deposit."] },
       { q: "How long does it take to produce my piece?",
         a: ["Production typically takes six to seven weeks from the date your order is confirmed. Complex designs or larger sizes will require additional time. We will provide an estimated delivery date at order confirmation."] },
       { q: "Can I modify my order after it is placed?",
@@ -27,7 +29,7 @@ export const faq = [
       { q: "Can I see a sample before I commit?",
         a: ["Not a physical swatch, no. We work to the ARS 1,400 dye system: you choose a colour reference, and we match the wool to that reference as closely as the dyeing process allows, typically within about 5%. It is the same standard the mills work to, and it holds up better than matching to a posted sample that has aged in transit.", "What you do get before committing: a design visualisation mapped to your exact dimensions, your chosen colour references confirmed in writing, and a sign-off stage where nothing is made until you approve it. Dyed wool sits slightly differently to a screen, so we confirm that with you at sign-off."] },
       { q: "What materials do you use?",
-        a: ["Wool for most commissions, because it is hard-wearing, takes dye beautifully and resists staining without treatment. Silk blend and bamboo silk add sheen and depth at a price; flatweave is lighter, reversible and suits high traffic. Material affects texture and appearance. The starting rate is set by design tier; your final rate is confirmed at quote, once we know the design."] },
+        a: ["Wool for most commissions, because it is hard-wearing, takes dye beautifully and resists staining without treatment. Silk blend and bamboo silk add sheen and depth; flatweave is lighter, reversible and suits high traffic. Material shapes the texture, the appearance and the investment. Your written proposal sets it out in full for the material and design you choose, before any deposit."] },
       { q: "What is the difference between pile and flatweave?",
         a: ["Pile is yarn standing upright: it has depth and it is warm underfoot. Flatweave has no pile: lighter, reversible, and better under furniture or in a busy hallway."] },
       { q: "How do I choose the right pile height?",
@@ -38,7 +40,7 @@ export const faq = [
     category: "Shipping &amp; Delivery",
     items: [
       { q: "Do you ship internationally?",
-        a: ["Shipping is included and fully insured to the UK, Europe and the United States for most commissions. Exceptionally large or heavy pieces may carry an additional freight charge, passed on at cost and confirmed with you at quote, before you commit. For delivery elsewhere, contact us to confirm delivery to your country. Every shipment is fully insured and tracked."] },
+        a: ["Shipping is included and fully insured to the UK, Europe and the United States for most commissions. Exceptionally large or heavy pieces may carry an additional freight charge, passed on at cost and stated in your proposal, before you commit. For delivery elsewhere, contact us to confirm delivery to your country. Every shipment is fully insured and tracked."] },
       { q: "Who pays customs and duties?",
         a: ["Following the UK-India trade deal that took effect in July 2026, UK deliveries no longer carry import duty. VAT and, for deliveries to the US, EU and any other destination outside the UK, import duty remain payable by the recipient on arrival."] },
       { q: "How is my piece packaged for shipping?",
@@ -60,7 +62,7 @@ export const faq = [
       { q: "How do I measure for a wall-to-wall carpet?",
         a: ["You supply the two longest measurements of the room. This is the standard trade method and correctly accounts for bay windows, chimney breasts and alcoves. We add approximately 10cm to each dimension as a trimming allowance. A professional measure is recommended."] },
       { q: "What is the charged area on a carpet?",
-        a: ["You are charged for the full rectangle, including the area trimmed away around a bay or chimney breast. The quote shows the charged area in m&sup2; and states that trimming waste is included in it, before the deposit."] },
+        a: ["You are charged for the full rectangle, including the area trimmed away around a bay or chimney breast. The proposal shows the charged area in m&sup2; and states that trimming waste is included in it, before the deposit."] },
       { q: "Will the pattern be affected by trimming?",
         a: ["The design is centred to the ordered rectangle. Trimming at a bay or chimney breast will cut into the pattern. Please consider this when choosing your design tier."] },
     ],

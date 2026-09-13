@@ -28,7 +28,7 @@ const rules = [
     title: 'Charged area',
     paras: [
       'You pay for the <strong class="text-ink font-medium">full rectangle</strong>. That includes the area trimmed away around a bay or chimney breast.',
-      'The quote shows the charged area in m&sup2; and states that trimming waste is included, <strong class="text-ink font-medium">before the deposit</strong>.',
+      'The proposal shows the charged area in m&sup2; and states that trimming waste is included, <strong class="text-ink font-medium">before the deposit</strong>.',
     ],
   },
   {
@@ -42,7 +42,7 @@ const rules = [
 ];
 
 const extras = [
-  { title: `Design fee: £${pricing.designFee}`, body: pricing.designFeeNote },
+  { title: 'Design fee', body: pricing.designFeeNote },
   { title: 'Shipping', body: pricing.shippingNote },
   { title: 'Customs and duties', body: pricing.customsNote },
 ];
@@ -50,7 +50,7 @@ const extras = [
 
 <BaseLayout
   title="Bespoke Wall-to-Wall Carpets, Made to Your Room | Harrow &amp; Thread"
-  description="Hand-woven wall-to-wall carpets made to your room and your design, from 1,400 dye colours. From £600 per square metre. Supply only, with full measurement guidance and charged-area pricing explained upfront."
+  description="Hand-woven wall-to-wall carpets made to your room and your design, from 1,400 dye colours. Priced individually on the charged area, in a written proposal before any deposit. Supply only, with full measurement guidance."
 >
   <!-- Archetype: page header. -->
   <section class="section-pad">
@@ -78,7 +78,6 @@ const extras = [
       <div class="grid gap-10 sm:gap-x-8 sm:gap-y-14 sm:grid-cols-2 stagger reveal">
         {rules.map((r) => (
           <div class="border-t-2 border-ink pt-6">
-            <span class="eyebrow text-graphite block mb-5">{r.n}</span>
             <h3 class="display text-2xl mb-4">{r.title}</h3>
             <div class="space-y-3">
               {r.paras.map((para) => (
@@ -91,51 +90,28 @@ const extras = [
     </div>
   </section>
 
-  <!-- Archetype: full-bleed colour statement. The rate card, unmissable. -->
+  <!-- Archetype: full-bleed colour statement. How a carpet is priced, in the
+       open. No rate card: prices left the site 2026-09-13 (client decision). -->
   <section class="bg-ink text-paper">
     <div class="shell py-12 sm:py-20">
-      <h2 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0 mb-6">Pricing</h2>
-      <p class="text-paper text-lg m-0 max-w-[46ch]">
-        The same rates apply to wall-to-wall carpets. The worked example below includes the 10cm trimming allowance on each dimension.
+      <p class="eyebrow text-paper/70 mb-6">Investment</p>
+      <h2 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0 mb-8 max-w-[14ch]">
+        Priced for the room.
+      </h2>
+      <p class="text-lg sm:text-xl text-paper/90 m-0 max-w-[46ch]">
+        Every carpet is priced on its charged area. Your written proposal shows
+        that area, with trimming waste included, and sets out the investment in
+        full before any deposit.
       </p>
     </div>
 
     <div class="border-t border-paper/20">
-      <div class="shell">
-        <p class="eyebrow text-paper/90 mb-3 sm:hidden">Scroll for full detail &rarr;</p>
-        <div class="overflow-x-auto -mx-6 px-6 sm:mx-0 sm:px-0">
-        <table class="w-full min-w-[30rem] text-left border-collapse">
-          <caption class="sr-only">Design tier rate card</caption>
-          <thead>
-            <tr class="border-b border-paper/20">
-              <th scope="col" class="eyebrow font-medium text-paper/90 py-4 pr-6">Tier</th>
-              <th scope="col" class="eyebrow font-medium text-paper/90 py-4 pr-6">Rate</th>
-              <th scope="col" class="eyebrow font-medium text-paper/90 py-4">What it is</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pricing.tiers.map((tier, i) => (
-              <tr class={i < pricing.tiers.length - 1 ? 'border-b border-paper/20' : ''}>
-                <th scope="row" class="display text-xl sm:text-2xl font-medium text-left py-6 pr-6 align-top">{tier.name}</th>
-                <td class="text-lg py-6 pr-6 align-top whitespace-nowrap">
-                  <span class="text-sm text-paper/90">from </span>&pound;{tier.rate.toLocaleString()}<span class="text-sm text-paper/90">/m&sup2;</span>
-                </td>
-                <td class="text-base text-paper/90 py-6 align-top">{tier.description}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="border-t border-paper/20">
       <div class="shell py-10 sm:py-14">
-        <p class="eyebrow text-paper/90 mb-5">Worked example: 5m &times; 4m room, plain</p>
+        <p class="eyebrow text-paper/90 mb-5">Worked example: 5m &times; 4m room</p>
         <div class="text-base text-paper space-y-2">
           <p class="m-0">Ordered dimensions: 5.1m &times; 4.1m (10cm trimming allowance added to each side)</p>
           <p class="m-0">Charged area: 5.1 &times; 4.1 = 20.91m&sup2;</p>
-          <p class="m-0">Plain, from &pound;600/m&sup2;: 20.91 &times; &pound;600 = <strong class="font-medium text-paper">from &pound;12,546</strong></p>
+          <p class="m-0">The proposal is based on those <strong class="font-medium text-paper">20.91m&sup2;</strong>, trimming waste included.</p>
         </div>
       </div>
     </div>
@@ -177,12 +153,12 @@ const extras = [
 
   <!-- Archetype: full-bleed image. -->
   <section>
-    <div class="media h-[22rem] sm:h-[34rem]">
+    <div class="media aspect-wide">
       <ImagePlaceholder
         id="carpet-room-context"
         width={1600}
         height={900}
-        alt="A hand-woven wall-to-wall carpet in a warm neutral tone filling a room with a bay window, extending fully to the skirting boards"
+        alt="A hand-woven wall-to-wall carpet in soft dove grey filling a modern master bedroom with a grey upholstered bed, a chaise by tall windows and a stone abstract painting"
         caption="Design visualisation"
         class="w-full"
         sizes="100vw"
@@ -197,7 +173,7 @@ const extras = [
         Start a carpet commission.
       </h2>
       <div class="flex flex-col sm:flex-row sm:items-center gap-8 sm:gap-14">
-        <a href="/enquire?type=carpet" class="btn btn-invert self-start">Enquire</a>
+        <a href="/enquire" class="btn btn-invert self-start">Enquire</a>
         <p class="text-paper text-lg m-0">{site.responsePromise}</p>
       </div>
     </div>

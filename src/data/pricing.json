@@ -1,67 +1,32 @@
 {
-  "_note": "FROM-pricing model, set by the client 2026-08-11. Rates are starting rates: the final figure is set at quote once the design is specified, because a geometric border, a full all-over geometric and a design with custom elements genuinely cost different amounts to make. Every rate MUST be presented with 'from' in front of it — a bare '£600/m²' is a price claim the business cannot stand behind, and under the DMCC Act 2024 a headline price that is rarely obtainable is drip pricing. The from-price must be genuinely achievable.",
-  "fromPricing": true,
+  "_note": "No price or fee amount appears on the site (client decision 2026-09-13, reversing the earlier from-price model). Every commission is priced individually in a written proposal, before any deposit. The tiers below are design descriptions only, never rates. The unavoidable costs — that a design fee exists and is credited back, shipping inclusions, customs, charged area on carpets — must still be disclosed in the open before the enquiry form (docs/COMPLIANCE.md).",
   "tiers": [
     {
       "id": "plain",
       "name": "Plain",
-      "rate": 600,
       "description": "A single colour across the whole piece",
       "chooseIf": "A single colour across the whole piece"
     },
     {
       "id": "geometric",
       "name": "Geometric",
-      "rate": 900,
       "description": "A geometric pattern, as a border or across the whole piece",
       "chooseIf": "A geometric pattern, either as a border or all over"
     },
     {
       "id": "pictorial",
       "name": "Pictorial",
-      "rate": 1200,
       "description": "A scene, painterly or photographic design",
       "chooseIf": "A scene, painterly or photographic design"
     }
   ],
-  "rateNote": "The starting rate for the tier. Your final rate is confirmed at quote, once we know the design — a border, an all-over pattern and a design with custom elements take different amounts of work.",
-  "designFee": 200,
-  "designFeeNote": "Applies only if you ask us to assign a designer. Credited in full against your commission. If you take the design and do not proceed, the £200 is all you pay.",
+  "proposalNote": "Every commission is priced individually. Your written proposal sets out the investment in full, before any deposit.",
+  "designFeeNote": "Applies only if you ask us to assign a designer, and is stated in your proposal. Credited in full against your commission. If you take the design and do not proceed, the design fee is all you pay.",
   "shippingIncluded": [
     "UK",
     "Europe",
     "United States"
   ],
-  "shippingNote": "Shipping is included and fully insured to the UK, Europe and the United States for most commissions. Exceptionally large or heavy pieces may carry an additional freight charge, passed on at cost and confirmed with you at quote, before you commit. For delivery elsewhere, contact us to confirm delivery to your country.",
-  "customsNote": "Following the UK-India trade deal that took effect in July 2026, UK deliveries no longer carry customs charges or import duty. VAT and, for deliveries outside the UK, import duty remain payable by the recipient on arrival.",
-  "workedExamples": [
-    {
-      "label": "1.5 × 1m (hanging)",
-      "area": 1.5,
-      "plain": 900,
-      "geometric": 1350,
-      "pictorial": 1800
-    },
-    {
-      "label": "3 × 2m",
-      "area": 6,
-      "plain": 3600,
-      "geometric": 5400,
-      "pictorial": 7200
-    },
-    {
-      "label": "4 × 3m",
-      "area": 12,
-      "plain": 7200,
-      "geometric": 10800,
-      "pictorial": 14400
-    },
-    {
-      "label": "15 × 10m",
-      "area": 150,
-      "plain": 90000,
-      "geometric": 135000,
-      "pictorial": 180000
-    }
-  ]
+  "shippingNote": "Shipping is included and fully insured to the UK, Europe and the United States for most commissions. Exceptionally large or heavy pieces may carry an additional freight charge, passed on at cost and stated in your proposal, before you commit. For delivery elsewhere, contact us to confirm delivery to your country.",
+  "customsNote": "Following the UK-India trade deal that took effect in July 2026, UK deliveries no longer carry customs charges or import duty. VAT and, for deliveries outside the UK, import duty remain payable by the recipient on arrival."
 }

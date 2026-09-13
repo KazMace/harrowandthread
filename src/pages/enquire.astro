@@ -278,17 +278,14 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
 
           <ol class="list-none p-0 m-0 space-y-5">
             <li class="border-t rule pt-4">
-              <span class="eyebrow text-graphite block mb-2">01</span>
               <p class="text-base text-ink m-0 mb-1">We reply within one working day</p>
               <p class="text-sm text-graphite m-0">With an indicative price for what you have described, and any questions we need answered to quote properly.</p>
             </li>
             <li class="border-t rule pt-4">
-              <span class="eyebrow text-graphite block mb-2">02</span>
               <p class="text-base text-ink m-0 mb-1">We map the design to your dimensions</p>
               <p class="text-sm text-graphite m-0">You approve the design and the colour references before anything is made.</p>
             </li>
             <li class="border-t rule pt-4">
-              <span class="eyebrow text-graphite block mb-2">03</span>
               <p class="text-base text-ink m-0 mb-1">Production begins on deposit</p>
               <p class="text-sm text-graphite m-0">Production begins on receipt of the 50% deposit. That deposit is non-refundable from the point it is paid. The balance is due before dispatch, about six to seven weeks later.</p>
             </li>
@@ -300,8 +297,12 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
               Enquiring costs nothing and commits you to nothing.
             </p>
             <p class="text-sm text-graphite m-0">
-              A &pound;200 design fee applies only if you ask us to assign a designer,
-              and is credited in full against your commission.
+              Every commission is priced individually. Your written proposal
+              sets out the investment in full, before any deposit.
+            </p>
+            <p class="text-sm text-graphite m-0">
+              A design fee applies only if you ask us to assign a designer. It is
+              stated in the proposal and credited in full against your commission.
             </p>
           </div>
         </aside>
@@ -368,7 +369,7 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
   const GAS_URL = import.meta.env.PUBLIC_GAS_URL;
   const CONTACT_EMAIL = 'meadow.mace@harrowandthread.com';
 
-  // Native platform resize, no dependency (CLAUDE.md laziness ladder): a phone photo at
+  // Native platform resize, no dependency (simplest option first): a phone photo at
   // 12MP JPEGs down to a few hundred KB, well inside the Apps Script 50MB POST cap once
   // base64 inflates it ~33%, and it's what actually made the form fast on mobile data.
   async function downscaleToBase64(file: File, maxDim = 2000, quality = 0.82) {
@@ -468,7 +469,13 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
       if (!status) return;
       status.textContent = msg;
       status.classList.toggle('sr-only', !visible);
-      if (visible) status.classList.add('text-sm', 'text-madder', 'mb-4', 'block');
+      if (visible) {
+        status.classList.add('text-sm', 'text-madder', 'mb-4', 'block');
+        // The message sits above the form; the visitor is down at the Send button.
+        // Focus brings it on screen so a failure never looks like nothing happened.
+        status.setAttribute('tabindex', '-1');
+        status.focus();
+      }
     };
 
     (async () => {
@@ -478,7 +485,7 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
       const fd = new FormData(form);
 
       // Honeypot: behave exactly as success, store nothing. No network call at
-      // all — AGENTS.md: an agent that fills every field it finds will fill
+      // all — docs/TESTING.md: an agent that fills every field it finds will fill
       // this too, so it must never leave a trace to assert against.
       if (fd.get('website')) { window.location.assign('/enquire/success'); return; }
 
@@ -499,25 +506,24 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
 
       let ok = false;
       try {
-        // no-cors: Apps Script Web Apps serve their real response from a
-        // googleusercontent.com redirect with no CORS headers, so the browser
-        // lets the request through but always blocks reading the reply — even
-        // on success (confirmed: the row lands, the fetch still throws). We
-        // can't read the result, so a request that doesn't throw is the only
-        // signal available. Do not "fix" this by trying to read res.json().
-        await fetch(GAS_URL, {
+        // Read the reply: success is only { ok: true } from the script. The
+        // googleusercontent.com redirect does send Access-Control-Allow-Origin: *
+        // (verified in Chromium 2026-09-13), so the JSON is readable. The old
+        // mode: 'no-cors' could not see a failure and sent visitors to the
+        // success page when the enquiry was lost. text/plain keeps it a simple
+        // request with no preflight.
+        const res = await fetch(GAS_URL, {
           method: 'POST',
-          mode: 'no-cors',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ ...fields, images }),
         });
-        ok = true;
+        ok = res.ok && (await res.json()).ok === true;
       } catch { ok = false; }
 
       if (ok) { window.location.assign('/enquire/success'); return; }
 
       say(`We could not send your enquiry. Please try again, or email us directly at ${CONTACT_EMAIL}.`, true);
-      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send enquiry'; }
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit enquiry'; }
     })();
   });
 </script>

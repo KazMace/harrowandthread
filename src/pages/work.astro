@@ -1,0 +1,168 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ImagePlaceholder from '../components/ui/ImagePlaceholder.astro';
+import EnquiryCTA from '../components/home/EnquiryCTA.astro';
+
+// Every visualisation on the site, each given the full measure with a
+// specification caption. Sizes come from the homepage plates (read off the
+// imagery against the furniture, client audit 2026-08-11); pieces without an
+// audited size carry none rather than a guess. The notes describe what is
+// in the picture — never a claim about a delivered piece. No piece is ever
+// cropped: width/height match the files on disk.
+const groups = [
+  {
+    heading: 'Rugs',
+    plates: [
+      {
+        id: 'render-rug-01', width: 1600, height: 900,
+        title: 'Morning room, 6 × 4m',
+        spec: 'Pictorial · wool · 15mm pile · mineral green, moss, stone, ivory, clay',
+        note: 'The green of the walls and the clay of the chairs meet in the rug. The seating group sits inside a plain moss border.',
+        alt: 'A hand-woven rug with a painterly abstract design in mineral green, stone and clay, shown whole under a linen sofa and two velvet armchairs in a green-walled country house morning room',
+      },
+      {
+        id: 'render-rug-04', width: 1600, height: 900,
+        title: 'Dining room, 8 × 5m',
+        spec: 'Pictorial · wool · hand-knotted · stone, clay, muted green on ivory',
+        note: 'A classical all-over design in a hushed palette, sized so every chair stays on the rug when pulled out. Hand-knotted, with a short fringe on the ends only.',
+        alt: 'A hand-knotted rug with an all-over classical palmette design in stone, clay and muted green, shown whole beneath a long mahogany dining table and twelve velvet chairs in a green dining room',
+      },
+      {
+        id: 'grand/grand-contemporary', width: 2400, height: 1350,
+        title: 'Penthouse, 6 × 4m',
+        spec: 'Plain · wool · sculpted high-low pile · warm clay and stone',
+        note: 'One family of colour. The pattern is cut into the pile, so it is read in the light rather than in contrast.',
+        alt: 'A hand-woven rug in warm clay and stone with a sculpted high-low surface of soft bands, shown whole under a curved sofa and two leather chairs in a penthouse living room at dusk',
+        formats: ['webp'],
+      },
+      {
+        id: 'render-rug-02', width: 1600, height: 900,
+        title: 'Library, 5 × 4m',
+        spec: 'Geometric · wool · 6mm carved pile · charcoal, ochre, cream',
+        note: 'Low pile for a room that is walked through. The grid answers the coffered ceiling, the ochre answers the curtains.',
+        alt: 'A hand-woven rug with a restrained geometric grid design in charcoal, ochre and cream, shown whole beneath two leather reading chairs in a mahogany-shelved library',
+      },
+      {
+        id: 'render-rug-03', width: 1600, height: 900,
+        title: 'Principal bedroom, 6 × 4m',
+        spec: 'Plain · wool · 20mm pile · deep teal, matched to a single reference',
+        note: 'One colour, the deepest pile, the same teal as the curtains. Morning light rakes across it and shows the depth of the wool.',
+        alt: 'A plain deep teal hand-woven rug with a deep pile, shown whole beneath a carved four-poster bed and a bench in a Georgian bedroom with teal curtains and pale panelled walls',
+      },
+    ],
+  },
+  {
+    heading: 'Wall hangings',
+    plates: [
+      {
+        id: 'render-wall-hanging-01', width: 1600, height: 1199,
+        title: 'Drawing room, 4 × 3m',
+        spec: 'Pictorial · wool · 20mm pile · rust, plum, sage, ivory',
+        note: 'Broad painterly washes above a sofa in the same rust. Hung flat from a turned pole on brackets.',
+        alt: 'A hand-woven wool wall hanging with broad painterly washes of rust, plum, sage and ivory, hung flat from a turned wooden pole above a rust velvet sofa in a blue drawing room',
+      },
+      {
+        id: 'render-wall-hanging-02', width: 1600, height: 1199,
+        title: 'Study, 3 × 2m',
+        spec: 'Geometric · wool · 12mm pile · charcoal, ochre, cream',
+        note: 'Interlocking rectangles with room to breathe, wider than the chesterfield beneath it.',
+        alt: 'A hand-woven wool wall hanging with a geometric design of interlocking rectangles in charcoal, ochre and cream, hung from an oak pole above a leather chesterfield in a panelled study',
+      },
+      {
+        id: 'wall-hanging-context', width: 1600, height: 900,
+        title: 'Corridor, 5 × 2.5m',
+        spec: 'Plain · wool · raised bands · stone, ivory, mushroom, mineral green',
+        note: 'A long piece for a long wall, above a bench in a members\' club corridor. The bands are raised in the pile.',
+        alt: 'A long hand-woven wool wall hanging in soft horizontal bands of stone, ivory, mushroom and green, hung from a pole above a moss velvet bench in a panelled corridor',
+      },
+      {
+        id: 'grand/wall-hanging', width: 2400, height: 3200,
+        title: 'Stairwell, 2.5 × 4m',
+        spec: 'Pictorial · wool · 12mm pile · stone, mineral green, ivory, clay',
+        note: 'A tall piece for a tall wall, lit from the window on the stair.',
+        alt: 'A tall hand-woven wall hanging in soft vertical washes of stone, green, ivory and clay, hung from a pole on a stone stairwell wall beside a curved staircase and a console table with a lamp',
+        formats: ['webp'],
+        narrow: true,
+      },
+    ],
+  },
+  {
+    heading: 'Wall-to-wall carpets',
+    plates: [
+      {
+        id: 'carpets-teaser', width: 1600, height: 900,
+        title: 'Drawing room',
+        spec: 'Plain · wool · deep warm gold · fitted wall to wall',
+        note: 'One colour to the skirting on every side, the gold picked up in the curtains and the chairs.',
+        alt: 'A hand-woven wall-to-wall carpet in deep warm gold filling a stone-walled drawing room with a fire lit, linen sofas and gold velvet armchairs',
+      },
+      {
+        id: 'carpet-room-context', width: 1600, height: 900,
+        title: 'Master bedroom',
+        spec: 'Plain · wool · dove grey · fitted wall to wall',
+        note: 'Runs through the bedroom and its dressing area in one unbroken surface.',
+        alt: 'A hand-woven wall-to-wall carpet in soft dove grey filling a modern master bedroom with a grey upholstered bed, a chaise by tall windows and a stone abstract painting',
+      },
+    ],
+  },
+];
+
+let n = 0;
+const roman = (i: number) => ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'][i];
+---
+
+<BaseLayout
+  title="Rugs, Wall Hangings and Carpets, Each Made for One Room | Harrow &amp; Thread"
+  description="Every design visualisation from Harrow & Thread, shown whole: hand-woven rugs, wall hangings and wall-to-wall carpets, each composed for the room it belongs to, with material, pile and colour."
+>
+  <!-- Archetype: page header. -->
+  <section class="section-pad">
+    <div class="shell">
+      <p class="eyebrow text-graphite mb-6">Work</p>
+      <h1 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0 mb-8 max-w-[18ch]">
+        Every piece,<br />for one room.
+      </h1>
+      <p class="lede text-graphite m-0 max-w-[44ch]">
+        Rugs, wall hangings and wall-to-wall carpets, each composed around the room it belongs to. Shown whole, at the scale the room gives it.
+      </p>
+    </div>
+  </section>
+
+  {groups.map((g) => (
+    <section class="section-pad border-t rule">
+      <div class="shell">
+        <h2 class="display text-3xl sm:text-4xl lg:text-5xl m-0 mb-14 sm:mb-20">{g.heading}</h2>
+
+        {g.plates.map((p) => {
+          const plate = roman(n++);
+          return (
+            <figure class="m-0 mb-20 sm:mb-28 last:mb-0">
+              <div class={p.narrow ? 'max-w-[40rem] mx-auto' : 'max-w-[80rem] mx-auto'}>
+                <ImagePlaceholder
+                  id={p.id}
+                  width={p.width}
+                  height={p.height}
+                  alt={p.alt}
+                  sizes={p.narrow ? '(min-width: 768px) 40rem, 92vw' : '(min-width: 1100px) 80rem, 92vw'}
+                  formats={p.formats ?? ['webp']}
+                />
+              </div>
+              <figcaption class={`${p.narrow ? 'max-w-[40rem]' : 'max-w-[80rem]'} mx-auto mt-5 sm:mt-6`}>
+                <span class="eyebrow text-graphite block mb-2">Plate {plate}</span>
+                <h3 class="display text-2xl sm:text-3xl m-0 mb-2">{p.title}</h3>
+                <p class="text-sm text-graphite m-0 mb-2">{p.spec}</p>
+                <p class="prose-body text-graphite m-0 max-w-[54ch]">{p.note}</p>
+              </figcaption>
+            </figure>
+          );
+        })}
+
+        <p class="text-utility uppercase text-graphite text-right max-w-[80rem] mx-auto mt-10 sm:mt-14 m-0">
+          Plates are design visualisations
+        </p>
+      </div>
+    </section>
+  ))}
+
+  <EnquiryCTA />
+</BaseLayout>

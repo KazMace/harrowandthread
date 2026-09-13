@@ -1,0 +1,33 @@
+---
+// Replaces the Rates section on the homepage (prices left the site
+// 2026-09-13). With no public price, the sequence is what carries the
+// decision: nothing made before sign-off, the investment in writing before
+// any deposit, the design assigned on final payment. Five lines, one link;
+// the full page is /process.
+const steps = [
+  'Tell us about the room. We reply within one working day.',
+  'A written proposal sets out the investment in full, before any deposit.',
+  'The design is mapped to your dimensions and signed off in writing. Nothing is made before that.',
+  'Production, then insured delivery: about six to seven weeks from sign-off for a straightforward piece.',
+  'On final payment the design is yours, in writing.',
+];
+---
+
+<section class="section-pad border-t rule">
+  <div class="shell">
+    <div class="grid gap-10 md:grid-cols-[0.85fr_1.15fr] md:gap-gutter">
+      <div>
+        <h2 class="display text-3xl sm:text-4xl m-0 mb-6 max-w-[12ch]">How it works</h2>
+        <a href="/process" class="link-underline text-sm font-medium">The process in full &rarr;</a>
+      </div>
+
+      <ol class="list-none p-0 m-0 border-t-2 border-ink reveal">
+        {steps.map((s, i) => (
+          <li class="border-b rule py-5">
+            <p class="text-base m-0">{s}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>

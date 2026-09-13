@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ImagePlaceholder from '../components/ui/ImagePlaceholder.astro';
+import EnquiryCTA from '../components/home/EnquiryCTA.astro';
+
+// Wall hangings get their own page (2026-09-13). Everything here previously
+// lived on /commissions (the hanging rules), in the FAQ (how it hangs) and
+// in RendersGrid (Plates V and VI). No new claims: the copy is moved, not
+// invented. The portrait hero is the stairwell image that was on disk and
+// unused — shown whole, never cropped.
+const rules = [
+  {
+    title: 'Made with loops for a pole',
+    body: 'Wide loops are sewn along the top edge. A pole threads through the loops and rests on two brackets fixed to the wall, so the piece hangs flat with its fringe at the bottom. The loops are part of the piece.',
+  },
+  {
+    title: 'Minimum 1.5m&sup2;, shortest side at least 1m',
+    body: 'Frame, design mapping, dye setup and finishing take the same work whatever the size. Below 1.5m² the piece cannot be made properly.',
+  },
+  {
+    title: 'Maximum approximately 18m&sup2; (6m &times; 3m)',
+    body: 'A weight constraint. Larger pieces become impractical to hang safely. Weight per m² at each pile height is stated in your proposal.',
+  },
+  {
+    title: 'Pole, brackets and fixings are not supplied',
+    body: 'You choose the pole and the wall fixings to suit the piece and the wall. A large hand-woven piece is heavy, so confirm your wall and fixings will carry it.',
+  },
+  {
+    title: 'You hang the piece',
+    body: 'And you are responsible for the suitability of your fixings and wall. Tell us the wall type at enquiry and we will advise on weight.',
+  },
+];
+
+// Plates V and VI from the homepage, given the full measure here. Sizes read
+// off the imagery against the furniture; no piece is ever cropped.
+const plates = [
+  {
+    id: 'render-wall-hanging-01', width: 1600, height: 1199, no: 'V',
+    title: 'Wall hanging, 4 × 3m',
+    spec: 'Pictorial · wool · 20mm pile · rust, plum, sage, ivory',
+    alt: 'A hand-woven wool wall hanging with broad painterly washes of rust, plum, sage and ivory, hung flat from a turned wooden pole above a rust velvet sofa in a blue drawing room',
+  },
+  {
+    id: 'render-wall-hanging-02', width: 1600, height: 1199, no: 'VI',
+    title: 'Wall hanging, 3 × 2m',
+    spec: 'Geometric · wool · 12mm pile · charcoal, ochre, cream',
+    alt: 'A hand-woven wool wall hanging with a geometric design of interlocking rectangles in charcoal, ochre and cream, hung from an oak pole above a leather chesterfield in a panelled study',
+  },
+];
+---
+
+<BaseLayout
+  title="Hand-Woven Wall Hangings, Made for One Wall | Harrow &amp; Thread"
+  description="A hand-woven textile piece for the wall, designed for one room. Same materials, same 1,400 colours, same three design tiers as a rug. Made with loops for a pole, from 1.5m² up to about 18m²."
+>
+  <!-- Archetype: page header. The feeling first, the mechanics later. -->
+  <section class="section-pad">
+    <div class="shell">
+      <p class="eyebrow text-graphite mb-6">Wall hangings</p>
+      <h1 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0 mb-8 max-w-[18ch]">
+        A hand-woven piece<br />for the wall.
+      </h1>
+      <p class="lede text-graphite m-0 max-w-[44ch]">
+        Same wool, same 1,400 colours, same three design tiers as a rug. Designed for one wall, made with loops for a pole, and never made twice.
+      </p>
+    </div>
+  </section>
+
+  <!-- Archetype: portrait plate, shown whole. Capped in width so a 3:4 image
+       never runs taller than the screen on desktop. -->
+  <section class="pb-16 sm:pb-24">
+    <div class="shell">
+      <figure class="m-0 max-w-[40rem] mx-auto">
+        <ImagePlaceholder
+          id="grand/wall-hanging"
+          width={2400}
+          height={3200}
+          alt="A tall hand-woven wall hanging in soft vertical washes of stone, green, ivory and clay, hung from a pole on a stone stairwell wall beside a curved staircase and a console table with a lamp"
+          caption="Design visualisation"
+          loading="eager"
+          sizes="(min-width: 768px) 40rem, 92vw"
+          formats={['webp']}
+        />
+      </figure>
+    </div>
+  </section>
+
+  <!-- Archetype: numbered sequence on chalk. How it hangs, and the limits,
+       stated in the open. -->
+  <section class="section-pad bg-chalk">
+    <div class="shell">
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-12 sm:mb-16">
+        <h2 class="display text-3xl sm:text-4xl m-0">How it hangs</h2>
+        <p class="text-sm text-graphite max-w-[40ch] m-0">
+          Everything that affects the piece or the wall it goes on, before you commit.
+        </p>
+      </div>
+
+      <ol class="grid gap-10 sm:grid-cols-2 sm:gap-x-gutter list-none p-0 m-0 stagger reveal">
+        {rules.map((rule, i) => (
+          <li class="border-t-2 border-ink pt-6">
+            <h3 class="display text-xl sm:text-2xl m-0 mb-3" set:html={rule.title} />
+            <p class="prose-body text-graphite m-0">{rule.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Archetype: catalogue plates, whole, with a specification caption. -->
+  <section class="section-pad border-t rule">
+    <div class="shell">
+      <div class="mb-14 sm:mb-20">
+        <h2 class="display text-3xl sm:text-4xl lg:text-5xl m-0 max-w-[18ch]">
+          Designed for the wall it goes on.
+        </h2>
+      </div>
+
+      {plates.map((p) => (
+        <figure class="m-0 mb-20 sm:mb-28 last:mb-0">
+          <div class="max-w-[80rem] mx-auto">
+            <ImagePlaceholder
+              id={p.id}
+              width={p.width}
+              height={p.height}
+              alt={p.alt}
+              sizes="(min-width: 1100px) 80rem, 92vw"
+              formats={['webp']}
+            />
+          </div>
+          <figcaption class="max-w-[80rem] mx-auto mt-5 sm:mt-6">
+            <span class="eyebrow text-graphite block mb-2">Plate {p.no}</span>
+            <h3 class="display text-2xl sm:text-3xl m-0 mb-2">{p.title}</h3>
+            <p class="text-sm text-graphite m-0">{p.spec}</p>
+          </figcaption>
+        </figure>
+      ))}
+
+      <p class="text-utility uppercase text-graphite text-right max-w-[80rem] mx-auto mt-10 sm:mt-14 m-0">
+        Plates are design visualisations
+      </p>
+    </div>
+  </section>
+
+  <!-- Archetype: single column. Care, in brief, linked to the full page. -->
+  <section class="section-pad bg-chalk">
+    <div class="shell">
+      <div class="max-w-narrow">
+        <h2 class="display text-3xl sm:text-4xl m-0 mb-6">Looking after it</h2>
+        <p class="text-lg sm:text-xl m-0 mb-6">
+          Dust it gently with a soft, dry cloth. Keep it out of direct sunlight, and away from bathrooms, kitchens and heat sources. Check the pole, brackets and fixings now and then, and ease the piece along the pole so the loops do not always carry the weight at the same points.
+        </p>
+        <a href="/care" class="link-underline text-sm font-medium">Full care guidance &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <EnquiryCTA />
+</BaseLayout>

@@ -15,27 +15,23 @@ const tiles = [
   {
     id: 'render-rug-01', width: 1024, height: 768,
     label: 'Rugs',
-    href: '/commissions',
-    alt: 'A hand-woven rug with a flowing painterly design',
+    href: '/work',
+    alt: 'A hand-woven rug with a painterly design in green, stone and clay in a country house morning room',
   },
   {
     id: 'render-wall-hanging-01', width: 1024, height: 768,
     label: 'Wall hangings',
-    href: '/commissions#wall-hangings',
-    alt: 'A hand-woven wool wall hanging with a painterly abstract design',
+    href: '/wall-hangings',
+    alt: 'A hand-woven wool wall hanging in rust, plum, sage and ivory above a sofa in a blue drawing room',
   },
   {
     id: 'carpets-teaser', width: 1024, height: 768,
     label: 'Carpets',
     href: '/carpets',
-    alt: 'A hand-woven wall-to-wall carpet filling a room',
+    alt: 'A hand-woven wall-to-wall carpet in deep gold filling a drawing room',
   },
-  {
-    id: 'wall-hanging-context', width: 1024, height: 768,
-    label: 'Trade',
-    href: '/trade',
-    alt: 'A hand-woven piece styled in a finished interior',
-  },
+  // Trade tile removed 2026-09-13 (client): trade is footer-only, and a
+  // trade label on a wall-hanging picture read wrong on the home page.
 ];
 ---
 
@@ -45,7 +41,7 @@ const tiles = [
       Explore a selection of the work.
     </h2>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 stagger reveal">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 stagger reveal">
       {tiles.map((t) => (
         <a href={t.href} class="group no-underline block">
           <div class="media aspect-[4/3]">
@@ -55,7 +51,7 @@ const tiles = [
               height={t.height}
               alt={t.alt}
               fit="cover"
-              sizes="(max-width: 768px) 50vw, 25vw"
+              sizes="(max-width: 768px) 100vw, 33vw"
             />
           </div>
           <p class="eyebrow text-ink mt-4 group-hover:text-graphite">{t.label}</p>

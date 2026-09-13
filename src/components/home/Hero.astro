@@ -13,23 +13,25 @@ import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
 ---
 
 <section class="pt-0">
-  <div class="media h-[26rem] xs:h-[30rem] sm:h-[36rem] lg:h-[44rem]">
+  <div class="media hero-media">
     <ImagePlaceholder
       id="grand/hero-grand"
       width={2400}
-      height={1350}
-      alt="A grand, light-filled reception room with tall windows, ready for a bespoke hand-woven rug"
+      height={1029}
+      alt="A Georgian townhouse drawing room with a fire lit, a green velvet sofa and armchairs standing on a large bespoke hand-knotted rug in stone, clay and green"
       fit="cover"
       class="w-full h-full"
       loading="eager"
       sizes="100vw"
     >
+      <!-- Gradient runs higher and darker than before: on a phone the eyebrow
+           sat over the chandelier and windows and was hard to read. -->
       <div slot="overlay" class="h-full flex items-end" style="background: linear-gradient(to top, rgba(23,21,15,0.75), rgba(23,21,15,0.15) 45%, transparent 70%);">
         <div class="shell pb-10 sm:pb-16 w-full">
-          <p class="eyebrow text-paper/85 mb-6">
+          <p class="eyebrow text-paper/90 mb-6">
             Bespoke hand-woven rugs, wall hangings and carpets
           </p>
-          <h1 class="display text-4xl xs:text-5xl sm:text-6xl lg:text-7xl text-paper m-0 mb-8 max-w-[16ch]">
+          <h1 class="display text-4xl xs:text-5xl sm:text-6xl lg:text-7xl text-paper m-0 mb-10 max-w-[16ch]">
             One rug. Yours. Never made twice.
           </h1>
           <a href="/enquire" class="btn btn-invert inline-flex">Start a commission</a>

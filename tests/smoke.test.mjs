@@ -1,5 +1,5 @@
 // Proves the QA harness works: real browser, real server, real stylesheet.
-// Not a test suite — the blind QA agent writes those. See AGENTS.md.
+// Not a test suite — the blind QA agent writes those. See docs/TESTING.md.
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
@@ -13,7 +13,9 @@ const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 let server, browser;
 
 before(async () => {
-  server = spawn('npm', ['run', 'preview'], { stdio: 'ignore' });
+  // Spawn astro itself, not `npm run`: kill() only stops the direct child, and an npm
+  // wrapper left the real preview server running on the port after every run.
+  server = spawn('node_modules/.bin/astro', ['preview'], { stdio: 'ignore' });
   browser = await chromium.launch({ args: ['--disable-blink-features=AutomationControlled'] });
   for (let i = 0; i < 40; i++) {
     try { await fetch(BASE); return; } catch { await new Promise(r => setTimeout(r, 250)); }
@@ -45,7 +47,7 @@ test('homepage renders with its real fonts, not an Arial fallback', async () => 
 //   applies only to their use as small navigational tile thumbnails linking
 //   to category pages, not to the full-scale showcase, which stays protected.
 // The rule below still catches a `cover` crop landing anywhere else.
-const PAGES = ['/', '/commissions', '/carpets', '/care', '/faq', '/trade', '/enquire'];
+const PAGES = ['/', '/commissions', '/wall-hangings', '/carpets', '/process', '/work', '/care', '/faq', '/trade', '/enquire'];
 const CROP_ALLOWED_IDS = [
   'hero-grand',
   'render-rug-01',
@@ -85,7 +87,7 @@ test('no rug or wall hanging is ever cropped or distorted', async () => {
 
 // Structural invariants across every page. These are settled client rules and
 // accessibility floors that regress silently when a page is added or a nav edited.
-const ALL_PAGES = ['/', '/commissions', '/carpets', '/care', '/faq', '/trade',
+const ALL_PAGES = ['/', '/commissions', '/wall-hangings', '/carpets', '/process', '/work', '/care', '/faq', '/trade',
                    '/enquire', '/terms', '/privacy', '/cookies', '/enquire/success'];
 
 test('structure holds on every page: headings, labels, skip link, nav, trade placement', async () => {
@@ -125,7 +127,7 @@ test('structure holds on every page: headings, labels, skip link, nav, trade pla
   assert.deepEqual(failures, [], `\n  ${failures.join('\n  ')}\n`);
 });
 
-// COMPLIANCE.md: four things materially affect the purchase decision and must be
+// docs/COMPLIANCE.md: four things materially affect the purchase decision and must be
 // prominent on the page that sells them — not buried as their only appearance in
 // an accordion. Repeating them in the homepage FAQ is fine; that is not burying.
 const MATERIAL_INFO = {

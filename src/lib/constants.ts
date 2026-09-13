@@ -2,16 +2,8 @@ export const SITE_NAME = 'Harrow & Thread';
 export const SITE_URL = 'https://harrowandthread.com';
 export const RESPONSE_PROMISE = 'We respond within one working day.';
 
-// STARTING rates, not fixed prices. Always rendered with "from" in front —
-// the final rate is set at quote once the design is known. Never present these
-// as the price. See the _note in src/data/pricing.json.
-export const RATES = {
-  plain: 600,
-  geometric: 900,
-  pictorial: 1200,
-} as const;
-
-export const DESIGN_FEE = 200;
+// No rates or fee amounts live in code: prices left the site 2026-09-13.
+// See the _note in src/data/pricing.json.
 
 export const SIZE_LIMITS = {
   rug: { min: null, maxW: 15, maxH: 10 },

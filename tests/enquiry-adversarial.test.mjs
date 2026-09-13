@@ -1,5 +1,5 @@
-// I3, I4 and I8 from QA-CHECKLIST.md — the three adversarial cases the overnight
-// run did not reach. Backend stubbed per AGENTS.md: nothing leaves the browser, so
+// I3, I4 and I8 from docs/QA-CHECKLIST.md — the three adversarial cases the overnight
+// run did not reach. Backend stubbed per docs/TESTING.md: nothing leaves the browser, so
 // no real Drive uploads, Sheet rows or emails.
 //
 // Rewritten 2026-08-20 for the Google Apps Script pipeline (replaced Supabase +
@@ -24,7 +24,8 @@ const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 let server, browser, tmp;
 
 before(async () => {
-  server = spawn('npm', ['run', 'preview', '--', '--port', String(PORT)], { stdio: 'ignore' });
+  // astro itself, not `npm run` — see smoke.test.mjs.
+  server = spawn('node_modules/.bin/astro', ['preview', '--port', String(PORT)], { stdio: 'ignore' });
   browser = await chromium.launch({ args: ['--disable-blink-features=AutomationControlled'] });
   tmp = mkdtempSync(join(tmpdir(), 'ht-qa-'));
   for (let i = 0; i < 40; i++) {
@@ -35,7 +36,10 @@ before(async () => {
 
 after(async () => { await browser?.close(); server?.kill(); });
 
-const OK_GAS = { status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) };
+// The real Apps Script reply carries Access-Control-Allow-Origin: *; the stubs match it.
+// (fulfill() does not enforce CORS, so this does not test a missing header.)
+const CORS = { 'Access-Control-Allow-Origin': '*' };
+const OK_GAS = { status: 200, headers: CORS, contentType: 'application/json', body: JSON.stringify({ ok: true }) };
 
 // Route on the CONTEXT, not the page, so any navigation-triggered request is still
 // covered. fulfill(), never abort() — aborting a request the page is waiting on
@@ -65,7 +69,7 @@ async function openForm(gas = OK_GAS) {
 }
 
 // The required set only. NEVER fill `website` — the honeypot bounces the visitor to
-// /enquire/success without submitting, which fakes a pass (AGENTS.md). I8 is the
+// /enquire/success without submitting, which fakes a pass (docs/TESTING.md). I8 is the
 // one deliberate exception.
 async function fillRequired(page) {
   await page.fill('#name', 'QA Adversarial');
@@ -83,7 +87,14 @@ async function submit(page) {
 // the cookie banner is also an aria-live region and would otherwise be counted.
 const outcome = (page) => page.evaluate(() => ({
   url: location.pathname,
-  visible: [...document.querySelectorAll('#enquiry-form [id^="err-"], #enquiry-form [aria-live], #enquiry-form [role="alert"]')]
+  // #form-status sits just outside the form. Only count what is actually rendered and on
+  // screen — hidden error spans and the sr-only live region would fake a visible message.
+  visible: [...document.querySelectorAll('#form-status, #enquiry-form [id^="err-"], #enquiry-form [aria-live], #enquiry-form [role="alert"]')]
+    .filter((e) => {
+      if (e.classList.contains('sr-only') || !e.checkVisibility()) return false;
+      const r = e.getBoundingClientRect();
+      return r.bottom > 0 && r.top < innerHeight;
+    })
     .map((e) => e.textContent.trim()).filter(Boolean),
   submitDisabled: document.querySelector('button[type="submit"]')?.disabled ?? null,
 }));
@@ -114,7 +125,7 @@ test('I3 — a bad photo does not lose the enquiry, and a backend failure is nev
       { url: '/enquire/success', images: 0, note: 'downscale fails -> enquiry still sends, with no photos' }],
     ['5 files (over the 3-file cap)', five, OK_GAS,
       { url: '/enquire/success', images: 3, note: 'only the first 3 are ever read from the picker' }],
-    ['backend returns 500', [], { status: 500, contentType: 'application/json', body: '{"ok":false}' },
+    ['backend returns 500', [], { status: 500, headers: CORS, contentType: 'application/json', body: '{"ok":false}' },
       { url: '/enquire', images: null, note: 'must tell the visitor, not silently drop the lead' }],
   ];
 
@@ -171,9 +182,9 @@ test('I4 — wrong types in the size fields are rejected, not coerced silently',
 
 // OPEN FINDING, awaiting the client. min="0" is declared on both size inputs, but the
 // form is novalidate, so nothing enforces it and "-50" reaches the Sheet as a string.
-// Un-skip once the client decides — the enquiry form is theirs (CLAUDE.md §3), and a QA
-// test must not fix what it finds (AGENTS.md §4).
-test('I4b — negative sizes are rejected', { skip: 'open finding — see QA-CHECKLIST.md' }, async () => {
+// Un-skip once the client decides — the enquiry form is theirs, and a QA
+// test must not fix what it finds (docs/TESTING.md §4).
+test('I4b — negative sizes are rejected', { skip: 'open finding — see docs/QA-CHECKLIST.md' }, async () => {
   const { page, sent } = await openForm();
   await fillRequired(page);
   await page.evaluate(() => { document.getElementById('size-h').value = '-50'; });

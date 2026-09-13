@@ -6,15 +6,14 @@ import RendersGrid from '../components/home/RendersGrid.astro';
 import ColourRail from '../components/home/ColourRail.astro';
 import CarpetsStrip from '../components/home/CarpetsStrip.astro';
 import TheMaison from '../components/home/TheMaison.astro';
-import PriceAnchor from '../components/home/PriceAnchor.astro';
+import ProcessStrip from '../components/home/ProcessStrip.astro';
 import Details from '../components/home/Details.astro';
 import EnquiryCTA from '../components/home/EnquiryCTA.astro';
-import pricing from '../data/pricing.json';
 
-// Machine-readable rate card. This is what an AI answer engine quotes for
-// "how much does a bespoke rug cost per square metre". No aggregateRating or
-// review — there are no genuine reviews and inventing them is a banned
-// practice under the UK DMCC Act 2024.
+// Machine-readable description of the service. No rate card: prices left the
+// site on 2026-09-13 (client decision) — every commission is priced in a
+// written proposal. No aggregateRating or review — there are no genuine
+// reviews and inventing them is a banned practice under the UK DMCC Act 2024.
 const serviceSchema = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Service',
@@ -24,32 +23,13 @@ const serviceSchema = JSON.stringify({
   provider: { '@id': 'https://harrowandthread.com/#organization' },
   areaServed: ['GB', 'EU', 'US'],
   description:
-    'Made-to-order hand-woven rugs, wall hangings and wall-to-wall carpets in wool, silk blend, bamboo silk or flatweave. Priced per square metre by design tier. About six to seven weeks from sign-off for a straightforward piece; larger and more complex commissions take longer, confirmed at sign-off.',
-  offers: {
-    '@type': 'OfferCatalog',
-    name: 'Design tier rate card',
-    // These are STARTING rates. `minPrice` (not `price`) is what says so in
-    // schema.org — publishing them as `price` would state a fixed price the
-    // business cannot stand behind, and answer engines quote this verbatim.
-    itemListElement: pricing.tiers.map((tier) => ({
-      '@type': 'Offer',
-      name: tier.name,
-      description: tier.description,
-      priceSpecification: {
-        '@type': 'UnitPriceSpecification',
-        minPrice: tier.rate,
-        priceCurrency: 'GBP',
-        unitCode: 'MTK',
-        unitText: 'per square metre, starting rate; final rate confirmed at quote',
-      },
-    })),
-  },
+    'Made-to-order hand-woven rugs, wall hangings and wall-to-wall carpets in wool, silk blend, bamboo silk or flatweave. Every commission is priced individually in a written proposal before any deposit. About six to seven weeks from sign-off for a straightforward piece; larger and more complex commissions take longer, confirmed at sign-off.',
 });
 ---
 
 <BaseLayout
   title="Bespoke Hand-Woven Rugs, Made to Order in the UK | Harrow &amp; Thread"
-  description="Bespoke hand-woven rugs, wall hangings and wall-to-wall carpets, each designed for one room and dyed to match from 1,400 colours. Priced from £600 per square metre, insured delivery to the UK, Europe and the US."
+  description="Bespoke hand-woven rugs, wall hangings and wall-to-wall carpets, each designed for one room and dyed to match from 1,400 colours. Priced individually in a written proposal, insured delivery to the UK, Europe and the US."
   schema={serviceSchema}
 >
   <Hero />
@@ -58,7 +38,7 @@ const serviceSchema = JSON.stringify({
   <ColourRail />
   <CarpetsStrip />
   <TheMaison />
-  <PriceAnchor />
+  <ProcessStrip />
   <Details />
   <EnquiryCTA />
 </BaseLayout>

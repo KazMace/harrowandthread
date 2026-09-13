@@ -6,6 +6,8 @@ Everything left that needs you rather than code. Ordered by what blocks launch.
 
 ## 1 · Blocks launch — legally or functionally
 
+**OpenRouter key is dead (2026-09-13).** The key in `.env` gets "User not found" from OpenRouter, so no images can be generated until you put a working key in `.env` as `OPENROUTER_API_KEY`. Everything else in the image plan is ready: the generator script, the prompts, and the AI-metadata tag Google asks for (already inside every existing image file). Not a launch blocker on its own — the current images stay until then.
+
 **Finish setting up the enquiry pipeline — 10 minutes, in your Google account.**
 2026-08-20: Supabase and Web3Forms are gone. Both had the same shape of problem —
 free-tier limits that would start costing money exactly as enquiries grew, and Supabase's
@@ -48,8 +50,6 @@ entirely in favour of a plain link to the form — no email needed there at all.
 
 **"Last updated" dates** on `/terms`, `/privacy` and `/cookies`. Currently `[Date before launch]`.
 
-**Phone number.** You said this was easy to sort. There isn't one anywhere on the site, and for a £90k purchase a buyer wants to speak to someone.
-
 **Solicitor review** — pay a solicitor to read `/terms`, `/privacy` and `/cookies` before launch. That's all it means. I've kept them compliant at build level, but I'm not qualified to give legal advice and you're taking £4,500+ non-refundable deposits on goods that cannot be returned. An hour of someone's time.
 
 **Decide sole trader vs limited company, and plan for VAT.** Two separate decisions, often conflated:
@@ -63,7 +63,7 @@ entirely in favour of a plain link to the form — no email needed there at all.
 
 ## 1a · Booking calendar (added 2026-08-23)
 
-Plan is in `BOOKING-PLAN.md`. Your part, in the browser, no code:
+Plan is in `docs/BOOKING-PLAN.md`. Your part, in the browser, no code:
 
 - [ ] Create `cal.com/harrowandthread` on your existing Google account
 - [ ] Connect Google Calendar, set working hours and minimum booking notice
@@ -73,28 +73,40 @@ Plan is in `BOOKING-PLAN.md`. Your part, in the browser, no code:
 
 ---
 
-## 2 · Blocks a real customer segment
+## 1b · Straight after deploy — Google Search Console (added 2026-09-06)
 
-**Fire-rating certification** — BS 4790 and EN 13501. Without it no hotel, developer or commercial project can specify your product, so this closes the whole contract market even though the site now sells to end customers.
+Harrowtech sat live for 11 days and Google never came: a new domain with no inbound
+links is never crawled on its own. Do this the same day the site goes live, it takes
+ten minutes:
 
-Worth knowing: **wool is one of the better natural performers here**, not a problem material. High moisture and nitrogen content and a high oxygen index mean it chars and self-extinguishes rather than melting and dripping the way polypropylene and nylon do — which is why wool gets specified for aircraft and hotel interiors. BS 4790 is a *test method*, not a standard wool fails. Certification means sending a sample to a testing lab and getting a certificate you can hand to a specifier. Likely a fee-and-paperwork exercise rather than a product problem — but get it tested, because the certificate is what developers ask for, not the chemistry.
-
-**The all-over geometric rate.** The card currently shows one Geometric rate at from £900/m². You told me a border and an all-over pattern genuinely cost different amounts. If that's still true, I need the second figure, or all-over work is being under-quoted.
-
-**Trade terms.** `/trade` says "Trade pricing on registered accounts" and nothing more. If you want designers at all, that needs a real percentage, threshold and payment terms.
+- [ ] Go to https://search.google.com/search-console and add the property `harrowandthread.com`
+- [ ] Pick the "HTML file" method, download the `google….html` file
+- [ ] Drop it in `public/` (the deploy root) and deploy — it must answer 200 at `https://harrowandthread.com/google….html`
+- [ ] Click Verify
+- [ ] Sitemaps → submit `sitemap-index.xml` (Astro generates it, already named in `public/robots.txt`)
+- [ ] URL inspection → `https://harrowandthread.com/` → Request indexing
+- [ ] Leave the Google file in `public/` forever; deleting it un-verifies the site
+- [ ] Bing too: go to https://www.bing.com/webmasters, sign in, pick **Import from Google Search Console** — that verifies the site and brings the sitemap across in one step
+- [ ] Bing → URL Submission → `https://harrowandthread.com/`
 
 ---
 
-## 3 · The biggest quality lever left
+## Next — site work (updated 2026-09-13, afternoon)
 
-**Photograph something real.** Every image on the site is AI-generated and labelled "Design visualisation", which tells every visitor they aren't looking at your work. In order of value:
+Done today, shown to you as it went: prices and the design-fee amount removed everywhere (written
+proposal carries the investment); `/trade` discount line gone and design-rights line now matches
+`/terms`; `/privacy` company-number line gone; three new pages (`/process`, `/wall-hangings`,
+`/work`); "How it works" strip on the home page; Trade tile off the home page; AI-image label made
+small and quiet; hero caption made legible on a phone; the AI-generated tag Google asks for written
+into every image file.
 
-1. **A finished commission in situ** — the single most valuable asset you could get. Ask permission in writing; some clients will say yes.
-2. **A pile close-up.** A phone camera does this fine. Unfakeable, needs nobody's permission, and it's the shot that proves the craft.
-3. **Process** — a frame, wool cones, dye lots, a tufting gun.
-4. **A named human with a photo.** Right now the site has no person in it anywhere.
+Still to do, my side:
 
-One genuine texture shot does more for trust than four more AI room scenes. And I can feed a real photograph in as a reference so the generated images inherit its material and light.
+1. **Legal pages cut to the bare minimum.** Terms + Privacy only; `/cookies` folded into Privacy and the cookie banner removed (no analytics means nothing to consent to).
+2. **AI images regenerated slot by slot** — blocked on a working OpenRouter key (see section 1). Slot list: `docs/PHOTO-SLOTS.md`, plus the new `/work` and `/wall-hangings` slots.
+3. **Analytics** — after launch, not needed to go live.
+
+**Settled, not coming back:** no phone number, no trade discounts, no fire-rating certification.
 
 ---
 
@@ -104,14 +116,14 @@ One genuine texture shot does more for trust than four more AI room scenes. And 
 
 **Enquiry form fields.** Budget is now removed as you asked. Four remain required: name, email, what they're commissioning, and who they are. Still open: should size and design tier also be required, and should timeline and design starting point be cut too?
 
-**Privacy and Terms in the homepage accordions.** Your brief listed them. I linked to the pages instead, because two copies of legal text drift apart and it matters which one was live. Say the word if you want them inline.
+**~~Privacy and Terms in the homepage accordions~~ — settled 2026-09-13:** they stay as links.
 
 ---
 
 ## 4a · Hand-woven rename (2026-08-26) — ~~real work still needed~~ finished 2026-08-27
 
 **2026-08-27: the four leftover spots below are now rewritten** in neutral wording (no
-invented weaving claims), so no "tufted" remains anywhere on the site. `COMPLIANCE.md` and
+invented weaving claims), so no "tufted" remains anywhere on the site. `docs/COMPLIANCE.md` and
 QA rule A3 were reversed to match, on your instruction. The paragraphs below are history.
 
 **What changed:** every general product description on the site now says "hand-woven"
@@ -153,14 +165,7 @@ shipping works (does the UK deal apply the way I've assumed, given the mill rela
 
 ## 6 · Nice to have
 
-- **Analytics** — **none is installed.** Corrected 2026-08-12: nothing in `src/` loads Plausible,
-  Fathom, gtag or GTM. `CookieBanner.astro` has a bare `// Load analytics scripts here` comment
-  and no script; `BaseLayout.astro` has nothing at all. ⚠ Meanwhile `/cookies` tells visitors in
-  the present tense that the site *"uses privacy-first analytics (Plausible or Fathom)"* —
-  describing a data practice that does not exist. Either install one or reword that page. This
-  also gates any paid advertising: spending with no measurement is spending blind.
-- **Delete the two old reference links** from `harrowandthread_core_Design.md` if they're still bothering you.
-- **A second all-over geometric image** once the rate is settled, so the tier has its own picture.
+- Analytics and the `/cookies` wording are now in **Next** above.
 
 ---
 
@@ -170,14 +175,13 @@ Direction A rolled across all 12 pages. Every image slot filled. Accordions buil
 
 **2026-08-26 — homepage rebuilt in an LV-influenced, photo-led style.** Full-bleed hero
 with type overlaid, category tiles, larger catalogue plates, a merged closer section, and
-an overlay-menu header. See `reference/lv-style/LV-STYLE-REFERENCE.md` for the full style
-reference and `reference/lv-style/PHOTO-SLOTS.md` for what real photography needs to land
+an overlay-menu header. See `docs/PHOTO-SLOTS.md` for what each image needs to land
 in which slot. **One thing to check when real photos replace the placeholders:** the hero
 now uses `object-fit: cover` (the one approved exception to "never crop" — a room-context
 shot, not a rug plate). I tested it against the current placeholder photo and its rug sits
 close enough to the frame edge that cropping cuts it at most screen widths — flagged, not
 fixed, since it's a placeholder. When the real hero photo is chosen, check it against
-`PHOTO-SLOTS.md`'s hero row before it ships: no rug edge may be visible right at the frame
+`docs/PHOTO-SLOTS.md`'s hero row before it ships: no rug edge may be visible right at the frame
 boundary.
 
 **Done since this list was written:** design rights assigned to the client with IPO registration offered and the fee included; lead times qualified by scale and complexity; budget selector removed; room photographs invited on the enquiry upload; plate sizes corrected after your audit; wall hangings redone with loops and a threaded pole.

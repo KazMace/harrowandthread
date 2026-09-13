@@ -13,8 +13,20 @@
       "href": "/commissions"
     },
     {
+      "label": "Wall hangings",
+      "href": "/wall-hangings"
+    },
+    {
       "label": "Carpets",
       "href": "/carpets"
+    },
+    {
+      "label": "Process",
+      "href": "/process"
+    },
+    {
+      "label": "Work",
+      "href": "/work"
     }
   ],
   "enquireLink": {
@@ -52,5 +64,5 @@
     "arsColours": "https://arscolors.com"
   },
   "formEndpoint": "",
-  "_formEndpointNote": "Paste the POST URL from your form service here (Formspree, Basin, or similar) and the enquiry form starts working \u2014 nothing else to change. Leave empty and the form falls back to Netlify Forms, which only works if the site is hosted on Netlify. UNTIL ONE OF THOSE IS TRUE, ENQUIRIES GO NOWHERE and the page still says 'Received'."
+  "_formEndpointNote": "Paste the POST URL from your form service here (Formspree, Basin, or similar) and the enquiry form starts working — nothing else to change. Leave empty and the form falls back to Netlify Forms, which only works if the site is hosted on Netlify. UNTIL ONE OF THOSE IS TRUE, ENQUIRIES GO NOWHERE and the page still says 'Received'."
 }

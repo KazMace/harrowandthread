@@ -5,39 +5,16 @@ import pricing from '../data/pricing.json';
 import site from '../data/site.json';
 import { PILE_HEIGHTS, MATERIALS } from '../lib/constants';
 
-const wallHangingRules = [
-  {
-    title: 'Minimum 1.5m&sup2;, shortest side at least 1m',
-    body: 'Frame, design mapping, dye setup and finishing cost the same regardless of size. Below 1.5m² the piece cannot be made properly at a fair price.',
-  },
-  {
-    title: 'Maximum approximately 18m&sup2; (6m &times; 3m)',
-    body: 'A weight constraint. Larger pieces become impractical to hang safely. Weight per m² at each pile height is confirmed at quote.',
-  },
-  {
-    title: 'Made with loops for a pole',
-    body: 'Wide loops are sewn along the top edge, so the piece threads straight onto a pole and hangs flat. The loops are part of the piece.',
-  },
-  {
-    title: 'Pole, brackets and fixings are not supplied',
-    body: 'You choose the pole and the wall fixings to suit the piece and the wall. A large hand-woven piece is heavy, so confirm your wall and fixings will carry it.',
-  },
-  {
-    title: 'You are responsible for hanging the piece',
-    body: 'And for the suitability of your fixings and wall. Tell us the wall type at enquiry and we will advise on weight.',
-  },
-];
-
 const extras = [
-  { title: `Design fee: £${pricing.designFee}`, body: pricing.designFeeNote },
+  { title: 'Design fee', body: pricing.designFeeNote },
   { title: 'Shipping', body: pricing.shippingNote },
   { title: 'Customs and duties', body: pricing.customsNote },
 ];
 ---
 
 <BaseLayout
-  title="Bespoke Hand-Woven Rugs &amp; Wall Hangings, From £600/m² | Harrow &amp; Thread"
-  description="Commission a hand-woven rug or wall hanging designed for one room, at any dimension up to 15m × 10m. Wool, silk blend, bamboo silk or flatweave, dyed to match from 1,400 colours. From £600 per square metre, confirmed at quote."
+  title="Bespoke Hand-Woven Rugs &amp; Wall Hangings, Made for One Room | Harrow &amp; Thread"
+  description="Commission a hand-woven rug or wall hanging designed for one room, at any dimension up to 15m × 10m. Wool, silk blend, bamboo silk or flatweave, dyed to match from 1,400 colours. Priced individually in a written proposal before any deposit."
 >
   <!-- Archetype: page header. Eyebrow, one real h1, lede. -->
   <section class="section-pad">
@@ -58,9 +35,17 @@ const extras = [
     <div class="shell">
       <h2 class="display text-3xl sm:text-4xl m-0 mb-12 sm:mb-16">What you choose</h2>
 
-      <!-- Materials: four-up cards -->
+      <!-- Materials: two fibre close-ups, then four-up cards -->
       <div class="mb-20 sm:mb-28">
         <h3 class="eyebrow text-graphite mb-8">Materials</h3>
+        <div class="grid gap-6 sm:grid-cols-2 sm:gap-8 mb-10 sm:mb-14">
+          <figure class="m-0">
+            <ImagePlaceholder id="fibre-wool" width={1600} height={1067} alt="A hank of undyed new wool fleece on natural linen, with two small skeins dyed indigo and clay beside it" caption="Design visualisation" sizes="(max-width: 768px) 100vw, 50vw" formats={['webp']} />
+          </figure>
+          <figure class="m-0">
+            <ImagePlaceholder id="fibre-silk" width={1600} height={1067} alt="A twisted hank of ivory bamboo silk yarn on natural linen, the fibres catching the window light" caption="Design visualisation" sizes="(max-width: 768px) 100vw, 50vw" formats={['webp']} />
+          </figure>
+        </div>
         <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-4 stagger reveal">
           {MATERIALS.map((m) => (
             <div class="border-t-2 border-ink pt-5">
@@ -103,9 +88,7 @@ const extras = [
         <div class="grid gap-8 sm:grid-cols-3 stagger reveal">
           {pricing.tiers.map((tier) => (
             <div class="bg-paper p-7 sm:p-8 flex flex-col h-full">
-              <h4 class="display text-2xl m-0 mb-4">
-                {tier.name}: from &pound;{tier.rate.toLocaleString()}/m&sup2;
-              </h4>
+              <h4 class="display text-2xl m-0 mb-4">{tier.name}</h4>
               <p class="text-base text-graphite m-0">{tier.chooseIf}</p>
               {tier.caveat && (
                 <p class="text-sm text-graphite m-0 mt-5 pt-5 border-t rule">{tier.caveat}</p>
@@ -151,97 +134,49 @@ const extras = [
     </div>
   </section>
 
-  <!-- Archetype: full-bleed colour statement. The rate card, unmissable. -->
-  <section id="pricing" class="bg-ink text-paper scroll-mt-24">
+  <!-- Archetype: full-bleed colour statement. How a commission is priced,
+       stated in the open. No rate card: prices left the site 2026-09-13
+       (client decision) — the written proposal carries the price. -->
+  <section id="proposal" class="bg-ink text-paper scroll-mt-24">
     <div class="shell py-12 sm:py-20">
-      <h2 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0">Pricing</h2>
+      <p class="eyebrow text-paper/70 mb-6">Investment</p>
+      <h2 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0 mb-8 max-w-[14ch]">
+        Priced for the piece, not from a list.
+      </h2>
+      <p class="text-lg sm:text-xl text-paper/90 m-0 max-w-[46ch]">
+        Every commission is priced individually. Once the room, the size, the
+        material and the design are known, your written proposal sets out the
+        investment in full, before any deposit. Nothing is made until you have
+        signed off the design.
+      </p>
     </div>
 
     <div class="border-t border-paper/20">
-      <div class="shell">
-        <p class="eyebrow text-paper/90 mb-3 sm:hidden">Scroll for full detail &rarr;</p>
-        <div class="overflow-x-auto -mx-6 px-6 sm:mx-0 sm:px-0">
-        <table class="w-full min-w-[30rem] text-left border-collapse">
-          <caption class="sr-only">Design tier rate card</caption>
-          <thead>
-            <tr class="border-b border-paper/20">
-              <th scope="col" class="eyebrow font-medium text-paper/90 py-4 pr-6">Tier</th>
-              <th scope="col" class="eyebrow font-medium text-paper/90 py-4 pr-6">Rate</th>
-              <th scope="col" class="eyebrow font-medium text-paper/90 py-4">What it is</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pricing.tiers.map((tier, i) => (
-              <tr class={i < pricing.tiers.length - 1 ? 'border-b border-paper/20' : ''}>
-                <th scope="row" class="display text-xl sm:text-2xl font-medium text-left py-6 pr-6 align-top">{tier.name}</th>
-                <td class="text-lg sm:text-2xl tabular-nums py-6 pr-6 align-top whitespace-nowrap">
-                  <span class="text-sm text-paper/90 tracking-normal">from </span>&pound;{tier.rate.toLocaleString()}<span class="text-sm text-paper/90">/m&sup2;</span>
-                </td>
-                <td class="text-sm sm:text-base text-paper/90 py-6 align-top">{tier.description}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        </div>
+      <div class="shell py-10 sm:py-14">
+        <dl class="grid gap-8 sm:grid-cols-3 m-0">
+          {extras.map((x) => (
+            <div>
+              <dt class="display text-xl mb-2">{x.title}</dt>
+              <dd class="m-0 text-sm text-paper/90">{x.body}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </div>
   </section>
 
-  <!-- Archetype: data table. Worked examples given the width they need. -->
-  <section class="section-pad">
-    <div class="shell">
-      <h3 class="display text-2xl sm:text-3xl m-0 mb-4 sm:mb-6">Worked examples</h3>
-      <p class="prose-body text-graphite mb-8 sm:mb-10">
-        Starting figures, at the rates above. Your final price is confirmed at
-        quote once the design is specified.
-      </p>
-      <p class="eyebrow text-graphite mb-4 sm:hidden">Scroll for all tiers &rarr;</p>
-
-      <div class="overflow-x-auto -mx-6 px-6 sm:mx-0 sm:px-0">
-        <table class="w-full min-w-[34rem] text-left border-collapse">
-          <thead>
-            <tr class="border-b-2 border-ink">
-              <th scope="col" class="eyebrow text-graphite py-4 pr-6">Size</th>
-              <th scope="col" class="eyebrow text-graphite py-4 pr-6">Area</th>
-              <th scope="col" class="eyebrow text-graphite py-4 pr-6">Plain from</th>
-              <th scope="col" class="eyebrow text-graphite py-4 pr-6">Geometric from</th>
-              <th scope="col" class="eyebrow text-graphite py-4">Pictorial from</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pricing.workedExamples.map((ex) => (
-              <tr class="border-b rule">
-                <th scope="row" class="display text-lg sm:text-xl font-medium text-left py-5 pr-6 whitespace-nowrap">{ex.label}</th>
-                <td class="text-sm text-graphite tabular-nums py-5 pr-6 whitespace-nowrap">{ex.area}m&sup2;</td>
-                <td class="text-base tabular-nums py-5 pr-6 whitespace-nowrap">&pound;{ex.plain.toLocaleString()}</td>
-                <td class="text-base tabular-nums py-5 pr-6 whitespace-nowrap">&pound;{ex.geometric.toLocaleString()}</td>
-                <td class="text-base tabular-nums py-5 whitespace-nowrap">&pound;{ex.pictorial.toLocaleString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div class="grid gap-10 sm:grid-cols-3 sm:gap-8 mt-16 sm:mt-20 stagger reveal">
-        {extras.map((x) => (
-          <div class="border-t-2 border-ink pt-5">
-            <h3 class="display text-xl m-0 mb-3" set:html={x.title} />
-            <p class="text-sm text-graphite m-0">{x.body}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Archetype: 50/50 split, image flush to the page edge. -->
+  <!-- Archetype: 50/50 split, image flush to the page edge. The full
+       wall-hanging detail (hanging rules, plates) lives on /wall-hangings;
+       the id stays so older links to #wall-hangings still land. -->
   <section id="wall-hangings" class="bg-chalk scroll-mt-24">
     <div class="grid md:grid-cols-2 items-stretch">
       <div class="order-1 flex items-center">
         <div class="px-6 py-14 sm:px-14 sm:py-20 lg:pl-gutter lg:pr-20">
           <h2 class="display text-3xl sm:text-4xl m-0 mb-6 max-w-[12ch]">Wall hangings</h2>
-          <p class="text-lg text-graphite m-0 max-w-[40ch]">
+          <p class="text-lg text-graphite m-0 mb-8 max-w-[40ch]">
             A hand-woven textile piece for the wall. Same materials, same colour system, same three design tiers. A variant of the same commission.
           </p>
+          <a href="/wall-hangings" class="link-underline text-sm font-medium">How a wall hanging is made and hung &rarr;</a>
         </div>
       </div>
 
@@ -250,25 +185,12 @@ const extras = [
           id="wall-hanging-context"
           width={1600}
           height={900}
-          alt="A hand-woven textile wall hanging in an abstract composition of layered earth tones and muted blues, mounted on a white wall in a modern living room"
+          alt="A long hand-woven wool wall hanging in soft horizontal bands of stone, ivory, mushroom and green, hung from a pole above a moss velvet bench in a panelled corridor"
           caption="Design visualisation"
           class="w-full"
           sizes="(max-width: 1024px) 100vw, 50vw"
         />
       </div>
-    </div>
-
-    <!-- Archetype: numbered sequence. The hanging rules, stated as a set. -->
-    <div class="shell pb-16 sm:pb-24">
-      <ol class="grid gap-10 sm:grid-cols-2 sm:gap-x-gutter list-none p-0 m-0 stagger reveal">
-        {wallHangingRules.map((rule, i) => (
-          <li class="border-t-2 border-ink pt-6">
-            <span class="eyebrow text-graphite block mb-5">{String(i + 1).padStart(2, '0')}</span>
-            <h3 class="display text-xl sm:text-2xl m-0 mb-3" set:html={rule.title} />
-            <p class="prose-body text-graphite m-0">{rule.body}</p>
-          </li>
-        ))}
-      </ol>
     </div>
   </section>
 

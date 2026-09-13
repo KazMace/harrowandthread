@@ -363,3 +363,21 @@
     }
   }
 }
+
+/* Hero: whole picture on tablet and desktop (16:9 box, no crop). On phones the
+   box is taller than the picture, so the crop anchors to the bottom and the rug
+   stays in frame (client, 2026-09-13). */
+/* Hero box. Phone: fixed heights. Tablet and up: full width always; height is
+   the picture's own shape (16:9, then 21:9 on large screens) unless the screen
+   is shorter, in which case the box shrinks to the screen minus the header and
+   the picture crops at its sides only. The rug sits in the middle, never cut. */
+.hero-media { height: 26rem; }
+@media (min-width: 480px) { .hero-media { height: 30rem; } }
+@media (min-width: 768px) {
+  .hero-media { height: min(calc(100vw * 9 / 16), calc(100vh - 5rem)); height: min(calc(100vw * 9 / 16), calc(100svh - 5rem)); }
+}
+@media (min-width: 1440px) {
+  .hero-media { height: min(calc(100vw * 9 / 21), calc(100vh - 5rem)); height: min(calc(100vw * 9 / 21), calc(100svh - 5rem)); }
+}
+.hero-media img { object-fit: cover; object-position: 50% 100%; transition: none; will-change: auto; }
+.hero-media:hover img { transform: none; }
