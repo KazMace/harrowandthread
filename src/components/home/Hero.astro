@@ -10,6 +10,11 @@ import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
 // Deliberately NOT wrapped in .reveal/.stagger: the hero is the largest
 // contentful paint on the page, and .js .reveal starts at opacity:0 until a
 // deferred script runs — an image inside it would not count as the real LCP.
+//
+// Hero film (client, 2026-09-14): a 5s glide into the same room plays over the
+// picture, with no shade, so the room is shown in full. The text panel drops in
+// just before the film loops. The picture stays underneath as the first paint
+// and the fallback. Source and encode notes: hero-film/LOG.md.
 ---
 
 <section class="pt-0">
@@ -24,17 +29,27 @@ import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
       loading="eager"
       sizes="100vw"
     >
-      <!-- Gradient runs higher and darker than before: on a phone the eyebrow
-           sat over the chandelier and windows and was hard to read. -->
-      <div slot="overlay" class="h-full flex items-end" style="background: linear-gradient(to top, rgba(23,21,15,0.75), rgba(23,21,15,0.15) 45%, transparent 70%);">
-        <div class="shell pb-10 sm:pb-16 w-full">
-          <p class="eyebrow text-paper/90 mb-6">
-            Bespoke hand-woven rugs, wall hangings and carpets
-          </p>
-          <h1 class="display text-4xl xs:text-5xl sm:text-6xl lg:text-7xl text-paper m-0 mb-10 max-w-[16ch]">
-            One rug. Yours. Never made twice.
-          </h1>
-          <a href="/enquire" class="btn btn-invert inline-flex">Start a commission</a>
+      <div slot="overlay" class="h-full flex items-end">
+        <video
+          id="hero-film"
+          class="hero-film"
+          src="/video/hero-glide-slow.mp4"
+          muted
+          playsinline
+          preload="auto"
+          aria-hidden="true"
+          tabindex="-1"
+        ></video>
+        <div class="shell pb-6 sm:pb-12 w-full relative">
+          <div id="hero-panel" class="hero-panel inline-block p-6 sm:p-10">
+            <p class="eyebrow text-paper/90 mb-6">
+              Bespoke hand-woven rugs, wall hangings and carpets
+            </p>
+            <h1 class="display text-4xl xs:text-5xl sm:text-6xl lg:text-7xl text-paper m-0 mb-10 max-w-[16ch]">
+              One rug. Yours. Never made twice.
+            </h1>
+            <a href="/enquire" class="btn btn-invert inline-flex">Start a commission</a>
+          </div>
         </div>
       </div>
     </ImagePlaceholder>
@@ -48,3 +63,55 @@ import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
     </p>
   </div>
 </section>
+
+<script>
+  // Cycle (client, 2026-09-14): the film plays once, holds on its last frame
+  // while the panel shows, then the panel fades out and the film starts again.
+  const HOLD_MS = 4500;
+  const FADE_MS = 700; // matches the .hero-panel transition in global.css
+
+  const film = document.getElementById('hero-film') as HTMLVideoElement | null;
+  const panel = document.getElementById('hero-panel');
+  const show = () => panel?.classList.add('is-shown');
+  const hide = () => panel?.classList.remove('is-shown');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let pointerOnPanel = false;
+  let failed = false;
+  const fail = () => { failed = true; show(); };
+
+  // Someone pointing at the panel or tabbing to the button keeps it on screen.
+  panel?.addEventListener('focusin', show);
+  panel?.addEventListener('mouseenter', () => { pointerOnPanel = true; show(); });
+  panel?.addEventListener('mouseleave', () => { pointerOnPanel = false; });
+
+  if (!film || !panel || reduceMotion) {
+    show();
+  } else {
+    const restart = () => {
+      if (failed) return;
+      if (pointerOnPanel || panel.contains(document.activeElement)) {
+        window.setTimeout(restart, 1000);
+        return;
+      }
+      hide();
+      window.setTimeout(() => {
+        film.currentTime = 0;
+        film.play().catch(fail);
+      }, FADE_MS);
+    };
+
+    film.addEventListener('playing', () => film.classList.add('is-playing'), { once: true });
+    film.addEventListener('ended', () => {
+      show();
+      window.setTimeout(restart, HOLD_MS);
+    });
+
+    // The words never stay hidden: show them for good if the film cannot play
+    // (low-power mode, blocked autoplay, failed download) or never starts.
+    film.addEventListener('error', fail);
+    film.play().catch(fail);
+    const neverStarted = window.setTimeout(fail, 10000);
+    film.addEventListener('playing', () => window.clearTimeout(neverStarted), { once: true });
+  }
+</script>

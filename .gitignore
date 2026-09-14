@@ -11,3 +11,7 @@ dist/
 design-directions.html
 undefined/
 lighthouse.*/
+# Hero film raw material: test renders and full-size plates stay local
+hero-film/tests/
+hero-film/clips/
+hero-film/plates/
