@@ -283,7 +283,7 @@ import { FORM_FIELDS } from '../lib/constants';
             </li>
             <li class="border-t rule pt-4">
               <p class="text-base text-ink m-0 mb-1">Production begins on deposit</p>
-              <p class="text-sm text-graphite m-0">Production begins on receipt of the 50% deposit. That deposit is non-refundable from the point it is paid. The balance is due before dispatch, about six to seven weeks later.</p>
+              <p class="text-sm text-graphite m-0">Production begins on receipt of the 50% deposit, usually within 12 to 24 hours. The deposit is refundable until production begins, and non-refundable from then. The balance is due before dispatch, about six to seven weeks later.</p>
             </li>
           </ol>
 
@@ -295,10 +295,6 @@ import { FORM_FIELDS } from '../lib/constants';
             <p class="text-sm text-graphite m-0">
               Every commission is priced individually. Your written proposal
               sets out the investment in full, before any deposit.
-            </p>
-            <p class="text-sm text-graphite m-0">
-              A design fee applies only if you ask us to assign a designer. It is
-              stated in the proposal and credited in full against your commission.
             </p>
           </div>
         </aside>
@@ -532,8 +528,7 @@ import { FORM_FIELDS } from '../lib/constants';
 
       if (ok) { window.location.assign('/enquire/success'); return; }
 
-      say(`We could not send your enquiry. Please try again, or email us directly at ${CONTACT_EMAIL}.`, true);
-      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit enquiry'; }
+      say(`We could not send your enquiry. Please try again, or email us directly at ${CONTACT_EMAIL}.`, true);      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit enquiry'; }
     })();
   });
 </script>

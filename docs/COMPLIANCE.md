@@ -34,9 +34,9 @@ still needs to review the policy pages before launch.
 earlier "from" model). Every commission is priced individually in a written proposal
 before any deposit. With no headline price there is nothing to drip from, so the DMCC
 drip-pricing exposure is gone — but every *unavoidable* cost must still be disclosed in
-the open before the enquiry form: that a design fee exists when a designer is assigned
-and its credit-back rule, shipping inclusions and exclusions, customs responsibility, and
-charged area on carpets.
+the open before the enquiry form: shipping inclusions and exclusions, customs
+responsibility, and charged area on carpets. There is no design fee (client decision
+2026-09-14); designer help is part of every proposal.
 
 Never reintroduce a number unless it is genuinely achievable and backed by the mill's
 current price list — a headline price that is rarely obtainable is drip pricing.

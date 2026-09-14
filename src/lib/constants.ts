@@ -48,6 +48,7 @@ export const FORM_FIELDS = {
   ],
   timeline: [
     { value: '', label: 'Select...' },
+    { value: 'right-away', label: 'Right away' },
     { value: 'within-3-months', label: 'Within 3 months' },
     { value: '3-6-months', label: '3–6 months' },
     { value: 'exploring', label: 'Exploring' },

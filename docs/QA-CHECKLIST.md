@@ -30,7 +30,7 @@ decisions (S — prices, no-cropped-rugs, trade placement).
 
 | # | Assertion | Source |
 |---|---|---|
-| B1 | The existence of the design fee **and its credit-back rule**, shipping, customs and charged area are visible before the enquiry form. No amounts anywhere. | C:31–41 |
+| B1 | Shipping, customs and charged area are visible before the enquiry form. No amounts anywhere. There is no design fee (client decision 2026-09-14). | C:31–41 |
 | B2 | Shipping inclusions *and* exclusions are stated. | C:32–34 |
 | B3 | Customs responsibility is stated. | C:32–34 |
 | B4 | Charged area on carpets is stated. | C:32–34, C:47 |

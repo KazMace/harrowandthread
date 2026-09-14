@@ -5,7 +5,7 @@ export const faq = [
     category: "Design Process",
     items: [
       { q: "Can you work from my design idea?",
-        a: ["We can take any design idea you have, whether inspired by photographs, sketches, or a link to an image with a pattern you like. Alternatively, our team can assign a dedicated designer to work alongside you and craft a custom design. A design fee applies in that case, stated in your proposal and credited in full against your commission."] },
+        a: ["We can take any design idea you have, whether inspired by photographs, sketches, or a link to an image with a pattern you like. Alternatively, our team can assign a dedicated designer to work alongside you and craft a custom design."] },
     ],
   },
   {
@@ -18,7 +18,9 @@ export const faq = [
       { q: "Can I modify my order after it is placed?",
         a: ["Change anything you like up to sign-off. After that it is fixed: once the frame is warped and the dye is mixed, the piece cannot be altered."] },
       { q: "What is the production process?",
-        a: ["After design approval, we source your specific materials, set up your custom dyes if applicable, and begin weaving. Your piece passes through multiple quality checkpoints during production, with a final inspection before shipping.", "Once your design is selected, we map the pattern to the exact scale of your ordered dimensions. When you approve the final design and colour choices, production begins upon receipt of a 50% non-refundable deposit. The remaining 50% balance is payable once your bespoke piece is complete and ready to ship."] },
+        a: ["After design approval, we source your specific materials, set up your custom dyes if applicable, and begin weaving. Your piece passes through multiple quality checkpoints during production, with a final inspection before shipping.", "Once your design is selected, we map the pattern to the exact scale of your ordered dimensions. When you approve the final design and colour choices, production begins on receipt of a 50% deposit, usually within 12 to 24 hours. The deposit is refundable until production begins, and non-refundable from then. The remaining 50% balance is payable once your bespoke piece is complete and ready to ship."] },
+      { q: "Who makes my piece, and to what standards?",
+        a: ["We choose who we work with carefully. Every piece is made for us by a specialist mill: a family business whose carpet making goes back to 1925, with a team of around 150 people. They deliver end to end, from dyeing the materials to complete production.", "The mill is certified to ISO 9001:2015, the international standard for quality management, and to SA8000, the international standard for decent working conditions. It is also a member of Sedex, the organisation for responsible and ethical supply chains, and of CARE &amp; FAIR, the carpet trade's initiative against child labour. So your piece is made to recognised quality and social standards."] },
       { q: "What are your minimum and maximum sizes?",
         a: ["Rugs: no minimum, up to 15m &times; 10m. Wall hangings: minimum 1.5m&sup2; (shortest side at least 1m), up to approximately 18m&sup2; (6m &times; 3m). Wall-to-wall carpets: up to 15m &times; 10m.", "Above 6 metres in any one dimension, the piece is joined from multiple sections, seamed together."] },
     ],

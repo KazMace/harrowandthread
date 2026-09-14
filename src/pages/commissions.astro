@@ -6,7 +6,6 @@ import site from '../data/site.json';
 import { PILE_HEIGHTS, MATERIALS } from '../lib/constants';
 
 const extras = [
-  { title: 'Design fee', body: pricing.designFeeNote },
   { title: 'Shipping', body: pricing.shippingNote },
   { title: 'Customs and duties', body: pricing.customsNote },
 ];
@@ -26,6 +25,8 @@ const extras = [
       <p class="lede text-graphite m-0 max-w-[44ch]">
         A commission starts with the room. We compose the design around its dimensions, its sightlines and where the light falls, then dye the wool to your colour and weave it to size. You choose the material, the pile, the design tier and the scale. We make it, insure it and ship it. One of one, and the design becomes legally yours.
       </p>
+      <!-- Phone only: the page's closing Enquire button is many screens down on a phone. -->
+      <a href="/enquire" class="btn btn-primary mt-10 sm:hidden">Enquire</a>
     </div>
   </section>
 
@@ -210,7 +211,7 @@ const extras = [
 
         <h2 class="display text-3xl sm:text-4xl m-0 mt-16 sm:mt-20 mb-8">Terms in brief</h2>
         <div class="border-t-2 border-ink">
-          <p class="text-base m-0 py-6 border-b rule">A 50% non-refundable deposit confirms your order and begins production. The remaining 50% balance is payable before dispatch.</p>
+          <p class="text-base m-0 py-6 border-b rule">A 50% deposit confirms your order, and production usually begins within 12 to 24 hours of receiving it. The deposit is refundable until production begins, and non-refundable from then. The remaining 50% balance is payable before dispatch.</p>
           <p class="text-base m-0 py-6 border-b rule">Your order is for bespoke goods made to your personal specification. Under the Consumer Contracts Regulations 2013, you do not have the right to cancel once production has commenced.</p>
           <p class="text-base m-0 py-6 border-b rule">Every shipment is fully insured at our expense. If your piece is lost or damaged in transit, we manage the claim and prioritise a replacement.</p>
           <p class="text-base m-0 py-6 border-b rule">Bespoke goods are not returnable once production starts, but your rights under the Consumer Rights Act 2015, including for a faulty piece, are unaffected.</p>

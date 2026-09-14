@@ -42,7 +42,6 @@ const rules = [
 ];
 
 const extras = [
-  { title: 'Design fee', body: pricing.designFeeNote },
   { title: 'Shipping', body: pricing.shippingNote },
   { title: 'Customs and duties', body: pricing.customsNote },
 ];
@@ -62,6 +61,8 @@ const extras = [
       <p class="lede text-graphite m-0 max-w-[46ch]">
         Hand-woven wall-to-wall carpets. All three design tiers (plain, geometric and pictorial), the same 1,400 colours. Supply only, with full measurement guidance.
       </p>
+      <!-- Phone only: the page's closing Enquire button is many screens down on a phone. -->
+      <a href="/enquire" class="btn btn-primary mt-10 sm:hidden">Enquire</a>
     </div>
   </section>
 
