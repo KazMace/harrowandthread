@@ -1,14 +1,14 @@
 # Harrow & Thread
 
-> Bespoke hand-woven rugs, wall hangings and wall-to-wall carpets, each designed for one room and never made twice. A UK business serving clients in the United Kingdom, Europe and the United States.
+> Bespoke handmade rugs, wall hangings and wall-to-wall carpets, each designed for one room and never made twice. A UK business serving clients in the United Kingdom, Europe and the United States.
 
 ## Key facts
 
 - Every commission is priced individually in a written proposal, before any deposit. There are no public prices.
-- Materials: wool, silk blend, bamboo silk or flatweave. Pile heights: 6mm, 12mm or 20mm. Design tiers: plain, geometric or pictorial.
+- Materials: wool, pure silk, bamboo silk or flatweave. Pile heights: 6mm, 12mm or 20mm. Design tiers: plain, geometric or pictorial.
 - Colour is matched to a reference from the ARS 1,400-colour system.
 - Sizes: rugs and wall-to-wall carpets up to 15m × 10m; wall hangings from 1.5m² up to about 6m × 3m.
-- Lead time: about six to seven weeks from sign-off for a straightforward piece; larger and more complex pieces take longer.
+- Lead time: about six to seven weeks from sign-off to dispatch for a straightforward piece, then around two weeks for delivery; larger and more complex pieces take longer.
 - A 50% deposit confirms the order and production begins; the balance is due before dispatch.
 - Shipping is included and insured to the UK, Europe and the United States for most commissions. Pieces travel rolled.
 - The designs shown on the site are design visualisations. Client pieces never appear on the website or in sales material.
@@ -18,12 +18,13 @@
 
 - [Home](https://harrowandthread.com/): what Harrow & Thread makes, with a selection of designs.
 - [Commissions](https://harrowandthread.com/commissions/): materials, pile heights, sizes, design tiers, colour and how a commission is priced.
-- [Wall hangings](https://harrowandthread.com/wall-hangings/): how a hand-woven wall hanging hangs, its size limits and care.
+- [Wall hangings](https://harrowandthread.com/wall-hangings/): how a handmade wall hanging hangs, its size limits and care.
 - [Wall-to-wall carpets](https://harrowandthread.com/carpets/): supply-only fitted carpets, measuring, charged area and pattern trimming.
+- [Materials](https://harrowandthread.com/materials/): how pieces are made (hand-tufted, hand-knotted in five grades, flatweave) and the fibres (New Zealand wool, pure silk, bamboo silk, lyocell).
 - [Process](https://harrowandthread.com/process/): each step from first enquiry to delivery and the design assigned to the client.
 - [Designs](https://harrowandthread.com/designs/): every design visualisation, with room, size, material and colour.
 - [FAQ](https://harrowandthread.com/faq/): pricing, sizes, materials, lead times, shipping, customs and returns.
-- [Care](https://harrowandthread.com/care/): looking after a hand-woven rug, carpet or wall hanging.
+- [Care](https://harrowandthread.com/care/): looking after a handmade rug, carpet or wall hanging.
 - [Trade](https://harrowandthread.com/trade/): specification support for interior designers, architects and developers.
 - [Enquire](https://harrowandthread.com/enquire/): start a commission.
 - [Terms](https://harrowandthread.com/terms/) and [Privacy](https://harrowandthread.com/privacy/).

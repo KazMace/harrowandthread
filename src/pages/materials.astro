@@ -1,0 +1,154 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ImagePlaceholder from '../components/ui/ImagePlaceholder.astro';
+import EnquiryCTA from '../components/home/EnquiryCTA.astro';
+
+// Materials page (client, 2026-09-14). Facts come only from the mill's quality
+// list and its written answers (docs/MANUFACTURER-ANSWERS.md): hand-tufted,
+// hand-knotted in five grades, flatweave; New Zealand wool, pure silk, bamboo
+// silk and lyocell. Jute and PET yarn are left off by the client. The pictures
+// are close-ups of fibre and finished surfaces only, labelled as visualisations.
+const makings = [
+  {
+    id: 'material-hand-tufted',
+    title: 'Hand-tufted',
+    body: 'Wool is punched by hand through a backing cloth, one tuft at a time, then sheared to an even pile and secured with a second backing. The surface is dense and even, like velvet, and it holds a crisp design edge.',
+    facts: 'Pile of 6, 12 or 20mm. About six to seven weeks from sign-off to dispatch. The standard backing is not recommended over underfloor heating.',
+    alt: 'Close-up of a hand-tufted wool rug surface: short, dense moss green pile crossed by a crisp band of warm stone',
+  },
+  {
+    id: 'material-hand-knotted',
+    title: 'Hand-knotted',
+    body: 'Every knot is tied by hand onto the warp threads, row after row, and the warp finishes as the fringe at each end. It comes in five grades, from 9/25 to 10/55: the higher the grade, the finer the knotting and the more detail the design can hold.',
+    facts: 'In wool, pure silk, bamboo silk or lyocell, depending on the grade. Lead time confirmed in your proposal.',
+    alt: 'The corner of a hand-knotted rug on an oak floor: a fine classical pattern in ivory, clay and green, a woven end band and a short ivory fringe',
+  },
+  {
+    id: 'material-flatweave',
+    title: 'Flatweave',
+    body: 'Woven with no pile at all. It lies flat and light, and it is reversible, so it suits a hallway, a dining room or anywhere chairs are moved.',
+    facts: 'In wool or pure silk.',
+    alt: 'Close-up of a flatweave wool rug: a tight, flat weave in broad geometric bands of charcoal, ochre and cream',
+  },
+];
+
+const fibres = [
+  {
+    id: 'fibre-wool', width: 1600, height: 1066,
+    title: 'New Zealand wool',
+    body: 'Hard-wearing, soft underfoot and naturally resistant to staining. It takes dye deeply and evenly, which is why most commissions are wool.',
+    alt: 'A hank of undyed wool fleece on natural linen, with two small skeins dyed indigo and clay beside it',
+  },
+  {
+    id: 'fibre-pure-silk', width: 1600, height: 1073,
+    title: 'Pure silk',
+    body: 'A deep, liquid lustre that shifts as you walk around the piece. Finer than wool, and best in a quieter room.',
+    alt: 'A twisted hank of pure silk yarn dyed deep teal, gleaming on natural linen by a window',
+  },
+  {
+    id: 'fibre-silk', width: 1600, height: 1066,
+    title: 'Bamboo silk',
+    body: 'A plant-based fibre with a silk-like sheen and a soft hand.',
+    alt: 'A twisted hank of ivory bamboo silk yarn on natural linen, the fibres catching the window light',
+  },
+  {
+    id: 'fibre-lyocell', width: 1600, height: 1073,
+    title: 'Lyocell',
+    body: 'A smooth fibre made from wood pulp, with a soft satin sheen and a fine, even texture.',
+    alt: 'A smoothly wound hank of sage green lyocell yarn with a satin sheen, on natural linen by a window',
+  },
+];
+---
+
+<BaseLayout
+  title="Materials and Making | Harrow &amp; Thread"
+  description="How each piece is made, hand-tufted, hand-knotted or flatweave, and the fibres it comes in: New Zealand wool, pure silk, bamboo silk and lyocell."
+>
+  <!-- Archetype: page header. -->
+  <section class="section-pad">
+    <div class="shell">
+      <p class="eyebrow text-graphite mb-6">Materials</p>
+      <h1 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0 mb-8 max-w-[18ch]">
+        How it is made.<br />What it is made of.
+      </h1>
+      <p class="lede text-graphite m-0 max-w-[44ch]">
+        Every piece is handmade to order, in one of three ways and one of four fibres. The choice shapes how it feels underfoot, how it holds the light and how long it takes to make.
+      </p>
+      <!-- Phone only: the page's closing Enquire button is many screens down on a phone. -->
+      <a href="/enquire" class="btn btn-primary mt-10 sm:hidden">Enquire</a>
+    </div>
+  </section>
+
+  <!-- Archetype: three-up plates on chalk, each with its facts beneath. -->
+  <section class="section-pad bg-chalk">
+    <div class="shell">
+      <h2 class="display text-3xl sm:text-4xl m-0 mb-12 sm:mb-16">Three ways of making</h2>
+      <div class="grid gap-14 md:grid-cols-3 md:gap-8">
+        {makings.map((m) => (
+          <figure class="m-0">
+            <ImagePlaceholder
+              id={m.id}
+              width={1600}
+              height={1073}
+              alt={m.alt}
+              caption="Design visualisation"
+              sizes="(min-width: 768px) 33vw, 92vw"
+              formats={['webp']}
+            />
+            <figcaption class="border-t-2 border-ink pt-5 mt-6">
+              <h3 class="display text-2xl m-0 mb-3">{m.title}</h3>
+              <p class="prose-body text-graphite m-0 mb-4">{m.body}</p>
+              <p class="text-sm text-graphite m-0">{m.facts}</p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Archetype: four-up fibre cards. -->
+  <section class="section-pad">
+    <div class="shell">
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-12 sm:mb-16">
+        <h2 class="display text-3xl sm:text-4xl m-0">Four fibres</h2>
+        <p class="text-sm text-graphite max-w-[40ch] m-0">
+          Every fibre is dyed to your reference in the ARS 1,400-colour system.
+        </p>
+      </div>
+      <div class="grid gap-12 sm:grid-cols-2 md:grid-cols-4 sm:gap-8">
+        {fibres.map((f) => (
+          <figure class="m-0">
+            <ImagePlaceholder
+              id={f.id}
+              width={f.width}
+              height={f.height}
+              alt={f.alt}
+              caption="Design visualisation"
+              sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 92vw"
+              formats={['webp']}
+            />
+            <figcaption class="border-t-2 border-ink pt-5 mt-6">
+              <h3 class="display text-2xl m-0 mb-3">{f.title}</h3>
+              <p class="text-base text-graphite m-0">{f.body}</p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Archetype: single column. How to choose. -->
+  <section class="section-pad bg-chalk">
+    <div class="shell">
+      <div class="max-w-narrow">
+        <h2 class="display text-3xl sm:text-4xl m-0 mb-6">Not sure which?</h2>
+        <p class="text-lg sm:text-xl m-0 mb-6">
+          Tell us about the room and how it is lived in. Your proposal recommends the making and the fibre, and a 50 &times; 50cm sample can be made before you commit.
+        </p>
+        <a href="/commissions" class="link-underline text-sm font-medium">Everything you choose in a commission &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <EnquiryCTA />
+</BaseLayout>

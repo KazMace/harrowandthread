@@ -17,8 +17,8 @@ decisions (S — prices, no-cropped-rugs, trade placement).
 |---|---|---|
 | A1 | No testimonial, review, rating, client name or client location appears anywhere in the rendered HTML. Specifically absent: Sarah Mitchell, James Chen, Emma Richardson, Thomas Weber, Isabella Santos, Oliver Thompson. | C:10–14, D:197–226 |
 | A2 | No `aggregateRating` and no `Review` type in any JSON-LD block. | C:13–14 |
-| A3 | The word "hand-tufted" / "tufted" appears nowhere as a product descriptor. "Hand-woven" only. (Rule reversed 2026-08-26 on client instruction; it used to be the exact opposite.) | C:26–29 |
-| A4 | No knot-density claim, and no invitation to inspect the reverse of a rug. | C:27–28 |
+| A3 | The general descriptor is "handmade"; "hand-woven" appears nowhere. Methods are named only as hand-tufted, hand-knotted or flatweave. (Client decision 2026-09-14.) | C:26–32 |
+| A4 | Knot grades appear only as the mill lists them (9/25 to 10/55); no hand-knotted lead time is stated outside the proposal. | C:26–32 |
 | A5 | The string "Ltd" does not appear as part of the company name. | C:18–19 |
 | A6 | No VAT claim: no "VAT included", no VAT line, no implication VAT is collected. Destination VAT on exports is permitted. | C:20–22 |
 | A7 | No manufacturing location, supplier, workshop or supply-chain detail — in copy, alt text, image filenames, `<meta>`, or JSON-LD. | C:15–17 |

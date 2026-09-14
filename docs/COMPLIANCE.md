@@ -23,10 +23,13 @@ still needs to review the policy pages before launch.
 - **No stock photograph of another company's finished rug** presented as an H&T
   commission — same DMCC exposure as a fake testimonial. Atmospheric stock (interiors,
   texture, materials) is permitted.
-- **"Hand-woven" only.** (Reversed 2026-08-26 on client instruction — the rule used to be
-  the exact opposite.) Never "hand-tufted" or "tufted" as a product descriptor. Also never
-  claim knot density or invite inspection of the reverse — those belong to hand-knotted
-  rugs and H&T does not make them.
+- **"Handmade" as the general descriptor, with the method named where it matters.**
+  (Client decision 2026-09-14, replacing the 2026-08-26 "hand-woven only" rule after the
+  mill's quality list showed hand-tufted, hand-knotted and flatweave, and no hand-woven
+  pile.) The methods on sale are hand-tufted, hand-knotted (grades 9/25 to 10/55, as the
+  mill lists them) and flatweave. Fibres: New Zealand wool, pure silk, bamboo silk and
+  lyocell; jute and PET yarn are not offered. A knot grade is stated only as the mill
+  lists it; lead times for hand-knotted pieces are confirmed in the proposal.
 
 ## Price transparency
 
