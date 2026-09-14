@@ -16,7 +16,7 @@ const groups = [
       {
         id: 'render-rug-01', width: 1600, height: 900,
         title: 'Morning room, 6 × 4m',
-        spec: 'Pictorial · wool · 15mm pile · mineral green, moss, stone, ivory, clay',
+        spec: 'Abstract · wool · 15mm pile · mineral green, moss, stone, ivory, clay',
         note: 'The green of the walls and the clay of the chairs meet in the rug. The seating group sits inside a plain moss border.',
         alt: 'A hand-woven rug with a painterly abstract design in mineral green, stone and clay, shown whole under a linen sofa and two velvet armchairs in a green-walled country house morning room',
       },
@@ -57,7 +57,7 @@ const groups = [
       {
         id: 'render-wall-hanging-01', width: 1600, height: 1199,
         title: 'Drawing room, 4 × 3m',
-        spec: 'Pictorial · wool · 20mm pile · rust, plum, sage, ivory',
+        spec: 'Abstract · wool · 20mm pile · rust, plum, sage, ivory',
         note: 'Broad painterly washes above a sofa in the same rust. Hung flat from a turned pole on brackets.',
         alt: 'A hand-woven wool wall hanging with broad painterly washes of rust, plum, sage and ivory, hung flat from a turned wooden pole above a rust velvet sofa in a blue drawing room',
       },
@@ -70,15 +70,15 @@ const groups = [
       },
       {
         id: 'wall-hanging-context', width: 1600, height: 900,
-        title: 'Corridor, 5 × 2.5m',
+        title: 'Long gallery, 5 × 2.5m',
         spec: 'Plain · wool · raised bands · stone, ivory, mushroom, mineral green',
-        note: 'A long piece for a long wall, above a bench in a members\' club corridor. The bands are raised in the pile.',
-        alt: 'A long hand-woven wool wall hanging in soft horizontal bands of stone, ivory, mushroom and green, hung from a pole above a moss velvet bench in a panelled corridor',
+        note: 'A long piece for a long wall, above a bench in a panelled long gallery. The bands are raised in the pile.',
+        alt: 'A long hand-woven wool wall hanging in soft horizontal bands of stone, ivory, mushroom and green, hung from a pole above a moss velvet bench in a panelled long gallery',
       },
       {
         id: 'grand/wall-hanging', width: 2400, height: 3200,
         title: 'Stairwell, 2.5 × 4m',
-        spec: 'Pictorial · wool · 12mm pile · stone, mineral green, ivory, clay',
+        spec: 'Abstract · wool · 12mm pile · stone, mineral green, ivory, clay',
         note: 'A tall piece for a tall wall, lit from the window on the stair.',
         alt: 'A tall hand-woven wall hanging in soft vertical washes of stone, green, ivory and clay, hung from a pole on a stone stairwell wall beside a curved staircase and a console table with a lamp',
         formats: ['webp'],
@@ -103,24 +103,41 @@ const groups = [
         note: 'Runs through the bedroom and its dressing area in one unbroken surface.',
         alt: 'A hand-woven wall-to-wall carpet in soft dove grey filling a modern master bedroom with a grey upholstered bed, a chaise by tall windows and a stone abstract painting',
       },
+      {
+        id: 'carpet-dressing', width: 1600, height: 900,
+        title: 'Dressing room',
+        spec: 'Patterned · wool · cream with a rose and sage trellis · fitted wall to wall',
+        note: 'A fine trellis of small rose sprigs and leaves, set on a diamond, running to the skirting on every wall.',
+        alt: 'A hand-woven wall-to-wall carpet in soft cream with a small rose and sage trellis pattern filling a pale green panelled dressing room with a walnut dressing table, a cheval mirror and a cream armchair',
+      },
+      {
+        id: 'carpet-music', width: 1600, height: 900,
+        title: 'Music room',
+        spec: 'Patterned · wool · deep blue with a fine tone-on-tone trellis · fitted wall to wall',
+        note: 'A fine diamond trellis a shade lighter than the ground, read in the light rather than in colour.',
+        alt: 'A hand-woven wall-to-wall carpet in deep blue with a fine tone-on-tone diamond trellis filling a panelled music room with a black grand piano, blue velvet curtains and two linen armchairs',
+      },
     ],
   },
 ];
 
 let n = 0;
-const roman = (i: number) => ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'][i];
+const roman = (i: number) => ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV'][i];
+// Section anchors: the home page category tiles link straight to each gallery.
+const slug = (heading: string) => ({ 'Rugs': 'rugs', 'Wall hangings': 'wall-hangings', 'Wall-to-wall carpets': 'carpets' } as Record<string, string>)[heading];
 ---
 
 <BaseLayout
-  title="Rugs, Wall Hangings and Carpets, Each Made for One Room | Harrow &amp; Thread"
+  title="Rug, Wall Hanging and Carpet Designs, Each for One Room | Harrow &amp; Thread"
   description="Every design visualisation from Harrow & Thread, shown whole: hand-woven rugs, wall hangings and wall-to-wall carpets, each composed for the room it belongs to, with material, pile and colour."
 >
-  <!-- Archetype: page header. -->
+  <!-- Archetype: page header. Named Designs, not Work (client, 2026-09-14): every
+       picture here is a design visualisation, not a delivered commission. -->
   <section class="section-pad">
     <div class="shell">
-      <p class="eyebrow text-graphite mb-6">Work</p>
+      <p class="eyebrow text-graphite mb-6">Designs</p>
       <h1 class="display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl m-0 mb-8 max-w-[18ch]">
-        Every piece,<br />for one room.
+        Every design,<br />for one room.
       </h1>
       <p class="lede text-graphite m-0 max-w-[44ch]">
         Rugs, wall hangings and wall-to-wall carpets, each composed around the room it belongs to. Shown whole, at the scale the room gives it.
@@ -129,7 +146,7 @@ const roman = (i: number) => ['I','II','III','IV','V','VI','VII','VIII','IX','X'
   </section>
 
   {groups.map((g) => (
-    <section class="section-pad border-t rule">
+    <section id={slug(g.heading)} class="section-pad border-t rule" style="scroll-margin-top: 4.5rem">
       <div class="shell">
         <h2 class="display text-3xl sm:text-4xl lg:text-5xl m-0 mb-14 sm:mb-20">{g.heading}</h2>
 

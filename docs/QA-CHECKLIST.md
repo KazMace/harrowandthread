@@ -72,10 +72,8 @@ Enforced in `tests/smoke.test.mjs`.
 
 | # | Assertion | Source |
 |---|---|---|
-| E1 | No non-essential cookie is set before consent. Assert `document.cookie` and storage are clean on first paint. | C:65 |
-| E2 | Reject is as prominent as Accept — compare computed size, weight, fill and contrast, not just presence. Note the banner is withheld until `scrollY > 120` or a 6s fallback, so a test must scroll or wait before measuring. | C:65 |
-| E3 | The choice persists across a reload. | C:66 |
-| E4 | `/cookies` exists and returns 200. | C:66 |
+| E1 | No cookie is set at all. Assert `document.cookie` and storage are clean after scrolling every page. | C:65 |
+| ~~E2–E4~~ | Retired 2026-09-14 with the cookie banner and `/cookies`. Bring back if a cookie or tracker is ever added. | C:65 |
 | E5 | Privacy policy has a data controller contact address, a retention period, and a working deletion route for enquiry uploads (assert the `mailto:` href actually resolves — it was literal template text until 2026-08-11). | C:66–67 |
 
 ## F. Accessibility floor
@@ -243,9 +241,10 @@ part reserved to the client.
 
 ---
 
-## ⚠ Open finding — negative sizes are accepted (2026-08-12)
+## ✅ Fixed 2026-09-14 — negative sizes are accepted (found 2026-08-12)
 
-**Not fixed. The enquiry form is off-limits without the client's say-so.**
+**Fixed on the client's go-ahead:** the submit handler now rejects a size of zero or below
+with an inline error, and **I4b** runs un-skipped. The original finding follows.
 
 Both size inputs declare `min="0"`, but the form is `novalidate`, so the attribute is inert
 and nothing else checks the range. Forced through a browser with the backend stubbed:

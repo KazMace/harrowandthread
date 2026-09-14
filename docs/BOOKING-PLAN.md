@@ -23,10 +23,9 @@ ourselves — weeks of upkeep for something free off the shelf.
 
 ## Hard constraint: link out, don't embed
 
-`COMPLIANCE.md:65` — no non-essential cookie fires before consent, and this site has
-a cookie banner (`src/components/global/CookieBanner.astro`). An **embedded**
-Cal.com widget loads third-party JavaScript on page load, before any consent —
-that breaks the rule. So the booking entry point on this site is a **button that
+Since 2026-09-14 the site sets no cookies and has no consent banner (`COMPLIANCE.md`,
+Cookies and privacy). An **embedded** Cal.com widget loads third-party JavaScript
+and cookies on page load, which would bring the whole consent banner back. So the booking entry point on this site is a **button that
 opens Cal.com in a new tab**, not an inline widget. Zero third-party script on this
 domain, zero new cookie work, and the Cal.com page still shows the brand's logo and
 colours.

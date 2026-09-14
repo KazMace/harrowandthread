@@ -3,10 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import site from '../data/site.json';
 import { SITE_URL } from '../lib/constants';
 import { FORM_FIELDS } from '../lib/constants';
-
-// Read preselection from query params
-const preselectedType = Astro.url?.searchParams.get('type') || '';
-const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
 ---
 
 <BaseLayout
@@ -103,7 +99,7 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
             class="field-select w-full px-4 py-3.5 text-base text-ink bg-paper border rule focus:border-ink transition-colors duration-150"
           >
             {FORM_FIELDS.enquiryType.map((opt) => (
-              <option value={opt.value} selected={opt.value === preselectedIAm}>{opt.label}</option>
+              <option value={opt.value}>{opt.label}</option>
             ))}
           </select>
           <span id="err-iam" class="text-sm text-madder hidden mt-1 block" data-error="iam">Please select an option.</span>
@@ -120,7 +116,7 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
             class="field-select w-full px-4 py-3.5 text-base text-ink bg-paper border rule focus:border-ink transition-colors duration-150"
           >
             {FORM_FIELDS.commissionType.map((opt) => (
-              <option value={opt.value} selected={opt.value === preselectedType}>{opt.label}</option>
+              <option value={opt.value}>{opt.label}</option>
             ))}
           </select>
           <span id="err-commission-type" class="text-sm text-madder hidden mt-1 block" data-error="commission-type">Please select an option.</span>
@@ -173,7 +169,7 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
               Not sure yet
             </label>
           </div>
-          <span id="err-size" class="text-sm text-madder hidden mt-1 block" data-error="size">Please enter dimensions or check "Not sure yet".</span>
+          <span id="err-size" class="text-sm text-madder hidden mt-1 block" data-error="size">Please enter a size above zero, or leave it blank.</span>
         </fieldset>
 
         <!-- Design tier -->
@@ -340,6 +336,15 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
     }
   });
 
+  // Preselect from ?type= and ?iam= links. Read here, not in frontmatter: the page is
+  // static, so the build never sees a query string.
+  const params = new URLSearchParams(location.search);
+  for (const [param, id] of [['type', 'commission-type'], ['iam', 'iam']]) {
+    const select = document.getElementById(id) as HTMLSelectElement | null;
+    const value = params.get(param);
+    if (select && value && [...select.options].some((o) => o.value === value)) select.value = value;
+  }
+
   // Trigger on load for preselected carpet
   if (commissionSelect?.value === 'carpet') {
     commissionSelect.dispatchEvent(new Event('change'));
@@ -435,6 +440,11 @@ const preselectedIAm = Astro.url?.searchParams.get('iam') || '';
     const email = document.getElementById('email') as HTMLInputElement;
     if (email?.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
       fail('email', 'email');
+    }
+
+    // min="0" is inert under novalidate, so the range is checked here. Size stays optional.
+    for (const size of [sizeW, sizeH]) {
+      if (!size.disabled && size.value !== '' && !(Number(size.value) > 0)) fail(size.id, 'size');
     }
 
     const status = document.getElementById('form-status');

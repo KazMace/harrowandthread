@@ -25,8 +25,8 @@
       "href": "/process"
     },
     {
-      "label": "Work",
-      "href": "/work"
+      "label": "Designs",
+      "href": "/designs"
     }
   ],
   "enquireLink": {
@@ -53,10 +53,6 @@
     {
       "label": "Privacy",
       "href": "/privacy"
-    },
-    {
-      "label": "Cookies",
-      "href": "/cookies"
     }
   ],
   "responsePromise": "We respond within one working day.",

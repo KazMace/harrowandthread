@@ -66,9 +66,12 @@ wall pieces and the suitability of their fixings.
 
 ## Cookies and privacy
 
-No non-essential cookie fires before consent. Reject must be as prominent as accept, the
-choice must persist, and `/cookies` must exist. Privacy policy needs a data controller
-contact address, a retention period, and a deletion route for enquiry uploads.
+Since 2026-09-14 the site sets no cookies and runs no analytics, so there is no banner and
+no `/cookies` page; the Privacy policy says so in its Cookies section. Adding any cookie or
+tracker (analytics after launch included) brings back the consent rules: nothing
+non-essential before consent, Reject as prominent as Accept, the choice persists, and the
+policy is updated first. Privacy policy needs a data controller contact address, a
+retention period, and a deletion route for enquiry uploads.
 
 ## Accessibility floor
 
@@ -78,7 +81,7 @@ order, form labels bound to inputs, skip link. Never `focus:outline-none`.
 ## Still outstanding before launch
 
 - Company registration number and registered office (currently `[Trading address]`).
-- "Last updated" dates on `/terms`, `/privacy`, `/cookies`.
+- ~~"Last updated" dates on `/terms`, `/privacy`~~ — set 2026-09-13 (Privacy 2026-09-14).
 - Solicitor review of the policy pages.
 - Form endpoint configured **and a real test submission sent** — confirm on the live
   deploy; this failure mode is invisible from the front end.

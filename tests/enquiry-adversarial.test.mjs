@@ -83,8 +83,8 @@ async function submit(page) {
   await page.waitForTimeout(2500); // observe the outcome; do not assume there is one
 }
 
-// Everything the visitor can actually perceive after a submit. Scoped to the form —
-// the cookie banner is also an aria-live region and would otherwise be counted.
+// Everything the visitor can actually perceive after a submit. Scoped to the form so
+// no other live region on the page is counted.
 const outcome = (page) => page.evaluate(() => ({
   url: location.pathname,
   // #form-status sits just outside the form. Only count what is actually rendered and on
@@ -161,7 +161,7 @@ test('I4 — wrong types in the size fields are rejected, not coerced silently',
   // directly or this test is vacuous — the note on I4 says so explicitly.
   const forced = await page.evaluate(() => {
     const set = (id, v) => { const el = document.getElementById(id); el.value = v; return el.value; };
-    return { text: set('size-w', 'abc'), negative: set('size-h', '-50') };
+    return { text: set('size-w', 'abc') };
   });
 
   await submit(page);
@@ -176,20 +176,29 @@ test('I4 — wrong types in the size fields are rejected, not coerced silently',
   // The browser's own value sanitisation should have emptied the text case.
   if (forced.text !== '') failures.push(`"abc" survived in size-w as ${JSON.stringify(forced.text)}`);
   assert.deepEqual(failures, [], `\n  ${failures.join('\n  ')}\n`);
-  // Negative sizes are the open half of I4 — see the skipped test below.
-  assert.equal(body.size_h, '-50', 'the -50 case did not reach the payload as expected');
+  assert.equal(o.url, '/enquire/success', 'a blanked size field blocked a valid enquiry');
+  assert.equal(body.size_w, '', 'the sanitised text case did not reach the payload empty');
 });
 
-// OPEN FINDING, awaiting the client. min="0" is declared on both size inputs, but the
-// form is novalidate, so nothing enforces it and "-50" reaches the Sheet as a string.
-// Un-skip once the client decides — the enquiry form is theirs, and a QA
-// test must not fix what it finds (docs/TESTING.md §4).
-test('I4b — negative sizes are rejected', { skip: 'open finding — see docs/QA-CHECKLIST.md' }, async () => {
+// Fixed 2026-09-14: min="0" is inert under novalidate, so the submit handler checks the
+// range. A negative size must show the size error and send nothing.
+test('I4b — negative sizes are rejected', async () => {
   const { page, sent } = await openForm();
   await fillRequired(page);
   await page.evaluate(() => { document.getElementById('size-h').value = '-50'; });
   await submit(page);
-  assert.notEqual(payload(sent).size_h, '-50');
+  const o = await outcome(page);
+  assert.equal(sent.length, 0, 'a negative size reached the backend');
+  assert.equal(o.url, '/enquire');
+  assert.ok(o.visible.some((t) => /above zero/.test(t)), `no size error shown: ${JSON.stringify(o.visible)}`);
+});
+
+test('?type= and ?iam= links preselect the form', async () => {
+  const { page } = await openForm();
+  await page.goto(`${BASE}/enquire?type=carpet&iam=interior-designer`, { waitUntil: 'networkidle' });
+  assert.equal(await page.inputValue('#commission-type'), 'carpet');
+  assert.equal(await page.inputValue('#iam'), 'interior-designer');
+  await page.context().close();
 });
 
 test('I8 — filling the honeypot submits nothing and still lands on success', async () => {

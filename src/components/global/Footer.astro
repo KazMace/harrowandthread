@@ -7,7 +7,7 @@ import site from '../../data/site.json';
 // sense for a small commission business, alongside site.nav for "Explore".
 const explore = [...site.nav, { label: 'Trade', href: '/trade' }];
 const help = site.footerLinks.filter((l) => ['FAQ', 'Care'].includes(l.label));
-const legal = site.footerLinks.filter((l) => ['Terms', 'Privacy', 'Cookies'].includes(l.label));
+const legal = site.footerLinks.filter((l) => ['Terms', 'Privacy'].includes(l.label));
 ---
 
 <footer class="bg-ink text-paper">

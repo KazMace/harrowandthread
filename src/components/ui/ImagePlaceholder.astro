@@ -7,8 +7,8 @@ export interface Props {
   width: number;
   height: number;
   alt: string;
-  /** Persistent visible label, e.g. "Design visualisation". Rendered as an
-   *  overlay so it stays attached to the image inside fixed-height layouts. */
+  /** Persistent visible label, e.g. "Design visualisation". Rendered as small
+   *  text below the image, never over it (client, 2026-09-14). */
   caption?: string;
   class?: string;
   sizes?: string;
@@ -112,14 +112,7 @@ const ground = pendingGrounds[hash % pendingGrounds.length];
   )}
 
   {caption && (
-    <figcaption
-      class="text-utility uppercase absolute bottom-0 left-0 right-0 px-3 pb-2 pt-8 text-right pointer-events-none opacity-80"
-      style={
-        hasRealImage
-          ? 'color: #FFFFFF; background: linear-gradient(to top, rgba(17,17,17,0.55), transparent);'
-          : `color: ${ground.fg}; opacity: 0.75;`
-      }
-    >
+    <figcaption class="text-utility uppercase px-3 pt-2 text-right opacity-70">
       {caption}
     </figcaption>
   )}

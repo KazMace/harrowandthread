@@ -47,7 +47,7 @@ test('homepage renders with its real fonts, not an Arial fallback', async () => 
 //   applies only to their use as small navigational tile thumbnails linking
 //   to category pages, not to the full-scale showcase, which stays protected.
 // The rule below still catches a `cover` crop landing anywhere else.
-const PAGES = ['/', '/commissions', '/wall-hangings', '/carpets', '/process', '/work', '/care', '/faq', '/trade', '/enquire'];
+const PAGES = ['/', '/commissions', '/wall-hangings', '/carpets', '/process', '/designs', '/care', '/faq', '/trade', '/enquire'];
 const CROP_ALLOWED_IDS = [
   'hero-grand',
   'render-rug-01',
@@ -87,8 +87,8 @@ test('no rug or wall hanging is ever cropped or distorted', async () => {
 
 // Structural invariants across every page. These are settled client rules and
 // accessibility floors that regress silently when a page is added or a nav edited.
-const ALL_PAGES = ['/', '/commissions', '/wall-hangings', '/carpets', '/process', '/work', '/care', '/faq', '/trade',
-                   '/enquire', '/terms', '/privacy', '/cookies', '/enquire/success'];
+const ALL_PAGES = ['/', '/commissions', '/wall-hangings', '/carpets', '/process', '/designs', '/care', '/faq', '/trade',
+                   '/enquire', '/terms', '/privacy', '/enquire/success'];
 
 test('structure holds on every page: headings, labels, skip link, nav, trade placement', async () => {
   const page = await browser.newPage({ userAgent: UA });
