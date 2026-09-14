@@ -50,6 +50,11 @@ const legal = site.footerLinks.filter((l) => ['Terms', 'Privacy'].includes(l.lab
               </a>
             </li>
           ))}
+          <li>
+            <a href={`mailto:${site.company.email}`} class="text-sm text-paper/75 hover:text-paper no-underline break-all">
+              {site.company.email}
+            </a>
+          </li>
         </ul>
       </div>
 

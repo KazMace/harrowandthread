@@ -6,13 +6,15 @@ export const faq = [
     items: [
       { q: "Can you work from my design idea?",
         a: ["We can take any design idea you have, whether inspired by photographs, sketches, or a link to an image with a pattern you like. Alternatively, our team can assign a dedicated designer to work alongside you and craft a custom design."] },
+      { q: "How long does the design stage take?",
+        a: ["That depends on you. Some clients approve the first design, others want a few rounds. The production time starts only once you sign off."] },
     ],
   },
   {
     category: "Ordering &amp; Production",
     items: [
       { q: "What is the investment?",
-        a: ["Every commission is priced individually. Tell us the room, the size and roughly what you have in mind, and we reply within one working day with an indication. Once the material and the design are agreed, your written proposal sets out the investment in full, before any deposit."] },
+        a: ["Every commission is priced individually. Tell us the room, the size and roughly what you have in mind, and we reply within one working day with an indication. Once the material and the design are agreed, your written proposal sets out the investment in full, before any deposit. There is no design fee."] },
       { q: "How long does it take to produce my piece?",
         a: ["About six to seven weeks from sign-off for a straightforward piece. Larger or more complex pieces take longer. We confirm the date at sign-off."] },
       { q: "Can I modify my order after it is placed?",
@@ -29,11 +31,13 @@ export const faq = [
     category: "Materials &amp; Construction",
     items: [
       { q: "Can I see a sample before I commit?",
-        a: ["Not a physical swatch, no. We work to the ARS 1,400 dye system: you choose a colour reference, and we match the wool to that reference as closely as the dyeing process allows, typically within about 5%. It is the same standard the mills work to, and it holds up better than matching to a posted sample that has aged in transit.", "What you do get before committing: a design visualisation mapped to your exact dimensions, your chosen colour references confirmed in writing, and a sign-off stage where nothing is made until you approve it. Dyed wool sits slightly differently to a screen, so we confirm that with you at sign-off."] },
+        a: ["Yes. We can make a 50 &times; 50cm sample in your chosen wool and colours, in about three weeks, and its cost is stated in your proposal. Colour is matched to your reference in the ARS 1,400 dye system, typically within about 5%.", "What you do get before committing: a design visualisation mapped to your exact dimensions, your chosen colour references confirmed in writing, and a sign-off stage where nothing is made until you approve it. Dyed wool sits slightly differently to a screen, so we confirm that with you at sign-off."] },
       { q: "What materials do you use?",
         a: ["Wool for most commissions, because it is hard-wearing, takes dye beautifully and resists staining without treatment. Silk blend and bamboo silk add sheen and depth; flatweave is lighter, reversible and suits high traffic. Material shapes the texture, the appearance and the investment. Your written proposal sets it out in full for the material and design you choose, before any deposit."] },
       { q: "What is the difference between pile and flatweave?",
         a: ["Pile is yarn standing upright: it has depth and it is warm underfoot. Flatweave has no pile: lighter, reversible, and better under furniture or in a busy hallway."] },
+      { q: "Can I use a rug over underfloor heating?",
+        a: ["Not with our standard backing, which is not recommended over underfloor heating. If the room has it, tell us when you enquire."] },
       { q: "How do I choose the right pile height?",
         a: ["6mm is sleek and easy to clean, best where there is traffic. 12mm balances comfort and practicality. 20mm is the softest and needs the most care. If you are unsure, take 12mm: it suits almost every room."] },
     ],
@@ -56,6 +60,8 @@ export const faq = [
     items: [
       { q: "What is your return policy?",
         a: ["Once production starts, a commission cannot be returned, because it exists only for you. That is why nothing is made until you have approved the design, the dimensions and the dye reference in writing. If a piece arrives faulty, contact us: your statutory rights under the Consumer Rights Act 2015 are unaffected."] },
+      { q: "Is my piece guaranteed?",
+        a: ["Yes. Every piece is guaranteed against manufacturing and workmanship faults for 12 months from delivery. This is in addition to your rights under the Consumer Rights Act 2015. Normal shedding, and the slight tonal variation of hand-dyed wool, are not faults."] },
     ],
   },
   {
