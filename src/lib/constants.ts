@@ -20,7 +20,7 @@ export const PILE_HEIGHTS = [
 export const MATERIALS = [
   { value: 'wool', label: 'Wool', description: 'Durable, soft, naturally stain resistant. The standard.' },
   { value: 'silk-blend', label: 'Silk blend', description: 'Adds lustre and depth. Finer, best for quieter areas.' },
-  { value: 'bamboo-silk', label: 'Bamboo silk', description: 'A vegan option with a silk-like sheen and soft hand.' },
+  { value: 'bamboo-silk', label: 'Bamboo silk', description: 'A plant-based fibre with a silk-like sheen and soft hand.' },
   { value: 'flatweave', label: 'Flatweave', description: 'Flat, no pile. Lightweight, reversible, good under furniture.' },
 ] as const;
 

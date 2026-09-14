@@ -45,7 +45,7 @@ const graph = {
       image: ogImage,
       email: site.company.email,
       description:
-        'Bespoke hand-woven rugs, wall hangings and wall-to-wall carpets, made to order for clients in the United Kingdom, Europe and the United States. Each piece designed for one room, at any dimension, dyed to match from a 1,400-colour system. Every commission is priced individually, in a written proposal before any deposit.',
+        'Bespoke hand-woven rugs, wall hangings and wall-to-wall carpets, made to order for clients in the United Kingdom, Europe and the United States. Each piece designed and sized for one room, dyed to match from a 1,400-colour system. Every commission is priced individually, in a written proposal before any deposit.',
       slogan: 'A rug that exists once.',
       address: { '@type': 'PostalAddress', addressCountry: 'GB' },
       areaServed: [
@@ -97,7 +97,8 @@ const graph = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {/* A noindex page (404, thank-you) asks not to be indexed, so it names no canonical. */}
+    {!noindex && <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     {noindex && <meta name="robots" content="noindex, follow" />}
 

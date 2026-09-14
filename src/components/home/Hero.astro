@@ -78,7 +78,26 @@ import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
 
   let pointerOnPanel = false;
   let failed = false;
-  const fail = () => { failed = true; show(); };
+  const fail = () => { failed = true; film?.classList.remove('is-playing'); show(); };
+
+  // The film's first frame is the picture zoomed 1.5% about its centre
+  // (measured, hero-film/LOG.md). Zoom the still the same way, about the
+  // picture's own centre inside the cropped box, so the film fades in with no
+  // jump and restarts land on a matching frame.
+  const START_ZOOM = 1.015;
+  const still = document.querySelector<HTMLImageElement>('.hero-media picture img');
+  const alignStill = () => {
+    if (!still || !still.naturalWidth) return;
+    const w = still.clientWidth, h = still.clientHeight;
+    const k = Math.max(w / still.naturalWidth, h / still.naturalHeight);
+    const renderedH = still.naturalHeight * k; // object-position 50% 100%: bottom-anchored
+    still.style.transformOrigin = `${w / 2}px ${h - renderedH / 2}px`;
+    still.style.transform = `scale(${START_ZOOM})`;
+  };
+  if (film && !reduceMotion) {
+    if (still?.complete) alignStill(); else still?.addEventListener('load', alignStill, { once: true });
+    window.addEventListener('resize', alignStill);
+  }
 
   // Someone pointing at the panel or tabbing to the button keeps it on screen.
   panel?.addEventListener('focusin', show);
@@ -94,14 +113,18 @@ import ImagePlaceholder from '../ui/ImagePlaceholder.astro';
         window.setTimeout(restart, 1000);
         return;
       }
+      // Fade the panel and the film out together onto the matching still,
+      // rewind out of sight, then fade the film back in as it plays: no hard
+      // cut from the close view back to the wide one.
       hide();
+      film.classList.remove('is-playing');
       window.setTimeout(() => {
+        film.addEventListener('seeked', () => film.play().catch(fail), { once: true });
         film.currentTime = 0;
-        film.play().catch(fail);
       }, FADE_MS);
     };
 
-    film.addEventListener('playing', () => film.classList.add('is-playing'), { once: true });
+    film.addEventListener('playing', () => film.classList.add('is-playing'));
     film.addEventListener('ended', () => {
       show();
       window.setTimeout(restart, HOLD_MS);

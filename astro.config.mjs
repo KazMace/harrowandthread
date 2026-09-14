@@ -8,6 +8,8 @@ export default defineConfig({
     sitemap({
       // Post-submission page carries noindex; keep it out of the sitemap too.
       filter: (page) => !page.includes('/enquire/success'),
+      // Every page carries the build date as its last-changed date.
+      lastmod: new Date(),
     }),
   ],
   output: 'static',

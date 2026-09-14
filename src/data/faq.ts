@@ -14,7 +14,7 @@ export const faq = [
       { q: "What is the investment?",
         a: ["Every commission is priced individually. Tell us the room, the size and roughly what you have in mind, and we reply within one working day with an indication. Once the material and the design are agreed, your written proposal sets out the investment in full, before any deposit."] },
       { q: "How long does it take to produce my piece?",
-        a: ["Production typically takes six to seven weeks from the date your order is confirmed. Complex designs or larger sizes will require additional time. We will provide an estimated delivery date at order confirmation."] },
+        a: ["About six to seven weeks from sign-off for a straightforward piece. Larger or more complex pieces take longer. We confirm the date at sign-off."] },
       { q: "Can I modify my order after it is placed?",
         a: ["Change anything you like up to sign-off. After that it is fixed: once the frame is warped and the dye is mixed, the piece cannot be altered."] },
       { q: "What is the production process?",
@@ -44,7 +44,7 @@ export const faq = [
       { q: "Do you ship internationally?",
         a: ["Shipping is included and fully insured to the UK, Europe and the United States for most commissions. Exceptionally large or heavy pieces may carry an additional freight charge, passed on at cost and stated in your proposal, before you commit. For delivery elsewhere, contact us to confirm delivery to your country. Every shipment is fully insured and tracked."] },
       { q: "Who pays customs and duties?",
-        a: ["Following the UK-India trade deal that took effect in July 2026, UK deliveries no longer carry import duty. VAT and, for deliveries to the US, EU and any other destination outside the UK, import duty remain payable by the recipient on arrival."] },
+        a: ["Following the UK-India trade deal that took effect in July 2026, UK deliveries no longer carry import duty. For deliveries outside the UK, import duty and local VAT are payable by the recipient on arrival."] },
       { q: "How is my piece packaged for shipping?",
         a: ["Always rolled around a core, wrapped in polythene and boxed. Every piece travels rolled, whatever its size: a deep wool pile holds a crease permanently, so we never risk one."] },
       { q: "What if my piece arrives damaged?",
@@ -55,7 +55,7 @@ export const faq = [
     category: "Returns",
     items: [
       { q: "What is your return policy?",
-        a: ["A commission cannot be returned, because it exists only for you. That is why nothing is made until you have approved the design, the dimensions and the dye reference in writing. If a piece arrives faulty, contact us: your statutory rights under the Consumer Rights Act 2015 are unaffected."] },
+        a: ["Once production starts, a commission cannot be returned, because it exists only for you. That is why nothing is made until you have approved the design, the dimensions and the dye reference in writing. If a piece arrives faulty, contact us: your statutory rights under the Consumer Rights Act 2015 are unaffected."] },
     ],
   },
   {
@@ -81,7 +81,7 @@ export const faq = [
     category: "Wall hangings",
     items: [
       { q: "How does a wall hanging actually hang?",
-        a: ["Wide loops are sewn along the top edge of the piece. A pole threads through the loops and rests on two brackets fixed to the wall, so the piece hangs flat with its fringe at the bottom.", "The loops are part of the piece. The pole, the brackets and the wall fixings are not supplied: you choose those to suit the piece and the wall. A large hand-woven piece is heavy, so confirm your wall and fixings will carry it."] },
+        a: ["Wide loops are sewn along the top edge of the piece. A pole threads through the loops and rests on two brackets fixed to the wall, so the piece hangs flat against the wall.", "The loops are part of the piece. The pole, the brackets and the wall fixings are not supplied: you choose those to suit the piece and the wall. A large hand-woven piece is heavy, so confirm your wall and fixings will carry it."] },
     ],
   },
 ];
