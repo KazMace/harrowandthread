@@ -15,5 +15,5 @@ if "${CURL[@]}" --list-only "$BASE" | grep -qiE '^(scrollcraft|app\.js|thank-you
 [ -f dist/index.html ] || { echo "dist/ is missing; run npm run build first"; exit 1; }
 n=0; find dist -type f | sort | while read -r f; do
   rel="${f#dist/}"; "${CURL[@]}" -T "$f" "$BASE$rel"; n=$((n+1)); printf '\r  uploaded %s' "$rel                    "
-done; echo; echo "Done. Verify:"; for p in / /commissions/ /wall-hangings/ /carpets/ /process/ /work/ /enquire/ /faq/ /care/ /trade/ /terms/ /privacy/ /cookies/ /images/grand/hero-grand-800w.webp /sitemap-index.xml /robots.txt /nope; do
+done; echo; echo "Done. Verify:"; for p in / /commissions/ /wall-hangings/ /carpets/ /process/ /designs/ /enquire/ /faq/ /care/ /trade/ /terms/ /privacy/ /images/grand/hero-grand-800w.webp /sitemap-index.xml /robots.txt /nope; do
   printf '  %-36s %s\n' "$p" "$(curl -s -o /dev/null -w '%{http_code}' -m 20 "https://harrowandthread.com$p")"; done
